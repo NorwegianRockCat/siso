@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   geometry_msgs
   message_generation
+  base_local_planner
   nav_core
   nav_msgs
   pcl_conversions
@@ -35,7 +36,7 @@ find_package(PCL REQUIRED)
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -125,6 +126,7 @@ catkin_package(
     dynamic_reconfigure
     geometry_msgs
     nav_core
+    base_local_planner
     nav_msgs
     pluginlib
     roscpp
@@ -147,8 +149,6 @@ include_directories(
 )
 
 add_definitions(${EIGEN3_DEFINITIONS})
-
-catkin_python_setup()
 
 ## Declare a C++ library
 add_library(${PROJECT_NAME}
