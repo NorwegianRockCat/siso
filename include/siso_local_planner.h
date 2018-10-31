@@ -169,6 +169,18 @@ namespace base_local_planner {
       void reconfigureCB(BaseLocalPlannerConfig &config, uint32_t level);
 
       /**
+       * @brief all the fine tuning that needs to happen if we are at or very near the goal
+       */
+      bool reached_position_compute_velocity_helper(
+	  const tf::Stamped<tf::Pose>& global_pose,
+	  const double goal_th,
+	  const std::vector<geometry_msgs::PoseStamped>& transformed_plan,
+	  const std::vector<geometry_msgs::PoseStamped>& local_plan,
+	  const tf::Stamped<tf::Pose>& robot_vel,
+	  tf::Stamped<tf::Pose>& drive_cmds,
+	  geometry_msgs::Twist& cmd_vel);
+
+      /**
        * @brief Once a goal position is reached... rotate to the goal orientation
        * @param  global_pose The pose of the robot in the global frame
        * @param  robot_vel The velocity of the robot

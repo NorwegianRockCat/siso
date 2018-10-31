@@ -369,6 +369,65 @@ namespace base_local_planner {
     return true;
   }
 
+  bool SisoLocalPlanner::reached_position_compute_velocity_helper(
+      const tf::Stamped<tf::Pose>& global_pose,
+      const double goal_th,
+      const std::vector<geometry_msgs::PoseStamped>& transformed_plan,
+      const std::vector<geometry_msgs::PoseStamped>& local_plan,
+      const tf::Stamped<tf::Pose>& robot_vel,
+      tf::Stamped<tf::Pose>& drive_cmds,
+      geometry_msgs::Twist& cmd_vel) {
+      //if the user wants to latch goal tolerance, if we ever reach the goal location, we'll
+      //just rotate in place
+      if (latch_xy_goal_tolerance_) {
+        xy_tolerance_latch_ = true;
+      }
+
+      double angle = getGoalOrientationAngleDifference(global_pose, goal_th);
+      //check to see if the goal orientation has been reached
+      if (fabs(angle) <= yaw_goal_tolerance_) {
+        //set the velocity command to zero
+        cmd_vel.linear.x = 0.0;
+        cmd_vel.linear.y = 0.0;
+        cmd_vel.angular.z = 0.0;
+        rotating_to_goal_ = false;
+        xy_tolerance_latch_ = false;
+        reached_goal_ = true;
+      } else {
+        //we need to call the next two lines to make sure that the trajectory
+        //planner updates its path distance and goal distance grids
+        tc_->updatePlan(transformed_plan);
+        Trajectory throwaway_path = tc_->findBestPath(global_pose, robot_vel, drive_cmds);
+        map_viz_.publishCostCloud(costmap_);
+
+        //copy over the odometry information
+        nav_msgs::Odometry base_odom;
+        odom_helper_.getOdom(base_odom);
+
+        //if we're not stopped yet... we want to stop... taking into account the acceleration limits of the robot
+        if ( ! rotating_to_goal_ && !base_local_planner::stopped(base_odom, rot_stopped_velocity_, trans_stopped_velocity_)) {
+          if ( ! stopWithAccLimits(global_pose, robot_vel, cmd_vel)) {
+            return false;
+          }
+        }
+        //if we're stopped... then we want to rotate to goal
+        else{
+          //set this so that we know its OK to be moving
+          rotating_to_goal_ = true;
+          if(!rotateToGoal(global_pose, robot_vel, goal_th, cmd_vel)) {
+            return false;
+          }
+        }
+      }
+
+      //publish an empty plan because we've reached our goal position
+      publishPlan(transformed_plan, g_plan_pub_);
+      publishPlan(local_plan, l_plan_pub_);
+
+      //we don't actually want to run the controller when we're just rotating to goal
+      return true;
+    }
+
   bool SisoLocalPlanner::computeVelocityCommands(geometry_msgs::Twist& cmd_vel){
     if (! isInitialized()) {
       ROS_ERROR("This planner has not been initialized, please call initialize() before using this planner");
@@ -420,58 +479,17 @@ namespace base_local_planner {
 
     //check to see if we've reached the goal position
     if (xy_tolerance_latch_ || (getGoalPositionDistance(global_pose, goal_x, goal_y) <= xy_goal_tolerance_)) {
-
-      //if the user wants to latch goal tolerance, if we ever reach the goal location, we'll
-      //just rotate in place
-      if (latch_xy_goal_tolerance_) {
-        xy_tolerance_latch_ = true;
-      }
-
-      double angle = getGoalOrientationAngleDifference(global_pose, goal_th);
-      //check to see if the goal orientation has been reached
-      if (fabs(angle) <= yaw_goal_tolerance_) {
-        //set the velocity command to zero
-        cmd_vel.linear.x = 0.0;
-        cmd_vel.linear.y = 0.0;
-        cmd_vel.angular.z = 0.0;
-        rotating_to_goal_ = false;
-        xy_tolerance_latch_ = false;
-        reached_goal_ = true;
-      } else {
-        //we need to call the next two lines to make sure that the trajectory
-        //planner updates its path distance and goal distance grids
-        tc_->updatePlan(transformed_plan);
-        Trajectory path = tc_->findBestPath(global_pose, robot_vel, drive_cmds);
-        map_viz_.publishCostCloud(costmap_);
-
-        //copy over the odometry information
-        nav_msgs::Odometry base_odom;
-        odom_helper_.getOdom(base_odom);
-
-        //if we're not stopped yet... we want to stop... taking into account the acceleration limits of the robot
-        if ( ! rotating_to_goal_ && !base_local_planner::stopped(base_odom, rot_stopped_velocity_, trans_stopped_velocity_)) {
-          if ( ! stopWithAccLimits(global_pose, robot_vel, cmd_vel)) {
-            return false;
-          }
-        }
-        //if we're stopped... then we want to rotate to goal
-        else{
-          //set this so that we know its OK to be moving
-          rotating_to_goal_ = true;
-          if(!rotateToGoal(global_pose, robot_vel, goal_th, cmd_vel)) {
-            return false;
-          }
-        }
-      }
-
-      //publish an empty plan because we've reached our goal position
-      publishPlan(transformed_plan, g_plan_pub_);
-      publishPlan(local_plan, l_plan_pub_);
-
-      //we don't actually want to run the controller when we're just rotating to goal
-      return true;
+	return reached_position_compute_velocity_helper(
+	    global_pose,
+	    goal_th,
+	    transformed_plan,
+	    local_plan,
+	    robot_vel,
+	    drive_cmds,
+	    cmd_vel);
     }
 
+    // If we are here, then we need to just keep going.
     tc_->updatePlan(transformed_plan);
 
     //compute what trajectory to drive along
