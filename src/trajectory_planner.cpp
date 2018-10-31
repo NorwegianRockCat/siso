@@ -35,7 +35,7 @@
 * Author: Eitan Marder-Eppstein
 *********************************************************************/
 
-#include <base_local_planner/trajectory_planner.h>
+#include "trajectory_planner.h"
 #include <costmap_2d/footprint.h>
 #include <string>
 #include <sstream>
@@ -267,7 +267,7 @@ namespace base_local_planner{
       //get map coordinates of a point
       unsigned int cell_x, cell_y;
 
-      //we don't want a path that goes off the know map
+      //we don't want a path that goes off the known map
       if(!costmap_.worldToMap(x_i, y_i, cell_x, cell_y)){
         traj.cost_ = -1.0;
         return;
@@ -305,7 +305,7 @@ namespace base_local_planner{
 
       occ_cost = std::max(std::max(occ_cost, footprint_cost), double(costmap_.getCost(cell_x, cell_y)));
 
-      //do we want to follow blindly
+      // Is the robot simply just attracted to the goal? (Fetch is not)
       if (simple_attractor_) {
         goal_dist = (x_i - global_plan_[global_plan_.size() -1].pose.position.x) *
           (x_i - global_plan_[global_plan_.size() -1].pose.position.x) +
@@ -316,7 +316,7 @@ namespace base_local_planner{
         bool update_path_and_goal_distances = true;
 
         // with heading scoring, we take into account heading diff, and also only score
-        // path and goal distance for one point of the trajectory
+        // path and goal distance for one point of the trajectory Fetch doesn't do this
         if (heading_scoring_) {
           if (time >= heading_scoring_timestep_ && time < heading_scoring_timestep_ + dt) {
             heading_diff = headingDiff(cell_x, cell_y, x_i, y_i, theta_i);
@@ -540,11 +540,11 @@ namespace base_local_planner{
     double min_vel_x, min_vel_theta;
 
     if( final_goal_position_valid_ ){
-      double final_goal_dist = hypot( final_goal_x_ - x, final_goal_y_ - y );
+      const auto final_goal_dist = hypot( final_goal_x_ - x, final_goal_y_ - y );
       max_vel_x = min( max_vel_x, final_goal_dist / sim_time_ );
     }
 
-    //should we use the dynamic window approach?
+    //should we use the dynamic window approach? (default for fetch is NO!)
     if (dwa_) {
       max_vel_x = max(min(max_vel_x, vx + acc_x * sim_period_), min_vel_x_);
       min_vel_x = max(min_vel_x_, vx - acc_x * sim_period_);
@@ -561,12 +561,12 @@ namespace base_local_planner{
 
 
     //we want to sample the velocity space regularly
-    double dvx = (max_vel_x - min_vel_x) / (vx_samples_ - 1);
-    double dvtheta = (max_vel_theta - min_vel_theta) / (vtheta_samples_ - 1);
+    const auto dvx = (max_vel_x - min_vel_x) / (vx_samples_ - 1);
+    const auto dvtheta = (max_vel_theta - min_vel_theta) / (vtheta_samples_ - 1);
 
-    double vx_samp = min_vel_x;
-    double vtheta_samp = min_vel_theta;
-    double vy_samp = 0.0;
+    auto vx_samp = min_vel_x;
+    auto vtheta_samp = min_vel_theta;
+    auto vy_samp = 0.0;
 
     //keep track of the best trajectory seen so far
     Trajectory* best_traj = &traj_one;
@@ -575,10 +575,10 @@ namespace base_local_planner{
     Trajectory* comp_traj = &traj_two;
     comp_traj->cost_ = -1.0;
 
-    Trajectory* swap = NULL;
+    Trajectory* swap = nullptr;
 
     //any cell with a cost greater than the size of the map is impossible
-    double impossible_cost = path_map_.obstacleCosts();
+    const auto impossible_cost = path_map_.obstacleCosts();
 
     //if we're performing an escape we won't allow moving forward
     if (!escaping_) {
@@ -613,7 +613,7 @@ namespace base_local_planner{
         vx_samp += dvx;
       }
 
-      //only explore y velocities with holonomic robots
+      //only explore y velocities with holonomic robots (Fetch is not one of these)!
       if (holonomic_robot_) {
         //explore trajectories that move forward but also strafe slightly
         vx_samp = 0.1;
@@ -903,18 +903,18 @@ namespace base_local_planner{
   }
 
   //given the current state of the robot, find a good trajectory
-  Trajectory TrajectoryPlanner::findBestPath(tf::Stamped<tf::Pose> global_pose, tf::Stamped<tf::Pose> global_vel,
+  Trajectory TrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& global_pose, const tf::Stamped<tf::Pose>& global_vel,
       tf::Stamped<tf::Pose>& drive_velocities){
 
-    Eigen::Vector3f pos(global_pose.getOrigin().getX(), global_pose.getOrigin().getY(), tf::getYaw(global_pose.getRotation()));
-    Eigen::Vector3f vel(global_vel.getOrigin().getX(), global_vel.getOrigin().getY(), tf::getYaw(global_vel.getRotation()));
+    const Eigen::Vector3f pos(global_pose.getOrigin().getX(), global_pose.getOrigin().getY(), tf::getYaw(global_pose.getRotation()));
+    const Eigen::Vector3f vel(global_vel.getOrigin().getX(), global_vel.getOrigin().getY(), tf::getYaw(global_vel.getRotation()));
 
     //reset the map for new operations
     path_map_.resetPathDist();
     goal_map_.resetPathDist();
 
     //temporarily remove obstacles that are within the footprint of the robot
-    std::vector<base_local_planner::Position2DInt> footprint_list =
+    const auto footprint_list =
         footprint_helper_.getFootprintCells(
             pos,
             footprint_spec_,

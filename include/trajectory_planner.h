@@ -142,7 +142,7 @@ namespace base_local_planner {
        * @param drive_velocities Will be set to velocities to send to the robot base
        * @return The selected path or trajectory
        */
-      Trajectory findBestPath(tf::Stamped<tf::Pose> global_pose, tf::Stamped<tf::Pose> global_vel,
+      Trajectory findBestPath(const tf::Stamped<tf::Pose>& global_pose, const tf::Stamped<tf::Pose>& global_vel,
           tf::Stamped<tf::Pose>& drive_velocities);
 
       /**
@@ -366,6 +366,7 @@ namespace base_local_planner {
        * @param  dt The timestep to take
        * @return The new velocity
        */
+      // I think this is where my stuff needs to go!
       inline double computeNewVelocity(double vg, double vi, double a_max, double dt){
         if((vg - vi) >= 0) {
           return std::min(vg, vi + a_max * dt);

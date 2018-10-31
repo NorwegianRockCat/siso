@@ -376,48 +376,49 @@ namespace base_local_planner {
       const std::vector<geometry_msgs::PoseStamped>& local_plan,
       const tf::Stamped<tf::Pose>& robot_vel,
       tf::Stamped<tf::Pose>& drive_cmds,
-      geometry_msgs::Twist& cmd_vel) {
+      geometry_msgs::Twist& cmd_vel)
+  {
       //if the user wants to latch goal tolerance, if we ever reach the goal location, we'll
       //just rotate in place
       if (latch_xy_goal_tolerance_) {
-        xy_tolerance_latch_ = true;
+	  xy_tolerance_latch_ = true;
       }
 
       double angle = getGoalOrientationAngleDifference(global_pose, goal_th);
       //check to see if the goal orientation has been reached
       if (fabs(angle) <= yaw_goal_tolerance_) {
-        //set the velocity command to zero
-        cmd_vel.linear.x = 0.0;
-        cmd_vel.linear.y = 0.0;
-        cmd_vel.angular.z = 0.0;
-        rotating_to_goal_ = false;
-        xy_tolerance_latch_ = false;
-        reached_goal_ = true;
+	  //set the velocity command to zero
+	  cmd_vel.linear.x = 0.0;
+	  cmd_vel.linear.y = 0.0;
+	  cmd_vel.angular.z = 0.0;
+	  rotating_to_goal_ = false;
+	  xy_tolerance_latch_ = false;
+	  reached_goal_ = true;
       } else {
-        //we need to call the next two lines to make sure that the trajectory
-        //planner updates its path distance and goal distance grids
-        tc_->updatePlan(transformed_plan);
-        Trajectory throwaway_path = tc_->findBestPath(global_pose, robot_vel, drive_cmds);
-        map_viz_.publishCostCloud(costmap_);
+	  //we need to call the next two lines to make sure that the trajectory
+	  //planner updates its path distance and goal distance grids
+	  tc_->updatePlan(transformed_plan);
+	  Trajectory throwaway_path = tc_->findBestPath(global_pose, robot_vel, drive_cmds);
+	  map_viz_.publishCostCloud(costmap_);
 
-        //copy over the odometry information
-        nav_msgs::Odometry base_odom;
-        odom_helper_.getOdom(base_odom);
+	  //copy over the odometry information
+	  nav_msgs::Odometry base_odom;
+	  odom_helper_.getOdom(base_odom);
 
-        //if we're not stopped yet... we want to stop... taking into account the acceleration limits of the robot
-        if ( ! rotating_to_goal_ && !base_local_planner::stopped(base_odom, rot_stopped_velocity_, trans_stopped_velocity_)) {
-          if ( ! stopWithAccLimits(global_pose, robot_vel, cmd_vel)) {
-            return false;
-          }
-        }
-        //if we're stopped... then we want to rotate to goal
-        else{
-          //set this so that we know its OK to be moving
-          rotating_to_goal_ = true;
-          if(!rotateToGoal(global_pose, robot_vel, goal_th, cmd_vel)) {
-            return false;
-          }
-        }
+	  //if we're not stopped yet... we want to stop... taking into account the acceleration limits of the robot
+	  if ( ! rotating_to_goal_ && !base_local_planner::stopped(base_odom, rot_stopped_velocity_, trans_stopped_velocity_)) {
+	      if ( ! stopWithAccLimits(global_pose, robot_vel, cmd_vel)) {
+		  return false;
+	      }
+	  }
+	  //if we're stopped... then we want to rotate to goal
+	  else{
+	      //set this so that we know its OK to be moving
+	      rotating_to_goal_ = true;
+	      if(!rotateToGoal(global_pose, robot_vel, goal_th, cmd_vel)) {
+		  return false;
+	      }
+	  }
       }
 
       //publish an empty plan because we've reached our goal position
@@ -426,7 +427,7 @@ namespace base_local_planner {
 
       //we don't actually want to run the controller when we're just rotating to goal
       return true;
-    }
+  }
 
   bool SisoLocalPlanner::computeVelocityCommands(geometry_msgs::Twist& cmd_vel){
     if (! isInitialized()) {
@@ -508,11 +509,11 @@ namespace base_local_planner {
     cmd_vel.linear.x = drive_cmds.getOrigin().getX();
     cmd_vel.linear.y = drive_cmds.getOrigin().getY();
     cmd_vel.angular.z = tf::getYaw(drive_cmds.getRotation());
-    ROS_INFO_STREAM(cmd_vel);
+//    ROS_INFO_STREAM(cmd_vel);
 
     //if we cannot move... tell someone
     if (path.cost_ < 0) {
-      ROS_DEBUG_NAMED("trajectory_planner_ros",
+      ROS_DEBUG_NAMED("siso_local_planner",
           "The rollout planner failed to find a valid plan. This means that the footprint of the robot was in collision for all simulated trajectories.");
       local_plan.clear();
       publishPlan(transformed_plan, g_plan_pub_);
@@ -520,7 +521,7 @@ namespace base_local_planner {
       return false;
     }
 
-    ROS_DEBUG_NAMED("trajectory_planner_ros", "A valid velocity command of (%.2f, %.2f, %.2f) was found for this cycle.",
+    ROS_DEBUG_NAMED("siso_local_planner", "A valid velocity command of (%.2f, %.2f, %.2f) was found for this cycle.",
         cmd_vel.linear.x, cmd_vel.linear.y, cmd_vel.angular.z);
 
     // Fill out the local plan
