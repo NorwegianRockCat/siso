@@ -79,8 +79,7 @@ SisoLocalPlanner::SisoLocalPlanner()
   , tf_(NULL)
   , setup_(false)
   , initialized_(false)
-  , odom_helper_("odo"
-                 "m")
+  , odom_helper_("odom")
 {
 }
 
@@ -91,8 +90,7 @@ SisoLocalPlanner::SisoLocalPlanner(std::string name, tf::TransformListener* tf, 
   , tf_(NULL)
   , setup_(false)
   , initialized_(false)
-  , odom_helper_("odo"
-                 "m")
+  , odom_helper_("odom")
 {
   // initialize the planner
   initialize(name, tf, costmap_ros);
