@@ -287,9 +287,8 @@ std::vector<double> SisoLocalPlanner::loadYVels(ros::NodeHandle node)
     boost::char_separator<char> sep("[], ");
     tokenizer tokens(y_vel_list, sep);
 
-    for (tokenizer::iterator i = tokens.begin(); i != tokens.end(); i++)
-    {
-      y_vels.push_back(atof((*i).c_str()));
+    for (auto token : tokens) {
+      y_vels.push_back(atof((token).c_str()));
     }
   }
   else
@@ -306,14 +305,9 @@ std::vector<double> SisoLocalPlanner::loadYVels(ros::NodeHandle node)
 
 SisoLocalPlanner::~SisoLocalPlanner()
 {
-  // make sure to clean things up
   delete dsrv_;
-
-  if (tc_ != NULL)
-    delete tc_;
-
-  if (world_model_ != NULL)
-    delete world_model_;
+  delete tc_;
+  delete world_model_;
 }
 
 bool SisoLocalPlanner::stopWithAccLimits(const tf::Stamped<tf::Pose>& global_pose,
@@ -351,8 +345,8 @@ bool SisoLocalPlanner::stopWithAccLimits(const tf::Stamped<tf::Pose>& global_pos
   cmd_vel.angular.z = 0.0;
   return false;
 }
-
-bool SisoLocalPlanner::rotateToGoal(const tf::Stamped<tf::Pose>& global_pose, const tf::Stamped<tf::Pose>& robot_vel,
+bool SisoLocalPlanner::rotateToGoal(const tf::Stamped<tf::Pose>& global_pose,
+				    const tf::Stamped<tf::Pose>& robot_vel,
                                     double goal_th, geometry_msgs::Twist& cmd_vel)
 {
   double yaw = tf::getYaw(global_pose.getRotation());
