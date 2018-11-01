@@ -61,6 +61,9 @@
 #include <base_local_planner/map_cell.h>
 #include <base_local_planner/map_grid.h>
 
+// For acceleration stuff
+#include <QtCore/QEasingCurve>
+
 namespace base_local_planner
 {
 /**
@@ -333,6 +336,10 @@ private:
   double sim_period_;        ///< @brief The number of seconds to use to compute max/min vels for dwa
 
   double inscribed_radius_, circumscribed_radius_;
+  double acceleration_progress_; // < @brief the progress for the acceleration graph
+  double deceleration_progress_; // < @brief the progress for the acceleration graph
+  QEasingCurve acceleration_curve; // < @brief the acceleration_curve
+  QEasingCurve deceleration_curve; // < @brief the deceleration_curve
 
   boost::mutex configuration_mutex_;
 
