@@ -236,6 +236,7 @@ private:
    * @param acc_theta The theta acceleration limit of the robot
    * @return
    */
+  // Needs to use the easing curve
   Trajectory createTrajectories(double x, double y, double theta, double vx, double vy, double vtheta, double acc_x,
                                 double acc_y, double acc_theta);
 
@@ -256,6 +257,8 @@ private:
    * @param impossible_cost The cost value of a cell in the local map grid that is considered impassable
    * @param traj Will be set to the generated trajectory with its associated score
    */
+
+  // Needs to use the easing curve
   void generateTrajectory(double x, double y, double theta, double vx, double vy, double vtheta, double vx_samp,
                           double vy_samp, double vtheta_samp, double acc_x, double acc_y, double acc_theta,
                           double impossible_cost, Trajectory& traj);
@@ -392,7 +395,7 @@ private:
    * @param  dt The timestep to take
    * @return The new velocity
    */
-  // I think this is where my stuff needs to go!
+  // Needs to use the easing curve
   inline double computeNewVelocity(double vg, double vi, double a_max, double dt)
   {
     if ((vg - vi) >= 0)
@@ -402,6 +405,7 @@ private:
     return std::max(vg, vi - a_max * dt);
   }
 
+  // Needs to use easing curve
   void getMaxSpeedToStopInTime(double time, double& vx, double& vy, double& vth)
   {
     vx = acc_lim_x_ * std::max(time, 0.0);

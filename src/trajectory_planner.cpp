@@ -191,6 +191,8 @@ TrajectoryPlanner::TrajectoryPlanner(WorldModel& world_model, const Costmap2D& c
   , y_vels_(y_vels)
   , stop_time_buffer_(stop_time_buffer)
   , sim_period_(sim_period)
+  , acceleration_progress_(0)
+  , deceleration_progress_(0)
 {
   // the robot is not stuck to begin with
   stuck_left = false;
