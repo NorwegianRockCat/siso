@@ -54,7 +54,7 @@ using namespace costmap_2d;
 
 namespace base_local_planner
 {
-void TrajectoryPlanner::reconfigure(BaseLocalPlannerConfig& cfg)
+void SisoTrajectoryPlanner::reconfigure(BaseLocalPlannerConfig& cfg)
 {
   BaseLocalPlannerConfig config(cfg);
 
@@ -141,7 +141,7 @@ void TrajectoryPlanner::reconfigure(BaseLocalPlannerConfig& cfg)
   y_vels_ = y_vels;
 }
 
-TrajectoryPlanner::TrajectoryPlanner(WorldModel& world_model, const Costmap2D& costmap,
+SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Costmap2D& costmap,
                                      std::vector<geometry_msgs::Point> footprint_spec, double acc_lim_x,
                                      double acc_lim_y, double acc_lim_theta, double sim_time, double sim_granularity,
                                      int vx_samples, int vtheta_samples, double pdist_scale, double gdist_scale,
@@ -210,11 +210,11 @@ TrajectoryPlanner::TrajectoryPlanner(WorldModel& world_model, const Costmap2D& c
   costmap_2d::calculateMinAndMaxDistances(footprint_spec_, inscribed_radius_, circumscribed_radius_);
 }
 
-TrajectoryPlanner::~TrajectoryPlanner()
+SisoTrajectoryPlanner::~SisoTrajectoryPlanner()
 {
 }
 
-bool TrajectoryPlanner::getCellCosts(int cx, int cy, float& path_cost, float& goal_cost, float& occ_cost,
+bool SisoTrajectoryPlanner::getCellCosts(int cx, int cy, float& path_cost, float& goal_cost, float& occ_cost,
                                      float& total_cost)
 {
   MapCell cell = path_map_(cx, cy);
@@ -238,25 +238,24 @@ bool TrajectoryPlanner::getCellCosts(int cx, int cy, float& path_cost, float& go
 /**
  * create and score a trajectory given the current pose of the robot and selected velocities
  */
-void TrajectoryPlanner::generateTrajectory(double x, double y, double theta, double vx, double vy, double vtheta,
-                                           double vx_samp, double vy_samp, double vtheta_samp, double acc_x,
-                                           double acc_y, double acc_theta, double impossible_cost, Trajectory& traj)
+void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, const double theta, const double vx,
+					   const double vy, const double vtheta, const double vx_samp,
+					   const double vy_samp, const double vtheta_samp, const double acc_x,
+                                           const double acc_y, const double acc_theta, const double acc_progress,
+					   const double impossible_cost, Trajectory& traj)
 {
   // make sure the configuration doesn't change mid run
   boost::mutex::scoped_lock l(configuration_mutex_);
 
-  double x_i = x;
-  double y_i = y;
-  double theta_i = theta;
-
-  double vx_i, vy_i, vtheta_i;
-
-  vx_i = vx;
-  vy_i = vy;
-  vtheta_i = vtheta;
+  auto x_i = x;
+  auto y_i = y;
+  auto theta_i = theta;
+  auto vx_i = vx;
+  auto vy_i = vy;
+  auto vtheta_i = vtheta;
 
   // compute the magnitude of the velocities
-  double vmag = hypot(vx_samp, vy_samp);
+  const auto vmag = hypot(vx_samp, vy_samp);
 
   // compute the number of steps we must take along this trajectory to be "safe"
   int num_steps;
@@ -275,7 +274,7 @@ void TrajectoryPlanner::generateTrajectory(double x, double y, double theta, dou
     num_steps = 1;
   }
 
-  double dt = sim_time_ / num_steps;
+  const auto dt = sim_time_ / num_steps;
   double time = 0.0;
 
   // create a potential trajectory
@@ -304,7 +303,7 @@ void TrajectoryPlanner::generateTrajectory(double x, double y, double theta, dou
     }
 
     // check the point on the trajectory for legality
-    double footprint_cost = footprintCost(x_i, y_i, theta_i);
+    const auto footprint_cost = footprintCost(x_i, y_i, theta_i);
 
     // if the footprint hits an obstacle this trajectory is invalid
     if (footprint_cost < 0)
@@ -411,7 +410,7 @@ void TrajectoryPlanner::generateTrajectory(double x, double y, double theta, dou
   traj.cost_ = cost;
 }
 
-double TrajectoryPlanner::headingDiff(int cell_x, int cell_y, double x, double y, double heading)
+double SisoTrajectoryPlanner::headingDiff(int cell_x, int cell_y, double x, double y, double heading)
 {
   unsigned int goal_cell_x, goal_cell_y;
 
@@ -432,7 +431,7 @@ double TrajectoryPlanner::headingDiff(int cell_x, int cell_y, double x, double y
 }
 
 // calculate the cost of a ray-traced line
-double TrajectoryPlanner::lineCost(int x0, int x1, int y0, int y1)
+double SisoTrajectoryPlanner::lineCost(int x0, int x1, int y0, int y1)
 {
   // Bresenham Ray-Tracing
   int deltax = abs(x1 - x0);  // The difference between the x's
@@ -515,7 +514,7 @@ double TrajectoryPlanner::lineCost(int x0, int x1, int y0, int y1)
   return line_cost;
 }
 
-double TrajectoryPlanner::pointCost(int x, int y)
+double SisoTrajectoryPlanner::pointCost(int x, int y)
 {
   unsigned char cost = costmap_.getCost(x, y);
   // if the cell is in an obstacle the path is invalid
@@ -527,7 +526,7 @@ double TrajectoryPlanner::pointCost(int x, int y)
   return cost;
 }
 
-void TrajectoryPlanner::updatePlan(const vector<geometry_msgs::PoseStamped>& new_plan, bool compute_dists)
+void SisoTrajectoryPlanner::updatePlan(const vector<geometry_msgs::PoseStamped>& new_plan, bool compute_dists)
 {
   global_plan_.resize(new_plan.size());
   for (unsigned int i = 0; i < new_plan.size(); ++i)
@@ -560,7 +559,7 @@ void TrajectoryPlanner::updatePlan(const vector<geometry_msgs::PoseStamped>& new
   }
 }
 
-bool TrajectoryPlanner::checkTrajectory(double x, double y, double theta, double vx, double vy, double vtheta,
+bool SisoTrajectoryPlanner::checkTrajectory(double x, double y, double theta, double vx, double vy, double vtheta,
                                         double vx_samp, double vy_samp, double vtheta_samp)
 {
   Trajectory t;
@@ -578,13 +577,14 @@ bool TrajectoryPlanner::checkTrajectory(double x, double y, double theta, double
   return false;
 }
 
-double TrajectoryPlanner::scoreTrajectory(double x, double y, double theta, double vx, double vy, double vtheta,
-                                          double vx_samp, double vy_samp, double vtheta_samp)
+double SisoTrajectoryPlanner::scoreTrajectory(const double x, const double y, const double theta, const double vx,
+					  const double vy, const double vtheta,
+                                          const double vx_samp, const double vy_samp, const double vtheta_samp)
 {
   Trajectory t;
   double impossible_cost = path_map_.obstacleCosts();
   generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_lim_x_, acc_lim_y_, acc_lim_theta_,
-                     impossible_cost, t);
+                     acceleration_progress_, impossible_cost, t);
 
   // return the cost.
   return double(t.cost_);
@@ -593,8 +593,10 @@ double TrajectoryPlanner::scoreTrajectory(double x, double y, double theta, doub
 /*
  * create the trajectories we wish to score
  */
-Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double theta, double vx, double vy, double vtheta,
-                                                 double acc_x, double acc_y, double acc_theta)
+Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const double y, const double theta,
+						 const double vx, const double vy, const double vtheta,
+                                                 const double acc_x, const double acc_y, const double acc_theta,
+						 const double acc_progress)
 {
   // compute feasible velocity limits in robot space
   double max_vel_x = max_vel_x_, max_vel_theta;
@@ -653,7 +655,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
       vtheta_samp = 0;
       // first sample the straight trajectory
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -668,7 +670,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
       for (int j = 0; j < vtheta_samples_ - 1; ++j)
       {
         generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                           impossible_cost, *comp_traj);
+                           acc_progress, impossible_cost, *comp_traj);
 
         // if the new trajectory is better... let's take it
         if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -690,7 +692,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
       vy_samp = 0.1;
       vtheta_samp = 0.0;
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -704,7 +706,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
       vy_samp = -0.1;
       vtheta_samp = 0.0;
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -731,7 +733,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
         vtheta_samp > 0 ? max(vtheta_samp, min_in_place_vel_th_) : min(vtheta_samp, -1.0 * min_in_place_vel_th_);
 
     generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp_limited, acc_x, acc_y, acc_theta,
-                       impossible_cost, *comp_traj);
+                       acc_progress, impossible_cost, *comp_traj);
 
     // if the new trajectory is better... let's take it...
     // note if we can legally rotate in place we prefer to do that rather than move with y velocity
@@ -855,7 +857,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
       vy_samp = y_vels_[i];
       // sample completely horizontal trajectories
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ <= best_traj->cost_ || best_traj->cost_ < 0))
@@ -965,7 +967,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
   vx_samp = backup_vel_;
   vy_samp = 0.0;
   generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                     impossible_cost, *comp_traj);
+                     acc_progress, impossible_cost, *comp_traj);
 
   // if the new trajectory is better... let's take it
   /*
@@ -1018,7 +1020,7 @@ Trajectory TrajectoryPlanner::createTrajectories(double x, double y, double thet
 }
 
 // given the current state of the robot, find a good trajectory
-Trajectory TrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& global_pose,
+Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& global_pose,
                                            const tf::Stamped<tf::Pose>& global_vel,
                                            tf::Stamped<tf::Pose>& drive_velocities)
 {
@@ -1035,9 +1037,9 @@ Trajectory TrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& global_p
   const auto footprint_list = footprint_helper_.getFootprintCells(pos, footprint_spec_, costmap_, true);
 
   // mark cells within the initial footprint of the robot
-  for (unsigned int i = 0; i < footprint_list.size(); ++i)
+  for (const auto &footprint : footprint_list)
   {
-    path_map_(footprint_list[i].x, footprint_list[i].y).within_robot = true;
+    path_map_(footprint.x, footprint.y).within_robot = true;
   }
 
   // make sure that we update our path based on the global plan and compute costs
@@ -1045,9 +1047,24 @@ Trajectory TrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& global_p
   goal_map_.setLocalGoal(costmap_, global_plan_);
   ROS_DEBUG("Path/Goal distance computed");
 
+  // Determine the actual progress so far, this isn't correct for the moment
+  const auto computed_progress = vel[0] / acc_lim_x_; //sqrt(vel[0] / 3.0);
+  if (computed_progress > acceleration_progress_)
+  {
+      ROS_INFO("Speeding Up");
+  } else if (computed_progress < acceleration_progress_)
+  {
+      ROS_INFO("Slowing down");
+  } else
+  {
+      ROS_INFO("unchanged");
+  }
+  acceleration_progress_ = computed_progress;
+
   // rollout trajectories and find the minimum cost one
   Trajectory best =
-      createTrajectories(pos[0], pos[1], pos[2], vel[0], vel[1], vel[2], acc_lim_x_, acc_lim_y_, acc_lim_theta_);
+      createTrajectories(pos[0], pos[1], pos[2], vel[0], vel[1], vel[2], acc_lim_x_, acc_lim_y_,
+			 acc_lim_theta_, acceleration_progress_);
   ROS_DEBUG("Trajectories created");
 
   /*
@@ -1092,13 +1109,13 @@ Trajectory TrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& global_p
 }
 
 // we need to take the footprint of the robot into account when we calculate cost to obstacles
-double TrajectoryPlanner::footprintCost(double x_i, double y_i, double theta_i)
+double SisoTrajectoryPlanner::footprintCost(double x_i, double y_i, double theta_i)
 {
   // check if the footprint is legal
   return world_model_.footprintCost(x_i, y_i, theta_i, footprint_spec_, inscribed_radius_, circumscribed_radius_);
 }
 
-void TrajectoryPlanner::getLocalGoal(double& x, double& y)
+void SisoTrajectoryPlanner::getLocalGoal(double& x, double& y)
 {
   x = path_map_.goal_x_;
   y = path_map_.goal_y_;

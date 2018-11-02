@@ -254,7 +254,7 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
 
     footprint_spec_ = costmap_ros_->getRobotFootprint();
 
-    tc_ = new TrajectoryPlanner(
+    tc_ = new SisoTrajectoryPlanner(
         *world_model_, *costmap_, footprint_spec_, acc_lim_x_, acc_lim_y_, acc_lim_theta_, sim_time, sim_granularity,
         vx_samples, vtheta_samples, pdist_scale, gdist_scale, occdist_scale, heading_lookahead, oscillation_reset_dist,
         escape_reset_dist, escape_reset_theta, holonomic_robot, max_vel_x, min_vel_x, max_vel_th_, min_vel_th_,
@@ -262,7 +262,7 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
         simple_attractor, y_vels, stop_time_buffer, sim_period_, angular_sim_granularity);
 
     map_viz_.initialize(name, global_frame_,
-                        boost::bind(&TrajectoryPlanner::getCellCosts, tc_, _1, _2, _3, _4, _5, _6));
+                        boost::bind(&SisoTrajectoryPlanner::getCellCosts, tc_, _1, _2, _3, _4, _5, _6));
     initialized_ = true;
 
     dsrv_ = new dynamic_reconfigure::Server<BaseLocalPlannerConfig>(private_nh);

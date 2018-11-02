@@ -45,7 +45,7 @@
 #include <base_local_planner/point_grid.h>
 #include <base_local_planner/costmap_model.h>
 #include <base_local_planner/voxel_grid_model.h>
-#include <base_local_planner/trajectory_planner.h>
+#include "trajectory_planner.h"
 #include <base_local_planner/map_grid_visualizer.h>
 
 #include <base_local_planner/planar_laser_scan.h>
@@ -159,8 +159,8 @@ public:
     return initialized_;
   }
 
-  /** @brief Return the inner TrajectoryPlanner object.  Only valid after initialize(). */
-  TrajectoryPlanner* getPlanner() const
+  /** @brief Return the inner SisoTrajectoryPlanner object.  Only valid after initialize(). */
+  SisoTrajectoryPlanner* getPlanner() const
   {
     return tc_;
   }
@@ -209,7 +209,7 @@ private:
   }
 
   WorldModel* world_model_;  ///< @brief The world model that the controller will use
-  TrajectoryPlanner* tc_;    ///< @brief The trajectory controller
+  SisoTrajectoryPlanner* tc_;    ///< @brief The trajectory controller
 
   costmap_2d::Costmap2DROS* costmap_ros_;  ///< @brief The ROS wrapper for the costmap the controller will use
   costmap_2d::Costmap2D* costmap_;         ///< @brief The costmap the controller will use

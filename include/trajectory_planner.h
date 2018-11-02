@@ -61,18 +61,18 @@
 #include <base_local_planner/map_cell.h>
 #include <base_local_planner/map_grid.h>
 
-// For acceleration stuff
+// For Easing Curves
 #include <QtCore/QEasingCurve>
 
 namespace base_local_planner
 {
 /**
- * @class TrajectoryPlanner
+ * @class SisoTrajectoryPlanner
  * @brief Computes control velocities for a robot given a costmap, a plan, and the robot's position in the world.
  */
-class TrajectoryPlanner
+class SisoTrajectoryPlanner
 {
-  friend class TrajectoryPlannerTest;  // Need this for gtest to work
+  friend class SisoTrajectoryPlannerTest;  // Need this for gtest to work
 public:
   /**
    * @brief  Constructs a trajectory controller
@@ -116,7 +116,7 @@ public:
    * @param angular_sim_granularity The distance between simulation points for angular velocity should be small enough
    * that the robot doesn't hit things
    */
-  TrajectoryPlanner(WorldModel& world_model, const costmap_2d::Costmap2D& costmap,
+  SisoTrajectoryPlanner(WorldModel& world_model, const costmap_2d::Costmap2D& costmap,
                     std::vector<geometry_msgs::Point> footprint_spec, double acc_lim_x = 1.0, double acc_lim_y = 1.0,
                     double acc_lim_theta = 1.0, double sim_time = 1.0, double sim_granularity = 0.025,
                     int vx_samples = 20, int vtheta_samples = 20, double pdist_scale = 0.6, double gdist_scale = 0.8,
@@ -131,7 +131,7 @@ public:
   /**
    * @brief  Destructs a trajectory controller
    */
-  ~TrajectoryPlanner();
+  ~SisoTrajectoryPlanner();
 
   /**
    * @brief Reconfigures the trajectory planner
@@ -156,7 +156,7 @@ public:
   void updatePlan(const std::vector<geometry_msgs::PoseStamped>& new_plan, bool compute_dists = false);
 
   /**
-   * @brief  Accessor for the goal the robot is currently pursuing in world corrdinates
+   * @brief  Accessor for the goal the robot is currently pursuing in world coordinates
    * @param x Will be set to the x position of the local goal
    * @param y Will be set to the y position of the local goal
    */
@@ -234,11 +234,12 @@ private:
    * @param acc_x The x acceleration limit of the robot
    * @param acc_y The y acceleration limit of the robot
    * @param acc_theta The theta acceleration limit of the robot
+   * @param acc_progress The progress on the acceleration curve
    * @return
    */
   // Needs to use the easing curve
   Trajectory createTrajectories(double x, double y, double theta, double vx, double vy, double vtheta, double acc_x,
-                                double acc_y, double acc_theta);
+                                double acc_y, double acc_theta, double acc_progress);
 
   /**
    * @brief  Generate and score a single trajectory
@@ -254,6 +255,7 @@ private:
    * @param acc_x The x acceleration limit of the robot
    * @param acc_y The y acceleration limit of the robot
    * @param acc_theta The theta acceleration limit of the robot
+   * @param acc_progress The progress on the acceleration curve
    * @param impossible_cost The cost value of a cell in the local map grid that is considered impassable
    * @param traj Will be set to the generated trajectory with its associated score
    */
@@ -261,7 +263,7 @@ private:
   // Needs to use the easing curve
   void generateTrajectory(double x, double y, double theta, double vx, double vy, double vtheta, double vx_samp,
                           double vy_samp, double vtheta_samp, double acc_x, double acc_y, double acc_theta,
-                          double impossible_cost, Trajectory& traj);
+			  double acc_progress, double impossible_cost, Trajectory& traj);
 
   /**
    * @brief  Checks the legality of the robot footprint at a position and orientation using the world model
