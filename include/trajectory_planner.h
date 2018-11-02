@@ -343,8 +343,8 @@ private:
   double inscribed_radius_, circumscribed_radius_;
   double acceleration_progress_; // < @brief the progress for the acceleration graph
   double deceleration_progress_; // < @brief the progress for the acceleration graph
-  QEasingCurve acceleration_curve; // < @brief the acceleration_curve
-  QEasingCurve deceleration_curve; // < @brief the deceleration_curve
+  QEasingCurve acceleration_curve_; // < @brief the acceleration_curve
+  QEasingCurve deceleration_curve_; // < @brief the deceleration_curve
 
   boost::mutex configuration_mutex_;
 

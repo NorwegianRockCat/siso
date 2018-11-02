@@ -54,6 +54,18 @@ using namespace costmap_2d;
 
 namespace base_local_planner
 {
+
+
+qreal linearAccelerationDerivative(qreal time)
+{
+  return 3 * time;
+}
+
+qreal linearDecelerationDerivative(qreal time)
+{
+  return 3 - linearAccelerationDerivative(time);
+}
+
 void SisoTrajectoryPlanner::reconfigure(BaseLocalPlannerConfig& cfg)
 {
   BaseLocalPlannerConfig config(cfg);
@@ -206,6 +218,8 @@ SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Cost
 
   escaping_ = false;
   final_goal_position_valid_ = false;
+  acceleration_curve_.setCustomType(linearAccelerationDerivative);
+  deceleration_curve_.setCustomType(linearDecelerationDerivative);
 
   costmap_2d::calculateMinAndMaxDistances(footprint_spec_, inscribed_radius_, circumscribed_radius_);
 }
@@ -385,6 +399,15 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
 
     // calculate velocities
     vx_i = computeNewVelocity(vx_samp, vx_i, acc_x, dt);
+    if (vx_samp >= vx_i)
+    {
+	const auto totalTimeForAcceleration = max_vel_x_ / acc_lim_x_;
+	const auto timeAsProgress = (acc_progress + time) / totalTimeForAcceleration;
+	const auto value = acceleration_curve_.valueForProgress(timeAsProgress);
+	ROS_INFO("speed %f guess %f (%f)", vx_i, std::min(vx_samp, (value / 3.0) * max_vel_x_), vx_samp);
+    }
+
+
     vy_i = computeNewVelocity(vy_samp, vy_i, acc_y, dt);
     vtheta_i = computeNewVelocity(vtheta_samp, vtheta_i, acc_theta, dt);
 
@@ -1047,18 +1070,8 @@ Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& glob
   goal_map_.setLocalGoal(costmap_, global_plan_);
   ROS_DEBUG("Path/Goal distance computed");
 
-  // Determine the actual progress so far, this isn't correct for the moment
+  // Determine the actual progress so far, this isn't correct for the moment (only using x for now)
   const auto computed_progress = vel[0] / acc_lim_x_; //sqrt(vel[0] / 3.0);
-  if (computed_progress > acceleration_progress_)
-  {
-      ROS_INFO("Speeding Up");
-  } else if (computed_progress < acceleration_progress_)
-  {
-      ROS_INFO("Slowing down");
-  } else
-  {
-      ROS_INFO("unchanged");
-  }
   acceleration_progress_ = computed_progress;
 
   // rollout trajectories and find the minimum cost one
