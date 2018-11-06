@@ -403,9 +403,10 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
     // calculate velocities
     if (vx_samp - vx_i > 0.0)
     {
-	vx_i = (acceleration_curve_.valueForProgress(acc_progress_i) / 3.0) * max_vel_x_;
+	vx_i = std::min(vx_samp, (acceleration_curve_.valueForProgress(acc_progress_i) / 3.0) * max_vel_x_);
     } else {
-	vx_i = computeNewVelocity(vx_samp, vx_i, acc_x, dt);
+	// This doesn't work, the progress doesn't get us what we want. 
+	vx_i = std::max(vx_samp, (deceleration_curve_.valueForProgress(1.0 - acc_progress_i) / 3.0) * max_vel_x_);
     }
     vy_i = computeNewVelocity(vy_samp, vy_i, acc_y, dt);
     vtheta_i = computeNewVelocity(vtheta_samp, vtheta_i, acc_theta, dt);
