@@ -265,11 +265,14 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
   auto y_i = y;
   auto theta_i = theta;
   auto vx_i = vx;
+  auto acc_progress_i = acc_progress;
   auto vy_i = vy;
   auto vtheta_i = vtheta;
 
   // compute the magnitude of the velocities
   const auto vmag = hypot(vx_samp, vy_samp);
+
+  const auto totalTimeForAcceleration = max_vel_x_ / acc_lim_x_;
 
   // compute the number of steps we must take along this trajectory to be "safe"
   int num_steps;
@@ -398,16 +401,12 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
     traj.addPoint(x_i, y_i, theta_i);
 
     // calculate velocities
-    vx_i = computeNewVelocity(vx_samp, vx_i, acc_x, dt);
-    if (vx_samp >= vx_i)
+    if (vx_samp - vx_i > 0.0)
     {
-	const auto totalTimeForAcceleration = max_vel_x_ / acc_lim_x_;
-	const auto timeAsProgress = (acc_progress + time) / totalTimeForAcceleration;
-	const auto value = acceleration_curve_.valueForProgress(timeAsProgress);
-	ROS_INFO("speed %f guess %f (%f)", vx_i, std::min(vx_samp, (value / 3.0) * max_vel_x_), vx_samp);
+	vx_i = (acceleration_curve_.valueForProgress(acc_progress_i) / 3.0) * max_vel_x_;
+    } else {
+	vx_i = computeNewVelocity(vx_samp, vx_i, acc_x, dt);
     }
-
-
     vy_i = computeNewVelocity(vy_samp, vy_i, acc_y, dt);
     vtheta_i = computeNewVelocity(vtheta_samp, vtheta_i, acc_theta, dt);
 
@@ -418,6 +417,7 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
 
     // increment time
     time += dt;
+    acc_progress_i = std::min(1.0, (vx_i / acc_lim_x_) / totalTimeForAcceleration);
   }  // end for i < numsteps
 
   // ROS_INFO("OccCost: %f, vx: %.2f, vy: %.2f, vtheta: %.2f", occ_cost, vx_samp, vy_samp, vtheta_samp);
@@ -1071,8 +1071,21 @@ Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& glob
   ROS_DEBUG("Path/Goal distance computed");
 
   // Determine the actual progress so far, this isn't correct for the moment (only using x for now)
-  const auto computed_progress = vel[0] / acc_lim_x_; //sqrt(vel[0] / 3.0);
-  acceleration_progress_ = computed_progress;
+
+  const auto total_accel_time = max_vel_x_ / acc_lim_x_;
+  const auto time_to_accelerate_to_vel = vel[0] / acc_lim_x_;  // This works for linear acceleration, but not different stuff.
+  const auto computed_progress = time_to_accelerate_to_vel / total_accel_time;
+
+  /*
+  if (computed_progress > acceleration_progress_) {
+      ROS_INFO("Progress up");
+  } else if (computed_progress < acceleration_progress_) {
+      ROS_INFO("Progress down");
+  } else {
+      ROS_INFO("Progress: no change");
+  }
+  */
+  acceleration_progress_ = std::min(1.0, computed_progress);
 
   // rollout trajectories and find the minimum cost one
   Trajectory best =
@@ -1108,6 +1121,7 @@ Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& glob
   if (best.cost_ < 0)
   {
     drive_velocities.setIdentity();
+    acceleration_progress_ = 0.0;
   }
   else
   {
