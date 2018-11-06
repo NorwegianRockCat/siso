@@ -405,8 +405,10 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
     {
 	vx_i = std::min(vx_samp, (acceleration_curve_.valueForProgress(acc_progress_i) / 3.0) * max_vel_x_);
     } else {
-	// This doesn't work, the progress doesn't get us what we want. 
-	vx_i = std::max(vx_samp, (deceleration_curve_.valueForProgress(1.0 - acc_progress_i) / 3.0) * max_vel_x_);
+	// This doesn't work, the progress doesn't get us what we want (off by one). 
+	vx_i = computeNewVelocity(vx_samp, vx_i, acc_x, dt);
+	//auto guess_i = (deceleration_curve_.valueForProgress(1.0 - acc_progress_i) / 3.0) * max_vel_x_;// std::max(vx_samp, (deceleration_curve_.valueForProgress(1.0 - acc_progress_i) / 3.0) * max_vel_x_);
+//	ROS_INFO("vx_i %f, guess %f", vx_i, guess_i);
     }
     vy_i = computeNewVelocity(vy_samp, vy_i, acc_y, dt);
     vtheta_i = computeNewVelocity(vtheta_samp, vtheta_i, acc_theta, dt);
@@ -418,7 +420,8 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
 
     // increment time
     time += dt;
-    acc_progress_i = std::min(1.0, (vx_i / acc_lim_x_) / totalTimeForAcceleration);
+
+    acc_progress_i = progressForSpeed(vx_i, acc_lim_x_, totalTimeForAcceleration);
   }  // end for i < numsteps
 
   // ROS_INFO("OccCost: %f, vx: %.2f, vy: %.2f, vtheta: %.2f", occ_cost, vx_samp, vy_samp, vtheta_samp);
@@ -1075,18 +1078,7 @@ Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& glob
 
   const auto total_accel_time = max_vel_x_ / acc_lim_x_;
   const auto time_to_accelerate_to_vel = vel[0] / acc_lim_x_;  // This works for linear acceleration, but not different stuff.
-  const auto computed_progress = time_to_accelerate_to_vel / total_accel_time;
-
-  /*
-  if (computed_progress > acceleration_progress_) {
-      ROS_INFO("Progress up");
-  } else if (computed_progress < acceleration_progress_) {
-      ROS_INFO("Progress down");
-  } else {
-      ROS_INFO("Progress: no change");
-  }
-  */
-  acceleration_progress_ = std::min(1.0, computed_progress);
+  acceleration_progress_ = progressForSpeed(vel[0], acc_lim_x_, time_to_accelerate_to_vel);
 
   // rollout trajectories and find the minimum cost one
   Trajectory best =

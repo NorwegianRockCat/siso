@@ -388,6 +388,12 @@ private:
     return thetai + vth * dt;
   }
 
+  // Return the progress in the acceleration curve, given the speed.
+  inline double progressForSpeed(double vi, double acc_lim, double total_acc_time)
+  {
+    return std::min(1.0, (vi / acc_lim) / total_acc_time);
+  }
+
   // compute velocity based on acceleration
   /**
    * @brief  Compute velocity based on acceleration
