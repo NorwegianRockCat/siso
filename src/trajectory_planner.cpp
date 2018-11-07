@@ -292,6 +292,7 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
   }
 
   const auto dt = sim_time_ / num_steps;
+  const auto acc_progress_dp = dt / totalTimeForAcceleration;
   double time = 0.0;
 
   // create a potential trajectory
@@ -401,14 +402,14 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
     traj.addPoint(x_i, y_i, theta_i);
 
     // calculate velocities
-    if (vx_samp - vx_i > 0.0)
+    if (vx_samp - vx_i >= 0.0)
     {
-	vx_i = std::min(vx_samp, (acceleration_curve_.valueForProgress(acc_progress_i) / 3.0) * max_vel_x_);
+	const auto accel_step = std::min(1.0, acc_progress_i + acc_progress_dp);
+	vx_i = std::min(vx_samp, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
     } else {
-	// This doesn't work, the progress doesn't get us what we want (off by one). 
-	vx_i = computeNewVelocity(vx_samp, vx_i, acc_x, dt);
-	//auto guess_i = (deceleration_curve_.valueForProgress(1.0 - acc_progress_i) / 3.0) * max_vel_x_;// std::max(vx_samp, (deceleration_curve_.valueForProgress(1.0 - acc_progress_i) / 3.0) * max_vel_x_);
-//	ROS_INFO("vx_i %f, guess %f", vx_i, guess_i);
+	const auto decel_step = std::min(1.0, 1.0 - acc_progress_i + acc_progress_dp);
+	const auto guess = (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_;
+	vx_i = std::max(vx_samp, guess);
     }
     vy_i = computeNewVelocity(vy_samp, vy_i, acc_y, dt);
     vtheta_i = computeNewVelocity(vtheta_samp, vtheta_i, acc_theta, dt);
@@ -421,6 +422,7 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
     // increment time
     time += dt;
 
+    // sync progress to the current speed (since we sometimes keep our speed our progress doesn't always change.
     acc_progress_i = progressForSpeed(vx_i, acc_lim_x_, totalTimeForAcceleration);
   }  // end for i < numsteps
 
@@ -1077,8 +1079,7 @@ Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& glob
   // Determine the actual progress so far, this isn't correct for the moment (only using x for now)
 
   const auto total_accel_time = max_vel_x_ / acc_lim_x_;
-  const auto time_to_accelerate_to_vel = vel[0] / acc_lim_x_;  // This works for linear acceleration, but not different stuff.
-  acceleration_progress_ = progressForSpeed(vel[0], acc_lim_x_, time_to_accelerate_to_vel);
+  acceleration_progress_ = progressForSpeed(vel[0], acc_lim_x_, total_accel_time);
 
   // rollout trajectories and find the minimum cost one
   Trajectory best =
