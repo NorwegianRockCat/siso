@@ -169,7 +169,6 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
         sim_period_ = 0.05;
       }
     }
-    ROS_INFO("Sim period is set to %.2f", sim_period_);
 
     private_nh.param("sim_time", sim_time, 1.0);
     private_nh.param("sim_granularity", sim_granularity, 0.025);

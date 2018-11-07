@@ -357,7 +357,7 @@ private:
    * @param  dt The timestep to take
    * @return The new x position
    */
-  inline double computeNewXPosition(double xi, double vx, double vy, double theta, double dt)
+  inline double computeNewXPosition(double xi, double vx, double vy, double theta, double dt) const
   {
     return xi + (vx * cos(theta) + vy * cos(M_PI_2 + theta)) * dt;
   }
@@ -371,7 +371,7 @@ private:
    * @param  dt The timestep to take
    * @return The new y position
    */
-  inline double computeNewYPosition(double yi, double vx, double vy, double theta, double dt)
+  inline double computeNewYPosition(double yi, double vx, double vy, double theta, double dt) const
   {
     return yi + (vx * sin(theta) + vy * sin(M_PI_2 + theta)) * dt;
   }
@@ -383,7 +383,7 @@ private:
    * @param  dt The timestep to take
    * @return The new orientation
    */
-  inline double computeNewThetaPosition(double thetai, double vth, double dt)
+  inline double computeNewThetaPosition(double thetai, double vth, double dt) const
   {
     return thetai + vth * dt;
   }
@@ -407,7 +407,7 @@ private:
    * @return The new velocity
    */
   // Needs to use the easing curve
-  inline double computeNewVelocity(double vg, double vi, double a_max, double dt)
+  inline double computeNewVelocity(double vg, double vi, double a_max, double dt) const
   {
     if ((vg - vi) >= 0)
     {
@@ -417,7 +417,7 @@ private:
   }
 
   // Needs to use easing curve
-  void getMaxSpeedToStopInTime(double time, double& vx, double& vy, double& vth)
+  void getMaxSpeedToStopInTime(double time, double& vx, double& vy, double& vth) const
   {
     vx = acc_lim_x_ * std::max(time, 0.0);
     vy = acc_lim_y_ * std::max(time, 0.0);
