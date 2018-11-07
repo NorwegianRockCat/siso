@@ -389,9 +389,12 @@ private:
   }
 
   // Return the progress in the acceleration curve, given the speed.
-  inline double progressForSpeed(double vi, double acc_lim, double total_acc_time)
+  inline double progressForSpeed(double vi, double acc_lim, double total_acc_time) const
   {
-    return std::min(1.0, (vi / acc_lim) / total_acc_time);
+      // Linear
+      //return std::min(1.0, (vi / acc_lim) / total_acc_time);
+
+      return std::min(1.0, sqrt(vi / 3) / total_acc_time);
   }
 
   // compute velocity based on acceleration

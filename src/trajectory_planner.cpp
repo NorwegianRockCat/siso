@@ -55,6 +55,16 @@ using namespace costmap_2d;
 namespace base_local_planner
 {
 
+qreal cubicInDerivative(qreal time)
+{
+  return 3.0 * time * time;
+}
+
+qreal cubicOutDerivative(qreal time)
+{
+  // 3 * (time - 1)^2
+  return cubicInDerivative(time - 1.0);
+}
 
 qreal linearAccelerationDerivative(qreal time)
 {
@@ -218,8 +228,10 @@ SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Cost
 
   escaping_ = false;
   final_goal_position_valid_ = false;
-  acceleration_curve_.setCustomType(linearAccelerationDerivative);
-  deceleration_curve_.setCustomType(linearDecelerationDerivative);
+//  acceleration_curve_.setCustomType(linearAccelerationDerivative);
+//  deceleration_curve_.setCustomType(linearDecelerationDerivative);
+  acceleration_curve_.setCustomType(cubicInDerivative);
+  deceleration_curve_.setCustomType(cubicOutDerivative);
 
   costmap_2d::calculateMinAndMaxDistances(footprint_spec_, inscribed_radius_, circumscribed_radius_);
 }
