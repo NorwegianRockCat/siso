@@ -41,6 +41,7 @@
 #include <sstream>
 #include <math.h>
 #include <cstring>
+#include <algorithm>
 #include <angles/angles.h>
 
 #include <boost/algorithm/string.hpp>
@@ -79,13 +80,19 @@ qreal linearDecelerationDerivative(qreal time)
 
 SisoTrajectoryPlanner::VelocityCurve decode_velocity_curve_string(const std::string &velocity_curve)
 {
-    if (strncmp("siso", velocity_curve.c_str(), 4) == 0)
+    // Since this will can get data from the keyboard,
+    // always lowercase to help out the occasional capitalization typos.
+    // This is only ASCII stuff, so we can get away with tolower().
+    std::string lower_case_curve(velocity_curve.size(), '\0');
+    std::transform(velocity_curve.begin(), velocity_curve.end(), lower_case_curve.begin(), ::tolower);
+
+    if (strcmp("siso", lower_case_curve.c_str()) == 0)
     {
 	return SisoTrajectoryPlanner::VelocityCurve::SlowInSlowOut;
-    } else if (strncmp("classic", velocity_curve.c_str(), 7) == 0)
+    } else if (strcmp("classic", lower_case_curve.c_str()) == 0)
     {
 	return SisoTrajectoryPlanner::VelocityCurve::Classic;
-    } else if (strncmp("linear", velocity_curve.c_str(), 6) == 0)
+    } else if (strcmp("linear", lower_case_curve.c_str()) == 0)
     {
 	return SisoTrajectoryPlanner::VelocityCurve::Linear;
     } else
@@ -180,8 +187,9 @@ void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
   }
 
   y_vels_ = y_vels;
-
+  //ROS_INFO("Read %s", config.velocity_curve.c_str());
   velocity_curve_ = decode_velocity_curve_string(config.velocity_curve);
+  //ROS_INFO("You got %d", velocity_curve_);
 }
 
 SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Costmap2D& costmap,
