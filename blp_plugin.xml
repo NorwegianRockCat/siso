@@ -1,5 +1,5 @@
 <library path="lib/libsiso_local_planner">
-    <class name="base_local_planner/SisoLocalPlanner" type="base_local_planner::SisoLocalPlanner" base_class_type="nav_core::BaseLocalPlanner">
+    <class name="siso_local_planner/SisoLocalPlanner" type="siso_local_planner::SisoLocalPlanner" base_class_type="nav_core::BaseLocalPlanner">
     <description>
       An attempt at trying to do the slow in, slow out movement with the local motion planner.
     </description>

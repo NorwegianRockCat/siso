@@ -51,11 +51,11 @@
 #include <nav_msgs/Path.h>
 
 // register this planner as a BaseLocalPlanner plugin
-PLUGINLIB_EXPORT_CLASS(base_local_planner::SisoLocalPlanner, nav_core::BaseLocalPlanner)
+PLUGINLIB_EXPORT_CLASS(siso_local_planner::SisoLocalPlanner, nav_core::BaseLocalPlanner)
 
-namespace base_local_planner
+namespace siso_local_planner
 {
-void SisoLocalPlanner::reconfigureCB(BaseLocalPlannerConfig& config, uint32_t level)
+void SisoLocalPlanner::reconfigureCB(SisoLocalPlannerConfig& config, uint32_t level)
 {
   if (setup_ && config.restore_defaults)
   {
@@ -125,6 +125,13 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
 
     global_frame_ = costmap_ros_->getGlobalFrameID();
     robot_base_frame_ = costmap_ros_->getBaseFrameID();
+    if (!private_nh.hasParam("siso_velocity_curve"))
+    {
+	ROS_INFO("No VELOCITY CURVE");
+    } else
+    {
+	ROS_INFO("FOUND PARTY PARTY");
+    }
     private_nh.param("prune_plan", prune_plan_, true);
 
     private_nh.param("yaw_goal_tolerance", yaw_goal_tolerance_, 0.05);
@@ -264,8 +271,8 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
                         boost::bind(&SisoTrajectoryPlanner::getCellCosts, tc_, _1, _2, _3, _4, _5, _6));
     initialized_ = true;
 
-    dsrv_ = new dynamic_reconfigure::Server<BaseLocalPlannerConfig>(private_nh);
-    dynamic_reconfigure::Server<BaseLocalPlannerConfig>::CallbackType cb =
+    dsrv_ = new dynamic_reconfigure::Server<SisoLocalPlannerConfig>(private_nh);
+    dynamic_reconfigure::Server<SisoLocalPlannerConfig>::CallbackType cb =
         boost::bind(&SisoLocalPlanner::reconfigureCB, this, _1, _2);
     dsrv_->setCallback(cb);
   }

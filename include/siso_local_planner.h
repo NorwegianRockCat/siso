@@ -68,11 +68,11 @@
 #include <nav_core/base_local_planner.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <base_local_planner/BaseLocalPlannerConfig.h>
+#include <siso_local_planner/SisoLocalPlannerConfig.h>
 
 #include <base_local_planner/odometry_helper_ros.h>
 
-namespace base_local_planner
+namespace siso_local_planner
 {
 /**
  * @class SisoLocalPlanner
@@ -169,7 +169,7 @@ private:
   /**
    * @brief Callback to update the local planner's parameters based on dynamic reconfigure
    */
-  void reconfigureCB(BaseLocalPlannerConfig& config, uint32_t level);
+   void reconfigureCB(SisoLocalPlannerConfig& config, uint32_t level);
 
   /**
    * @brief all the fine tuning that needs to happen if we are at or very near the goal
@@ -235,8 +235,8 @@ private:
 
   ros::Publisher g_plan_pub_, l_plan_pub_;
 
-  dynamic_reconfigure::Server<BaseLocalPlannerConfig>* dsrv_;
-  base_local_planner::BaseLocalPlannerConfig default_config_;
+  dynamic_reconfigure::Server<SisoLocalPlannerConfig>* dsrv_;
+  siso_local_planner::SisoLocalPlannerConfig default_config_;
   bool setup_;
 
   bool initialized_;

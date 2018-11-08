@@ -52,7 +52,7 @@
 using namespace std;
 using namespace costmap_2d;
 
-namespace base_local_planner
+namespace siso_local_planner
 {
 
 qreal cubicInDerivative(qreal time)
@@ -76,9 +76,9 @@ qreal linearDecelerationDerivative(qreal time)
   return 3 - linearAccelerationDerivative(time);
 }
 
-void SisoTrajectoryPlanner::reconfigure(BaseLocalPlannerConfig& cfg)
+void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
 {
-  BaseLocalPlannerConfig config(cfg);
+  SisoLocalPlannerConfig config(cfg);
 
   boost::mutex::scoped_lock l(configuration_mutex_);
 

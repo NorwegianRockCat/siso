@@ -48,7 +48,7 @@
 #include <base_local_planner/world_model.h>
 #include <base_local_planner/trajectory.h>
 #include <base_local_planner/Position2DInt.h>
-#include <base_local_planner/BaseLocalPlannerConfig.h>
+#include <siso_local_planner/SisoLocalPlannerConfig.h>
 
 // we'll take in a path as a vector of poses
 #include <geometry_msgs/PoseStamped.h>
@@ -64,8 +64,9 @@
 // For Easing Curves
 #include <QtCore/QEasingCurve>
 
-namespace base_local_planner
+namespace siso_local_planner
 {
+    using namespace base_local_planner;
 /**
  * @class SisoTrajectoryPlanner
  * @brief Computes control velocities for a robot given a costmap, a plan, and the robot's position in the world.
@@ -136,7 +137,7 @@ public:
   /**
    * @brief Reconfigures the trajectory planner
    */
-  void reconfigure(BaseLocalPlannerConfig& cfg);
+  void reconfigure(SisoLocalPlannerConfig& cfg);
 
   /**
    * @brief  Given the current position, orientation, and velocity of the robot, return a trajectory to follow
