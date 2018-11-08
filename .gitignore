@@ -1,0 +1,18 @@
+*~
+.#*
+*.*#
+tags
+.DS_Store
+.directory
+*.debug
+
+# xemacs temporary files
+*.flc
+
+# Vim temporary files
+.*.swp
+
+# Python byte code
+*.pyc
+
+.dir-locals.el
