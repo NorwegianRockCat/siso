@@ -182,10 +182,12 @@ void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
   y_vels_ = y_vels;
 
   const auto velocity_curve_string = config.velocity_curve;
+  ROS_INFO("I read %s", velocity_curve_string.c_str());
   velocity_curve_ = decode_velocity_curve_string(velocity_curve_string);
 }
 
 SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Costmap2D& costmap,
+					    const std::string &velocity_curve,
                                      std::vector<geometry_msgs::Point> footprint_spec, double acc_lim_x,
                                      double acc_lim_y, double acc_lim_theta, double sim_time, double sim_granularity,
                                      int vx_samples, int vtheta_samples, double pdist_scale, double gdist_scale,
@@ -236,6 +238,7 @@ SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Cost
   , stop_time_buffer_(stop_time_buffer)
   , sim_period_(sim_period)
   , acceleration_progress_(0)
+  , velocity_curve_(decode_velocity_curve_string(velocity_curve))
 {
   // the robot is not stuck to begin with
   stuck_left = false;

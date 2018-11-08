@@ -80,6 +80,7 @@ public:
    * @brief  Constructs a trajectory controller
    * @param world_model The WorldModel the trajectory controller uses to check for collisions
    * @param costmap A reference to the Costmap the controller should use
+   * @param velocity_curve A string containing what velocity curve should be used
    * @param footprint_spec A polygon representing the footprint of the robot. (Must be convex)
    * @param inscribed_radius The radius of the inscribed circle of the robot
    * @param circumscribed_radius The radius of the circumscribed circle of the robot
@@ -118,7 +119,7 @@ public:
    * @param angular_sim_granularity The distance between simulation points for angular velocity should be small enough
    * that the robot doesn't hit things
    */
-  SisoTrajectoryPlanner(WorldModel& world_model, const costmap_2d::Costmap2D& costmap,
+   SisoTrajectoryPlanner(WorldModel& world_model, const costmap_2d::Costmap2D& costmap, const std::string &velocity_curve,
                     std::vector<geometry_msgs::Point> footprint_spec, double acc_lim_x = 1.0, double acc_lim_y = 1.0,
                     double acc_lim_theta = 1.0, double sim_time = 1.0, double sim_granularity = 0.025,
                     int vx_samples = 20, int vtheta_samples = 20, double pdist_scale = 0.6, double gdist_scale = 0.8,

@@ -257,7 +257,7 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
     footprint_spec_ = costmap_ros_->getRobotFootprint();
 
     tc_ = new SisoTrajectoryPlanner(
-        *world_model_, *costmap_, footprint_spec_, acc_lim_x_, acc_lim_y_, acc_lim_theta_, sim_time, sim_granularity,
+        *world_model_, *costmap_, velocity_curve, footprint_spec_, acc_lim_x_, acc_lim_y_, acc_lim_theta_, sim_time, sim_granularity,
         vx_samples, vtheta_samples, pdist_scale, gdist_scale, occdist_scale, heading_lookahead, oscillation_reset_dist,
         escape_reset_dist, escape_reset_theta, holonomic_robot, max_vel_x, min_vel_x, max_vel_th_, min_vel_th_,
         min_in_place_vel_th_, backup_vel, dwa, heading_scoring, heading_scoring_timestep, meter_scoring,
