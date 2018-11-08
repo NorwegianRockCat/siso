@@ -399,6 +399,9 @@ private:
       return std::min(1.0, sqrt(vi / 3) / total_acc_time);
   }
 
+
+  double computeNewXVelocity(double vg, double vi, double a_max, double acc_progress, double dt, double dp);
+
   // compute velocity based on acceleration
   /**
    * @brief  Compute velocity based on acceleration

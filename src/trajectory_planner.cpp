@@ -182,7 +182,6 @@ void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
   y_vels_ = y_vels;
 
   const auto velocity_curve_string = config.velocity_curve;
-  ROS_INFO("read out %s", velocity_curve_string.c_str());
   velocity_curve_ = decode_velocity_curve_string(velocity_curve_string);
 }
 
@@ -436,15 +435,7 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
     traj.addPoint(x_i, y_i, theta_i);
 
     // calculate velocities
-    if (vx_samp - vx_i >= 0.0)
-    {
-	const auto accel_step = std::min(1.0, acc_progress_i + acc_progress_dp);
-	vx_i = std::min(vx_samp, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
-    } else {
-	const auto decel_step = std::min(1.0, 1.0 - acc_progress_i + acc_progress_dp);
-	const auto guess = (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_;
-	vx_i = std::max(vx_samp, guess);
-    }
+    vx_i = computeNewXVelocity(vx_samp, vx_i, acc_x, acc_progress, acc_progress_dp, dt);
     vy_i = computeNewVelocity(vy_samp, vy_i, acc_y, dt);
     vtheta_i = computeNewVelocity(vtheta_samp, vtheta_i, acc_theta, dt);
 
@@ -471,6 +462,30 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
     cost = occdist_scale_ * occ_cost + pdist_scale_ * path_dist + 0.3 * heading_diff + goal_dist * gdist_scale_;
   }
   traj.cost_ = cost;
+}
+
+
+double SisoTrajectoryPlanner::computeNewXVelocity(const double vg, const double vi, const double a_max,
+						  const double acc_progress, const double dt, double dp)
+{
+  switch (velocity_curve_)
+  {
+  default:
+      ROS_INFO("Unknown curve, you get classic!");
+  case Classic:
+      return computeNewVelocity(vg, vi, a_max, dt);
+  case Linear:
+  case SlowInSlowOut:
+      if (vg - vi >= 0)
+      {
+	const auto accel_step = std::min(1.0, acc_progress + dp);
+	return std::min(vg, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
+      } else
+      {
+	const auto decel_step = std::min(1.0, 1.0 - acc_progress + dp);
+	return std::max(vg, (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_);
+      }
+  }
 }
 
 double SisoTrajectoryPlanner::headingDiff(int cell_x, int cell_y, double x, double y, double heading)
