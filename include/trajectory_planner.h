@@ -75,6 +75,7 @@ class SisoTrajectoryPlanner
 {
   friend class SisoTrajectoryPlannerTest;  // Need this for gtest to work
 public:
+  enum VelocityCurve { Unknown = -1, Classic, Linear, SlowInSlowOut };
   /**
    * @brief  Constructs a trajectory controller
    * @param world_model The WorldModel the trajectory controller uses to check for collisions
@@ -343,9 +344,9 @@ private:
 
   double inscribed_radius_, circumscribed_radius_;
   double acceleration_progress_; // < @brief the progress for the acceleration graph
-  double deceleration_progress_; // < @brief the progress for the acceleration graph
   QEasingCurve acceleration_curve_; // < @brief the acceleration_curve
   QEasingCurve deceleration_curve_; // < @brief the deceleration_curve
+  VelocityCurve velocity_curve_; // < @brief the currently selected velocity curve
 
   boost::mutex configuration_mutex_;
 

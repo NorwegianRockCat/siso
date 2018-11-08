@@ -117,7 +117,7 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
     double max_vel_x, min_vel_x;
     double backup_vel;
     double stop_time_buffer;
-    std::string world_model_type;
+    std::string world_model_type, velocity_curve;
     rotating_to_goal_ = false;
 
     // initialize the copy of the costmap the controller will use
@@ -125,13 +125,6 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
 
     global_frame_ = costmap_ros_->getGlobalFrameID();
     robot_base_frame_ = costmap_ros_->getBaseFrameID();
-    if (!private_nh.hasParam("siso_velocity_curve"))
-    {
-	ROS_INFO("No VELOCITY CURVE");
-    } else
-    {
-	ROS_INFO("FOUND PARTY PARTY");
-    }
     private_nh.param("prune_plan", prune_plan_, true);
 
     private_nh.param("yaw_goal_tolerance", yaw_goal_tolerance_, 0.05);
@@ -253,6 +246,9 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
     private_nh.param("point_grid/max_obstacle_height", max_obstacle_height, 2.0);
     private_nh.param("point_grid/grid_resolution", grid_resolution, 0.2);
 
+    // parameters for the velocity curve
+    private_nh.param("velocity_curve", velocity_curve, std::string("siso"));
+
     ROS_ASSERT_MSG(world_model_type == "costmap", "At this time, only costmap world models are supported by this "
                                                   "controller");
     world_model_ = new CostmapModel(*costmap_);
@@ -275,6 +271,7 @@ void SisoLocalPlanner::initialize(std::string name, tf::TransformListener* tf, c
     dynamic_reconfigure::Server<SisoLocalPlannerConfig>::CallbackType cb =
         boost::bind(&SisoLocalPlanner::reconfigureCB, this, _1, _2);
     dsrv_->setCallback(cb);
+
   }
   else
   {
