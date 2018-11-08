@@ -83,7 +83,8 @@ SisoTrajectoryPlanner::VelocityCurve decode_velocity_curve_string(const std::str
     // Since this will can get data from the keyboard,
     // always lowercase to help out the occasional capitalization typos.
     // This is only ASCII stuff, so we can get away with tolower().
-    std::string lower_case_curve(velocity_curve.size(), '\0');
+    std::string lower_case_curve;
+    lower_case_curve.resize(velocity_curve.size());
     std::transform(velocity_curve.begin(), velocity_curve.end(), lower_case_curve.begin(), ::tolower);
 
     if (strcmp("siso", lower_case_curve.c_str()) == 0)
