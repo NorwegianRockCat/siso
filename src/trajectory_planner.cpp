@@ -181,9 +181,7 @@ void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
 
   y_vels_ = y_vels;
 
-  const auto velocity_curve_string = config.velocity_curve;
-  ROS_INFO("I read %s", velocity_curve_string.c_str());
-  velocity_curve_ = decode_velocity_curve_string(velocity_curve_string);
+  velocity_curve_ = decode_velocity_curve_string(config.velocity_curve);
 }
 
 SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Costmap2D& costmap,

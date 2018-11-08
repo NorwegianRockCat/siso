@@ -66,7 +66,7 @@
 
 namespace siso_local_planner
 {
-    using namespace base_local_planner;
+using namespace base_local_planner; // We are basically using everything here, so just use the entire namespace
 /**
  * @class SisoTrajectoryPlanner
  * @brief Computes control velocities for a robot given a costmap, a plan, and the robot's position in the world.
