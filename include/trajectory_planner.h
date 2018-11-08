@@ -391,17 +391,25 @@ private:
     return thetai + vth * dt;
   }
 
-  // Return the progress in the acceleration curve, given the speed.
-  inline double progressForSpeed(double vi, double acc_lim, double total_acc_time) const
-  {
-      // Linear
-      //return std::min(1.0, (vi / acc_lim) / total_acc_time);
+  /**
+   * @brief  Return the progress in the acceleration curve, given the speed.
+   * @param vi The current velocity
+   * @param acc_lim, the maximum time to get to the velocity
+   * @param total_acc_time the time it takes to go from not moving to maximum velocity
+   */
+  double progressForSpeed(double vi, double acc_lim, double total_acc_time) const;
 
-      return std::min(1.0, sqrt(vi / 3) / total_acc_time);
-  }
-
-
-  double computeNewXVelocity(double vg, double vi, double a_max, double acc_progress, double dt, double dp);
+  /**
+   * @brief Compute the X velocity based on the current velocity curves
+   * @param vg The desired velocity, what we're accelerating up to
+   * @param vi The current velocity
+   * @param a_max An acceleration limit
+   * @param acc_progress The progress on the acceleration curve
+   * @param dt The timestep to take
+   * @param dp the percentage step to take
+   * @return the new velocity in the X direction.
+   */
+  double computeNewXVelocity(double vg, double vi, double a_max, double acc_progress, double dt, double dp) const;
 
   // compute velocity based on acceleration
   /**
@@ -412,7 +420,6 @@ private:
    * @param  dt The timestep to take
    * @return The new velocity
    */
-  // Needs to use the easing curve
   inline double computeNewVelocity(double vg, double vi, double a_max, double dt) const
   {
     if ((vg - vi) >= 0)

@@ -474,27 +474,40 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
   traj.cost_ = cost;
 }
 
-
-double SisoTrajectoryPlanner::computeNewXVelocity(const double vg, const double vi, const double a_max,
-						  const double acc_progress, const double dt, double dp)
+double SisoTrajectoryPlanner::progressForSpeed(const double vi, const double acc_lim, const double total_acc_time) const
 {
   switch (velocity_curve_)
   {
   default:
-      ROS_INFO("Unknown curve, you get classic!");
+    ROS_INFO("progressForSpeed: Unknown curve using classic!");
+  case Linear:
   case Classic:
-      return computeNewVelocity(vg, vi, a_max, dt);
+    return std::min(1.0, (vi / acc_lim) / total_acc_time);
+  case SlowInSlowOut:
+    return std::min(1.0, sqrt(vi / 3) / total_acc_time);
+  }
+}
+
+double SisoTrajectoryPlanner::computeNewXVelocity(const double vg, const double vi, const double a_max,
+						  const double acc_progress, const double dt, double dp) const
+{
+  switch (velocity_curve_)
+  {
+  default:
+    ROS_INFO("computeNewXVelocity: Unknown curve using classic!");
+  case Classic:
+    return computeNewVelocity(vg, vi, a_max, dt);
   case Linear:
   case SlowInSlowOut:
-      if (vg - vi >= 0)
-      {
-	const auto accel_step = std::min(1.0, acc_progress + dp);
-	return std::min(vg, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
-      } else
-      {
-	const auto decel_step = std::min(1.0, 1.0 - acc_progress + dp);
-	return std::max(vg, (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_);
-      }
+    if (vg - vi >= 0)
+    {
+      const auto accel_step = std::min(1.0, acc_progress + dp);
+      return std::min(vg, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
+    } else
+    {
+      const auto decel_step = std::min(1.0, 1.0 - acc_progress + dp);
+      return std::max(vg, (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_);
+    }
   }
 }
 
