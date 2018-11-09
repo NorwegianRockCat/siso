@@ -399,6 +399,8 @@ private:
    */
   double progressForSpeed(double vi, double acc_lim, double total_acc_time) const;
 
+  double resampleXSpeed(double vx_sample, double dvx, double acc_progress, double dp) const;
+
   /**
    * @brief Compute the X velocity based on the current velocity curves
    * @param vg The desired velocity, what we're accelerating up to
@@ -409,7 +411,7 @@ private:
    * @param dp the percentage step to take
    * @return the new velocity in the X direction.
    */
-  double computeNewXVelocity(double vg, double vi, double a_max, double acc_progress, double dt, double dp) const;
+  double computeNewXVelocity(double vg, double vi, double a_max, double acc_progress, double dvx, double dvp) const;
 
   // compute velocity based on acceleration
   /**
@@ -429,7 +431,7 @@ private:
     return std::max(vg, vi - a_max * dt);
   }
 
-  // Needs to use easing curve
+  // Needs to use easing curve (currently unused!)
   void getMaxSpeedToStopInTime(double time, double& vx, double& vy, double& vth) const
   {
     vx = acc_lim_x_ * std::max(time, 0.0);
