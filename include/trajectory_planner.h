@@ -440,6 +440,7 @@ private:
   double lineCost(int x0, int x1, int y0, int y1);
   double pointCost(int x, int y);
   double headingDiff(int cell_x, int cell_y, double x, double y, double heading);
+  void syncEasingCurves();
 };
 };
 

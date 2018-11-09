@@ -56,7 +56,6 @@ using namespace costmap_2d;
 
 namespace siso_local_planner
 {
-
 qreal cubicInDerivative(qreal time)
 {
   return 3.0 * time * time;
@@ -78,30 +77,32 @@ qreal linearDecelerationDerivative(qreal time)
   return 3 - linearAccelerationDerivative(time);
 }
 
-SisoTrajectoryPlanner::VelocityCurve decode_velocity_curve_string(const std::string &velocity_curve)
+SisoTrajectoryPlanner::VelocityCurve decode_velocity_curve_string(const std::string& velocity_curve)
 {
-    // Since this will can get data from the keyboard,
-    // always lowercase to help out the occasional capitalization typos.
-    // This is only ASCII stuff, so we can get away with tolower().
-    std::string lower_case_curve;
-    lower_case_curve.resize(velocity_curve.size());
-    std::transform(velocity_curve.begin(), velocity_curve.end(), lower_case_curve.begin(), ::tolower);
+  // Since this will can get data from the keyboard,
+  // always lowercase to help out the occasional capitalization typos.
+  // This is only ASCII stuff, so we can get away with tolower().
+  std::string lower_case_curve;
+  lower_case_curve.resize(velocity_curve.size());
+  std::transform(velocity_curve.begin(), velocity_curve.end(), lower_case_curve.begin(), ::tolower);
 
-    if (strcmp("siso", lower_case_curve.c_str()) == 0)
-    {
-	return SisoTrajectoryPlanner::VelocityCurve::SlowInSlowOut;
-    } else if (strcmp("classic", lower_case_curve.c_str()) == 0)
-    {
-	return SisoTrajectoryPlanner::VelocityCurve::Classic;
-    } else if (strcmp("linear", lower_case_curve.c_str()) == 0)
-    {
-	return SisoTrajectoryPlanner::VelocityCurve::Linear;
-    } else
-    {
-	return SisoTrajectoryPlanner::VelocityCurve::Unknown;
-    }
+  if (strcmp("siso", lower_case_curve.c_str()) == 0)
+  {
+    return SisoTrajectoryPlanner::VelocityCurve::SlowInSlowOut;
+  }
+  else if (strcmp("classic", lower_case_curve.c_str()) == 0)
+  {
+    return SisoTrajectoryPlanner::VelocityCurve::Classic;
+  }
+  else if (strcmp("linear", lower_case_curve.c_str()) == 0)
+  {
+    return SisoTrajectoryPlanner::VelocityCurve::Linear;
+  }
+  else
+  {
+    return SisoTrajectoryPlanner::VelocityCurve::Unknown;
+  }
 }
-
 
 void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
 {
@@ -188,23 +189,38 @@ void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
   }
 
   y_vels_ = y_vels;
-  //ROS_INFO("Read %s", config.velocity_curve.c_str());
+  // ROS_INFO("Read %s", config.velocity_curve.c_str());
   velocity_curve_ = decode_velocity_curve_string(config.velocity_curve);
-  //ROS_INFO("You got %d", velocity_curve_);
+  syncEasingCurves();
+  // ROS_INFO("You got %d", velocity_curve_);
 }
 
-SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Costmap2D& costmap,
-					    const std::string &velocity_curve,
-                                     std::vector<geometry_msgs::Point> footprint_spec, double acc_lim_x,
-                                     double acc_lim_y, double acc_lim_theta, double sim_time, double sim_granularity,
-                                     int vx_samples, int vtheta_samples, double pdist_scale, double gdist_scale,
-                                     double occdist_scale, double heading_lookahead, double oscillation_reset_dist,
-                                     double escape_reset_dist, double escape_reset_theta, bool holonomic_robot,
-                                     double max_vel_x, double min_vel_x, double max_vel_th, double min_vel_th,
-                                     double min_in_place_vel_th, double backup_vel, bool dwa, bool heading_scoring,
-                                     double heading_scoring_timestep, bool meter_scoring, bool simple_attractor,
-                                     vector<double> y_vels, double stop_time_buffer, double sim_period,
-                                     double angular_sim_granularity)
+void SisoTrajectoryPlanner::syncEasingCurves()
+{
+  switch (velocity_curve_)
+  {
+    default:
+    case Linear:
+    case Classic:
+      acceleration_curve_.setCustomType(linearAccelerationDerivative);
+      deceleration_curve_.setCustomType(linearDecelerationDerivative);
+      break;
+    case SlowInSlowOut:
+      acceleration_curve_.setCustomType(cubicInDerivative);
+      deceleration_curve_.setCustomType(cubicOutDerivative);
+      break;
+  }
+}
+
+SisoTrajectoryPlanner::SisoTrajectoryPlanner(
+    WorldModel& world_model, const Costmap2D& costmap, const std::string& velocity_curve,
+    std::vector<geometry_msgs::Point> footprint_spec, double acc_lim_x, double acc_lim_y, double acc_lim_theta,
+    double sim_time, double sim_granularity, int vx_samples, int vtheta_samples, double pdist_scale, double gdist_scale,
+    double occdist_scale, double heading_lookahead, double oscillation_reset_dist, double escape_reset_dist,
+    double escape_reset_theta, bool holonomic_robot, double max_vel_x, double min_vel_x, double max_vel_th,
+    double min_vel_th, double min_in_place_vel_th, double backup_vel, bool dwa, bool heading_scoring,
+    double heading_scoring_timestep, bool meter_scoring, bool simple_attractor, vector<double> y_vels,
+    double stop_time_buffer, double sim_period, double angular_sim_granularity)
   : path_map_(costmap.getSizeInCellsX(), costmap.getSizeInCellsY())
   , goal_map_(costmap.getSizeInCellsX(), costmap.getSizeInCellsY())
   , costmap_(costmap)
@@ -259,10 +275,7 @@ SisoTrajectoryPlanner::SisoTrajectoryPlanner(WorldModel& world_model, const Cost
 
   escaping_ = false;
   final_goal_position_valid_ = false;
-//  acceleration_curve_.setCustomType(linearAccelerationDerivative);
-//  deceleration_curve_.setCustomType(linearDecelerationDerivative);
-  acceleration_curve_.setCustomType(cubicInDerivative);
-  deceleration_curve_.setCustomType(cubicOutDerivative);
+  syncEasingCurves();
 
   costmap_2d::calculateMinAndMaxDistances(footprint_spec_, inscribed_radius_, circumscribed_radius_);
 }
@@ -272,7 +285,7 @@ SisoTrajectoryPlanner::~SisoTrajectoryPlanner()
 }
 
 bool SisoTrajectoryPlanner::getCellCosts(int cx, int cy, float& path_cost, float& goal_cost, float& occ_cost,
-                                     float& total_cost)
+                                         float& total_cost)
 {
   MapCell cell = path_map_(cx, cy);
   MapCell goal_cell = goal_map_(cx, cy);
@@ -296,10 +309,10 @@ bool SisoTrajectoryPlanner::getCellCosts(int cx, int cy, float& path_cost, float
  * create and score a trajectory given the current pose of the robot and selected velocities
  */
 void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, const double theta, const double vx,
-					   const double vy, const double vtheta, const double vx_samp,
-					   const double vy_samp, const double vtheta_samp, const double acc_x,
-                                           const double acc_y, const double acc_theta, const double acc_progress,
-					   const double impossible_cost, Trajectory& traj)
+                                               const double vy, const double vtheta, const double vx_samp,
+                                               const double vy_samp, const double vtheta_samp, const double acc_x,
+                                               const double acc_y, const double acc_theta, const double acc_progress,
+                                               const double impossible_cost, Trajectory& traj)
 {
   // make sure the configuration doesn't change mid run
   boost::mutex::scoped_lock l(configuration_mutex_);
@@ -478,36 +491,37 @@ double SisoTrajectoryPlanner::progressForSpeed(const double vi, const double acc
 {
   switch (velocity_curve_)
   {
-  default:
-    ROS_INFO("progressForSpeed: Unknown curve using classic!");
-  case Linear:
-  case Classic:
-    return std::min(1.0, (vi / acc_lim) / total_acc_time);
-  case SlowInSlowOut:
-    return std::min(1.0, sqrt(vi / 3) / total_acc_time);
+    default:
+      ROS_INFO("progressForSpeed: Unknown curve using classic!");
+    case Linear:
+    case Classic:
+      return std::min(1.0, (vi / acc_lim) / total_acc_time);
+    case SlowInSlowOut:
+      return std::min(1.0, sqrt(vi / 3) / total_acc_time);
   }
 }
 
 double SisoTrajectoryPlanner::computeNewXVelocity(const double vg, const double vi, const double a_max,
-						  const double acc_progress, const double dt, double dp) const
+                                                  const double acc_progress, const double dt, double dp) const
 {
   switch (velocity_curve_)
   {
-  default:
-    ROS_INFO("computeNewXVelocity: Unknown curve using classic!");
-  case Classic:
-    return computeNewVelocity(vg, vi, a_max, dt);
-  case Linear:
-  case SlowInSlowOut:
-    if (vg - vi >= 0)
-    {
-      const auto accel_step = std::min(1.0, acc_progress + dp);
-      return std::min(vg, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
-    } else
-    {
-      const auto decel_step = std::min(1.0, 1.0 - acc_progress + dp);
-      return std::max(vg, (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_);
-    }
+    default:
+      ROS_INFO("computeNewXVelocity: Unknown curve using classic!");
+    case Classic:
+      return computeNewVelocity(vg, vi, a_max, dt);
+    case Linear:
+    case SlowInSlowOut:
+      if (vg - vi >= 0)
+      {
+        const auto accel_step = std::min(1.0, acc_progress + dp);
+        return std::min(vg, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
+      }
+      else
+      {
+        const auto decel_step = std::min(1.0, 1.0 - acc_progress + dp);
+        return std::max(vg, (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_);
+      }
   }
 }
 
@@ -661,7 +675,7 @@ void SisoTrajectoryPlanner::updatePlan(const vector<geometry_msgs::PoseStamped>&
 }
 
 bool SisoTrajectoryPlanner::checkTrajectory(double x, double y, double theta, double vx, double vy, double vtheta,
-                                        double vx_samp, double vy_samp, double vtheta_samp)
+                                            double vx_samp, double vy_samp, double vtheta_samp)
 {
   Trajectory t;
 
@@ -679,8 +693,8 @@ bool SisoTrajectoryPlanner::checkTrajectory(double x, double y, double theta, do
 }
 
 double SisoTrajectoryPlanner::scoreTrajectory(const double x, const double y, const double theta, const double vx,
-					  const double vy, const double vtheta,
-                                          const double vx_samp, const double vy_samp, const double vtheta_samp)
+                                              const double vy, const double vtheta, const double vx_samp,
+                                              const double vy_samp, const double vtheta_samp)
 {
   Trajectory t;
   double impossible_cost = path_map_.obstacleCosts();
@@ -695,9 +709,9 @@ double SisoTrajectoryPlanner::scoreTrajectory(const double x, const double y, co
  * create the trajectories we wish to score
  */
 Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const double y, const double theta,
-						 const double vx, const double vy, const double vtheta,
-                                                 const double acc_x, const double acc_y, const double acc_theta,
-						 const double acc_progress)
+                                                     const double vx, const double vy, const double vtheta,
+                                                     const double acc_x, const double acc_y, const double acc_theta,
+                                                     const double acc_progress)
 {
   // compute feasible velocity limits in robot space
   double max_vel_x = max_vel_x_, max_vel_theta;
@@ -1067,8 +1081,8 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   vtheta_samp = 0.0;
   vx_samp = backup_vel_;
   vy_samp = 0.0;
-  generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                     acc_progress, impossible_cost, *comp_traj);
+  generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta, acc_progress,
+                     impossible_cost, *comp_traj);
 
   // if the new trajectory is better... let's take it
   /*
@@ -1122,8 +1136,8 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
 
 // given the current state of the robot, find a good trajectory
 Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& global_pose,
-                                           const tf::Stamped<tf::Pose>& global_vel,
-                                           tf::Stamped<tf::Pose>& drive_velocities)
+                                               const tf::Stamped<tf::Pose>& global_vel,
+                                               tf::Stamped<tf::Pose>& drive_velocities)
 {
   const Eigen::Vector3f pos(global_pose.getOrigin().getX(), global_pose.getOrigin().getY(),
                             tf::getYaw(global_pose.getRotation()));
@@ -1138,7 +1152,7 @@ Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& glob
   const auto footprint_list = footprint_helper_.getFootprintCells(pos, footprint_spec_, costmap_, true);
 
   // mark cells within the initial footprint of the robot
-  for (const auto &footprint : footprint_list)
+  for (const auto& footprint : footprint_list)
   {
     path_map_(footprint.x, footprint.y).within_robot = true;
   }
@@ -1154,9 +1168,8 @@ Trajectory SisoTrajectoryPlanner::findBestPath(const tf::Stamped<tf::Pose>& glob
   acceleration_progress_ = progressForSpeed(vel[0], acc_lim_x_, total_accel_time);
 
   // rollout trajectories and find the minimum cost one
-  Trajectory best =
-      createTrajectories(pos[0], pos[1], pos[2], vel[0], vel[1], vel[2], acc_lim_x_, acc_lim_y_,
-			 acc_lim_theta_, acceleration_progress_);
+  Trajectory best = createTrajectories(pos[0], pos[1], pos[2], vel[0], vel[1], vel[2], acc_lim_x_, acc_lim_y_,
+                                       acc_lim_theta_, acceleration_progress_);
   ROS_DEBUG("Trajectories created");
 
   /*
