@@ -348,7 +348,7 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
   }
 
   const auto dt = sim_time_ / num_steps;
-  const auto acc_progress_dp = dt / totalTimeForAcceleration;
+  const auto acc_progress_dp = (sim_time_ / totalTimeForAcceleration) / num_steps;
   double time = 0.0;
 
   // create a potential trajectory
@@ -730,15 +730,18 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   double max_vel_x = max_vel_x_, max_vel_theta;
   double min_vel_x, min_vel_theta;
 
+  const auto total_accel_time = max_vel_x_ / acc_lim_x_;
+
   if (final_goal_position_valid_)
   {
     const auto final_goal_dist = hypot(final_goal_x_ - x, final_goal_y_ - y);
     max_vel_x = min(max_vel_x, final_goal_dist / sim_time_);
   }
 
-  // should we use the dynamic window approach? (default for fetch is NO!)
+  const auto progress_change_over_sim_time = sim_time_ / total_accel_time;
   if (dwa_)
   {
+    const auto progress_change_over_sim_period = sim_period_ / total_accel_time;
     max_vel_x = max(min(max_vel_x, vx + acc_x * sim_period_), min_vel_x_);
     min_vel_x = max(min_vel_x_, vx - acc_x * sim_period_);
 
@@ -747,22 +750,24 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   }
   else
   {
-    // These need to be corrected to be dependent on the acceleration curve.
-    max_vel_x = max(min(max_vel_x, vx + acc_x * sim_time_), min_vel_x_);
-    min_vel_x = max(min_vel_x_, vx - acc_x * sim_time_);
+    max_vel_x = std::max(computeNewXVelocity(max_vel_x, vx, acc_x, acc_progress,
+					progress_change_over_sim_time, sim_time_), min_vel_x_);
+    // Force a deceleration step by setting the speed the goal to zero,
+    // but ultimately never lower our minimum to lower than the set minimum.
+    min_vel_x = std::max(computeNewXVelocity(0.0, vx, acc_x, acc_progress,
+					     progress_change_over_sim_time, sim_time_), min_vel_x_);
 
     max_vel_theta = min(max_vel_th_, vtheta + acc_theta * sim_time_);
     min_vel_theta = max(min_vel_th_, vtheta - acc_theta * sim_time_);
   }
 
   // we want to sample the velocity space regularly
-  const auto total_accel_time = max_vel_x_ / acc_lim_x_;
   const auto dvx = (max_vel_x - min_vel_x) / (vx_samples_ - 1);
   const auto dvtheta = (max_vel_theta - min_vel_theta) / (vtheta_samples_ - 1);
-  const auto dvp = (1.0 - acc_progress) / (vx_samples_ - 1);
+  const auto dvp =  progress_change_over_sim_time / (vx_samples_ - 1);
 
   auto vx_samp = min_vel_x;
-  auto acc_progress_samp = progressForSpeed(vx_samp, acc_lim_x_, total_accel_time);
+  auto acc_progress_samp = acc_progress;
   auto vtheta_samp = min_vel_theta;
   auto vy_samp = 0.0;
 
@@ -779,7 +784,6 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   const auto impossible_cost = path_map_.obstacleCosts();
   
 
-  ROS_INFO("vx_samp %f progress %f(%f) dvp %f", vx_samp, acc_progress_samp, acc_progress, dvp);
   // if we're performing an escape we won't allow moving forward
   if (!escaping_)
   {
@@ -816,7 +820,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         vtheta_samp += dvtheta;
       }
       vx_samp = resampleXSpeed(vx_samp, dvx, acc_progress_samp, dvp);
-      ROS_INFO("next step vx_samp %f", vx_samp);
+      //ROS_INFO("next step vx_samp %f", vx_samp);
       acc_progress_samp = std::min(1.0, acc_progress_samp + dvp); 
     }
 
@@ -827,8 +831,9 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vx_samp = 0.1;
       vy_samp = 0.1;
       vtheta_samp = 0.0;
+      acc_progress_samp = progressForSpeed(vx_samp, acc_lim_x_, total_accel_time);
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress, impossible_cost, *comp_traj);
+                         acc_progress_samp, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -841,8 +846,9 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vx_samp = 0.1;
       vy_samp = -0.1;
       vtheta_samp = 0.0;
+      acc_progress_samp = progressForSpeed(vx_samp, acc_lim_x_, total_accel_time);
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress, impossible_cost, *comp_traj);
+                         acc_progress_samp, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -986,6 +992,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
     // if we can't rotate in place or move forward... maybe we can move sideways and rotate
     vtheta_samp = min_vel_theta;
     vx_samp = 0.0;
+    acc_progress_samp = progressForSpeed(vx_samp, acc_lim_x_, total_accel_time);
 
     // loop through all y velocities
     for (unsigned int i = 0; i < y_vels_.size(); ++i)
@@ -1103,6 +1110,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   vtheta_samp = 0.0;
   vx_samp = backup_vel_;
   vy_samp = 0.0;
+  acc_progress_samp = acc_progress;
   generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta, acc_progress_samp,
                      impossible_cost, *comp_traj);
 
