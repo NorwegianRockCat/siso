@@ -317,18 +317,18 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
   // make sure the configuration doesn't change mid run
   boost::mutex::scoped_lock l(configuration_mutex_);
 
+  const auto totalTimeForAcceleration = max_vel_x_ / acc_lim_x_;
+
   auto x_i = x;
   auto y_i = y;
   auto theta_i = theta;
   auto vx_i = vx;
-  auto acc_progress_i = acc_progress;
+  auto acc_progress_i = progressForSpeed(vx_i, acc_lim_x_, totalTimeForAcceleration);
   auto vy_i = vy;
   auto vtheta_i = vtheta;
 
   // compute the magnitude of the velocities
   const auto vmag = hypot(vx_samp, vy_samp);
-
-  const auto totalTimeForAcceleration = max_vel_x_ / acc_lim_x_;
 
   // compute the number of steps we must take along this trajectory to be "safe"
   int num_steps;
