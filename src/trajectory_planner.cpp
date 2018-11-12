@@ -350,6 +350,12 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
   const auto dt = sim_time_ / num_steps;
   const auto acc_progress_dp = (sim_time_ / totalTimeForAcceleration) / num_steps;
   double time = 0.0;
+  static int i = 0;
+  /*
+  while (i < 15) {
+      ROS_INFO("sim_time %f sim_granularity %f, num_steps %d, dt %f", sim_time_, sim_granularity_, num_steps, dt);
+      ++i;
+      }*/
 
   // create a potential trajectory
   traj.resetPoints();
@@ -424,7 +430,7 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
       bool update_path_and_goal_distances = true;
 
       // with heading scoring, we take into account heading diff, and also only score
-      // path and goal distance for one point of the trajectory Fetch doesn't do this
+      // path and goal distance for one point of the trajectory
       if (heading_scoring_)
       {
         if (time >= heading_scoring_timestep_ && time < heading_scoring_timestep_ + dt)
@@ -754,7 +760,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
 					progress_change_over_sim_time, sim_time_), min_vel_x_);
     // Force a deceleration step by setting the speed the goal to zero,
     // but ultimately never lower our minimum to lower than the set minimum.
-    min_vel_x = std::max(computeNewXVelocity(0.0, vx, acc_x, acc_progress,
+    min_vel_x = std::max(computeNewXVelocity(vx - 0.1, vx, acc_x, acc_progress,
 					     progress_change_over_sim_time, sim_time_), min_vel_x_);
 
     max_vel_theta = min(max_vel_th_, vtheta + acc_theta * sim_time_);
@@ -767,7 +773,8 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   const auto dvp =  progress_change_over_sim_time / (vx_samples_ - 1);
 
   auto vx_samp = min_vel_x;
-  auto acc_progress_samp = acc_progress;
+//  ROS_INFO("velocity sample %f", vx_samp);
+  auto acc_progress_samp = progressForSpeed(vx_samp, acc_lim_y_, total_accel_time);
   auto vtheta_samp = min_vel_theta;
   auto vy_samp = 0.0;
 
@@ -820,7 +827,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         vtheta_samp += dvtheta;
       }
       vx_samp = resampleXSpeed(vx_samp, dvx, acc_progress_samp, dvp);
-      //ROS_INFO("next step vx_samp %f", vx_samp);
+      //ROS_INFO("  next step vx_samp %f", vx_samp);
       acc_progress_samp = std::min(1.0, acc_progress_samp + dvp); 
     }
 
@@ -992,7 +999,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
     // if we can't rotate in place or move forward... maybe we can move sideways and rotate
     vtheta_samp = min_vel_theta;
     vx_samp = 0.0;
-    acc_progress_samp = progressForSpeed(vx_samp, acc_lim_x_, total_accel_time);
+    acc_progress_samp = 0.0;
 
     // loop through all y velocities
     for (unsigned int i = 0; i < y_vels_.size(); ++i)
