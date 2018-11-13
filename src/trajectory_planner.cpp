@@ -795,8 +795,6 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   Trajectory comp_traj;
   comp_traj.cost_ = -1.0;
 
-//  Trajectory* swap = nullptr;
-
   // any cell with a cost greater than the size of the map is impossible
   const auto impossible_cost = path_map_.obstacleCosts();
 

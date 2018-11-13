@@ -239,7 +239,6 @@ private:
    * @param acc_theta The theta acceleration limit of the robot
    * @return
    */
-  // Needs to use the easing curve
   Trajectory createTrajectories(double x, double y, double theta, double vx, double vy, double vtheta, double acc_x,
                                 double acc_y, double acc_theta);
 
