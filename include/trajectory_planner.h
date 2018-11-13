@@ -317,8 +317,6 @@ private:
   double escape_x_, escape_y_,
       escape_theta_;  ///< @brief Used to calculate the distance the robot has traveled before reseting escape booleans
 
-  Trajectory traj_one, traj_two;  ///< @brief Used for scoring trajectories
-
   double heading_lookahead_;  ///< @brief How far the robot should look ahead of itself when differentiating between
                               /// different rotational velocities
   double oscillation_reset_dist_;  ///< @brief The distance the robot must travel before it can explore rotational

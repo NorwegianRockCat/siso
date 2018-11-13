@@ -42,6 +42,7 @@
 #include <math.h>
 #include <cstring>
 #include <algorithm>
+#include <utility>
 #include <angles/angles.h>
 
 #include <boost/algorithm/string.hpp>
@@ -788,13 +789,13 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   auto vy_samp = 0.0;
 
   // keep track of the best trajectory seen so far
-  Trajectory* best_traj = &traj_one;
-  best_traj->cost_ = -1.0;
+  Trajectory best_traj;
+  best_traj.cost_ = -1.0;
 
-  Trajectory* comp_traj = &traj_two;
-  comp_traj->cost_ = -1.0;
+  Trajectory comp_traj;
+  comp_traj.cost_ = -1.0;
 
-  Trajectory* swap = nullptr;
+//  Trajectory* swap = nullptr;
 
   // any cell with a cost greater than the size of the map is impossible
   const auto impossible_cost = path_map_.obstacleCosts();
@@ -808,14 +809,12 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vtheta_samp = 0;
       // first sample the straight trajectory
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress, impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, comp_traj);
 
       // if the new trajectory is better... let's take it
-      if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
+      if (comp_traj.cost_ >= 0 && (comp_traj.cost_ < best_traj.cost_ || best_traj.cost_ < 0))
       {
-        swap = best_traj;
-        best_traj = comp_traj;
-        comp_traj = swap;
+	std::swap(best_traj, comp_traj);
       }
 
       vtheta_samp = min_vel_theta;
@@ -823,14 +822,12 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       for (int j = 0; j < vtheta_samples_ - 1; ++j)
       {
         generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                           acc_progress, impossible_cost, *comp_traj);
+                           acc_progress, impossible_cost, comp_traj);
 
         // if the new trajectory is better... let's take it
-        if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
+        if (comp_traj.cost_ >= 0 && (comp_traj.cost_ < best_traj.cost_ || best_traj.cost_ < 0))
         {
-          swap = best_traj;
-          best_traj = comp_traj;
-          comp_traj = swap;
+	  std::swap(best_traj, comp_traj);
         }
         vtheta_samp += dvtheta;
       }
@@ -847,14 +844,12 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vtheta_samp = 0.0;
       acc_progress_samp = progressForSpeed(vx_samp);
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress, impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, comp_traj);
 
       // if the new trajectory is better... let's take it
-      if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
+      if (comp_traj.cost_ >= 0 && (comp_traj.cost_ < best_traj.cost_ || best_traj.cost_ < 0))
       {
-        swap = best_traj;
-        best_traj = comp_traj;
-        comp_traj = swap;
+	std::swap(best_traj, comp_traj);
       }
 
       vx_samp = 0.1;
@@ -862,14 +857,12 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vtheta_samp = 0.0;
       acc_progress_samp = progressForSpeed(vx_samp);
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress, impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, comp_traj);
 
       // if the new trajectory is better... let's take it
-      if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
+      if (comp_traj.cost_ >= 0 && (comp_traj.cost_ < best_traj.cost_ || best_traj.cost_ < 0))
       {
-        swap = best_traj;
-        best_traj = comp_traj;
-        comp_traj = swap;
+	std::swap(best_traj, comp_traj);
       }
     }
   }  // end if not escaping
@@ -890,16 +883,16 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         vtheta_samp > 0 ? max(vtheta_samp, min_in_place_vel_th_) : min(vtheta_samp, -1.0 * min_in_place_vel_th_);
 
     generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp_limited, acc_x, acc_y, acc_theta,
-                       acc_progress, impossible_cost, *comp_traj);
+                       acc_progress, impossible_cost, comp_traj);
 
     // if the new trajectory is better... let's take it...
     // note if we can legally rotate in place we prefer to do that rather than move with y velocity
-    if (comp_traj->cost_ >= 0 &&
-        (comp_traj->cost_ <= best_traj->cost_ || best_traj->cost_ < 0 || best_traj->yv_ != 0.0) &&
+    if (comp_traj.cost_ >= 0 &&
+        (comp_traj.cost_ <= best_traj.cost_ || best_traj.cost_ < 0 || best_traj.yv_ != 0.0) &&
         (vtheta_samp > dvtheta || vtheta_samp < -1 * dvtheta))
     {
       double x_r, y_r, th_r;
-      comp_traj->getEndpoint(x_r, y_r, th_r);
+      comp_traj.getEndpoint(x_r, y_r, th_r);
       x_r += heading_lookahead_ * cos(th_r);
       y_r += heading_lookahead_ * sin(th_r);
       unsigned int cell_x, cell_y;
@@ -913,17 +906,13 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
           // if we haven't already tried rotating left since we've moved forward
           if (vtheta_samp < 0 && !stuck_left)
           {
-            swap = best_traj;
-            best_traj = comp_traj;
-            comp_traj = swap;
+	    std::swap(best_traj, comp_traj);
             heading_dist = ahead_gdist;
           }
           // if we haven't already tried rotating right since we've moved forward
           else if (vtheta_samp > 0 && !stuck_right)
           {
-            swap = best_traj;
-            best_traj = comp_traj;
-            comp_traj = swap;
+	    std::swap(best_traj, comp_traj);
             heading_dist = ahead_gdist;
           }
         }
@@ -934,12 +923,12 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   }
 
   // do we have a legal trajectory (consider folding this in with the slightly different stuff on line 1014).
-  if (best_traj->cost_ >= 0)
+  if (best_traj.cost_ >= 0)
   {
     // avoid oscillations of in place rotation and in place strafing
-    if (!(best_traj->xv_ > 0))
+    if (!(best_traj.xv_ > 0))
     {
-      if (best_traj->thetav_ < 0)
+      if (best_traj.thetav_ < 0)
       {
         if (rotating_right)
         {
@@ -947,7 +936,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         }
         rotating_right = true;
       }
-      else if (best_traj->thetav_ > 0)
+      else if (best_traj.thetav_ > 0)
       {
         if (rotating_left)
         {
@@ -955,7 +944,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         }
         rotating_left = true;
       }
-      else if (best_traj->yv_ > 0)
+      else if (best_traj.yv_ > 0)
       {
         if (strafe_right)
         {
@@ -963,7 +952,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         }
         strafe_right = true;
       }
-      else if (best_traj->yv_ < 0)
+      else if (best_traj.yv_ < 0)
       {
         if (strafe_left)
         {
@@ -997,7 +986,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       escaping_ = false;
     }
 
-    return *best_traj;
+    return best_traj;
   }
 
   // only explore y velocities with holonomic robots
@@ -1015,13 +1004,13 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vy_samp = y_vels_[i];
       // sample completely horizontal trajectories
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress_samp, impossible_cost, *comp_traj);
+                         acc_progress_samp, impossible_cost, comp_traj);
 
       // if the new trajectory is better... let's take it
-      if (comp_traj->cost_ >= 0 && (comp_traj->cost_ <= best_traj->cost_ || best_traj->cost_ < 0))
+      if (comp_traj.cost_ >= 0 && (comp_traj.cost_ <= best_traj.cost_ || best_traj.cost_ < 0))
       {
         double x_r, y_r, th_r;
-        comp_traj->getEndpoint(x_r, y_r, th_r);
+        comp_traj.getEndpoint(x_r, y_r, th_r);
         x_r += heading_lookahead_ * cos(th_r);
         y_r += heading_lookahead_ * sin(th_r);
         unsigned int cell_x, cell_y;
@@ -1035,17 +1024,13 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
             // if we haven't already tried strafing left since we've moved forward
             if (vy_samp > 0 && !stuck_left_strafe)
             {
-              swap = best_traj;
-              best_traj = comp_traj;
-              comp_traj = swap;
+	      std::swap(best_traj, comp_traj);
               heading_dist = ahead_gdist;
             }
             // if we haven't already tried rotating right since we've moved forward
             else if (vy_samp < 0 && !stuck_right_strafe)
             {
-              swap = best_traj;
-              best_traj = comp_traj;
-              comp_traj = swap;
+	      std::swap(best_traj, comp_traj);
               heading_dist = ahead_gdist;
             }
           }
@@ -1055,11 +1040,11 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   }
 
   // do we have a legal trajectory
-  if (best_traj->cost_ >= 0)
+  if (best_traj.cost_ >= 0)
   {
-    if (!(best_traj->xv_ > 0))
+    if (!(best_traj.xv_ > 0))
     {
-      if (best_traj->thetav_ < 0)
+      if (best_traj.thetav_ < 0)
       {
         if (rotating_right)
         {
@@ -1067,7 +1052,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         }
         rotating_left = true;
       }
-      else if (best_traj->thetav_ > 0)
+      else if (best_traj.thetav_ > 0)
       {
         if (rotating_left)
         {
@@ -1075,7 +1060,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         }
         rotating_right = true;
       }
-      else if (best_traj->yv_ > 0)
+      else if (best_traj.yv_ > 0)
       {
         if (strafe_right)
         {
@@ -1083,7 +1068,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         }
         strafe_left = true;
       }
-      else if (best_traj->yv_ < 0)
+      else if (best_traj.yv_ < 0)
       {
         if (strafe_left)
         {
@@ -1117,7 +1102,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       escaping_ = false;
     }
 
-    return *best_traj;
+    return best_traj;
   }
 
   // and finally, if we can't do anything else, we want to generate trajectories that move backwards slowly
@@ -1125,7 +1110,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   vx_samp = backup_vel_;
   vy_samp = 0.0;
   generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                     acc_progress, impossible_cost, *comp_traj);
+                     acc_progress, impossible_cost, comp_traj);
 
   // if the new trajectory is better... let's take it
   /*
@@ -1137,9 +1122,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
      */
 
   // we'll allow moving backwards slowly even when the static map shows it as blocked
-  swap = best_traj;
-  best_traj = comp_traj;
-  comp_traj = swap;
+  std::swap(best_traj, comp_traj);
 
   double dist = hypot(x - prev_x_, y - prev_y_);
   if (dist > oscillation_reset_dist_)
@@ -1155,7 +1138,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   }
 
   // only enter escape mode when the planner has given a valid goal point
-  if (!escaping_ && best_traj->cost_ > -2.0)
+  if (!escaping_ && best_traj.cost_ > -2.0)
   {
     escape_x_ = x;
     escape_y_ = y;
@@ -1171,10 +1154,10 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   }
 
   // if the trajectory failed because the footprint hits something, we're still going to back up
-  if (best_traj->cost_ == -1.0)
-    best_traj->cost_ = 1.0;
+  if (best_traj.cost_ == -1.0)
+    best_traj.cost_ = 1.0;
 
-  return *best_traj;
+  return best_traj;
 }
 
 // given the current state of the robot, find a good trajectory
