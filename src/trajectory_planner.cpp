@@ -780,7 +780,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   // we want to sample the velocity space regularly
   const auto dvx = (max_vel_x - min_vel_x) / (vx_samples_ - 1);
   const auto dvtheta = (max_vel_theta - min_vel_theta) / (vtheta_samples_ - 1);
-  const auto dvp = progress_change_over_sim_time / (vx_samples_ - 1);
+  const auto dvp = progressForSpeed(max_vel_x) - progressForSpeed(min_vel_x) / (vx_samples_ - 1);
 
   auto vx_samp = min_vel_x;
 //  ROS_INFO("START velocity sample %f", vx_samp);
@@ -809,7 +809,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vtheta_samp = 0;
       // first sample the straight trajectory
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress_samp, impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, *comp_traj);
 
 //      ROS_INFO("X:  trajectory with speed %f cost %f", comp_traj->xv_, comp_traj->cost_);
       // if the new trajectory is better... let's take it
@@ -825,7 +825,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       for (int j = 0; j < vtheta_samples_ - 1; ++j)
       {
         generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                           acc_progress_samp, impossible_cost, *comp_traj);
+                           acc_progress, impossible_cost, *comp_traj);
 	//ROS_INFO("theta:  trajectory with speed %f cost %f", comp_traj->xv_, comp_traj->cost_);
 
         // if the new trajectory is better... let's take it
@@ -839,7 +839,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       }
       vx_samp = std::min(max_vel_x, resampleXSpeed(vx_samp, dvx, acc_progress_samp, dvp));
       //ROS_INFO("  next step vx_samp %f %f %f", vx_samp, dvx, dvp);
-      acc_progress_samp = progressForSpeed(vx_samp);
+      acc_progress_samp += dvp;
     }
 
     // only explore y velocities with holonomic robots (Fetch is not one of these)!
@@ -851,7 +851,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vtheta_samp = 0.0;
       acc_progress_samp = progressForSpeed(vx_samp);
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress_samp, impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -866,7 +866,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
       vtheta_samp = 0.0;
       acc_progress_samp = progressForSpeed(vx_samp);
       generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                         acc_progress_samp, impossible_cost, *comp_traj);
+                         acc_progress, impossible_cost, *comp_traj);
 
       // if the new trajectory is better... let's take it
       if (comp_traj->cost_ >= 0 && (comp_traj->cost_ < best_traj->cost_ || best_traj->cost_ < 0))
@@ -894,7 +894,7 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
         vtheta_samp > 0 ? max(vtheta_samp, min_in_place_vel_th_) : min(vtheta_samp, -1.0 * min_in_place_vel_th_);
 
     generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp_limited, acc_x, acc_y, acc_theta,
-                       acc_progress_samp, impossible_cost, *comp_traj);
+                       acc_progress, impossible_cost, *comp_traj);
 
     // if the new trajectory is better... let's take it...
     // note if we can legally rotate in place we prefer to do that rather than move with y velocity
@@ -1128,9 +1128,8 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   vtheta_samp = 0.0;
   vx_samp = backup_vel_;
   vy_samp = 0.0;
-  acc_progress_samp = acc_progress;
   generateTrajectory(x, y, theta, vx, vy, vtheta, vx_samp, vy_samp, vtheta_samp, acc_x, acc_y, acc_theta,
-                     acc_progress_samp, impossible_cost, *comp_traj);
+                     acc_progress, impossible_cost, *comp_traj);
 
   // if the new trajectory is better... let's take it
   /*
