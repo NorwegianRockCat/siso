@@ -237,12 +237,11 @@ private:
    * @param acc_x The x acceleration limit of the robot
    * @param acc_y The y acceleration limit of the robot
    * @param acc_theta The theta acceleration limit of the robot
-   * @param acc_progress The progress on the acceleration curve
    * @return
    */
   // Needs to use the easing curve
   Trajectory createTrajectories(double x, double y, double theta, double vx, double vy, double vtheta, double acc_x,
-                                double acc_y, double acc_theta, double acc_progress);
+                                double acc_y, double acc_theta);
 
   /**
    * @brief  Generate and score a single trajectory
@@ -344,10 +343,10 @@ private:
   double sim_period_;        ///< @brief The number of seconds to use to compute max/min vels for dwa
 
   double inscribed_radius_, circumscribed_radius_;
-  double acceleration_progress_; // < @brief the progress for the acceleration graph
   QEasingCurve acceleration_curve_; // < @brief the acceleration_curve
   QEasingCurve deceleration_curve_; // < @brief the deceleration_curve
   VelocityCurve velocity_curve_; // < @brief the currently selected velocity curve
+  double total_acceleration_time_; // < @brief the amount of time it takes to accelerate from zero to the velocity limit;
 
   boost::mutex configuration_mutex_;
 
@@ -397,7 +396,7 @@ private:
    * @param acc_lim, the maximum time to get to the velocity
    * @param total_acc_time the time it takes to go from not moving to maximum velocity
    */
-  double progressForSpeed(double vi, double acc_lim, double total_acc_time) const;
+  double progressForSpeed(double vi) const;
 
   double resampleXSpeed(double vx_sample, double dvx, double acc_progress, double dp) const;
 
@@ -412,6 +411,9 @@ private:
    * @return the new velocity in the X direction.
    */
   double computeNewXVelocity(double vg, double vi, double a_max, double acc_progress, double dvx, double dvp) const;
+
+  double velocityUp(double vg, double vi, double a_max, double dvx, double acc_progress, double dvp) const;
+  double velocityDown(double vg, double vi, double a_max, double dvx, double acc_progress, double dvp) const;
 
   // compute velocity based on acceleration
   /**
