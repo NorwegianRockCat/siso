@@ -32,7 +32,6 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Boost REQUIRED COMPONENTS thread)
 find_package(Eigen3 REQUIRED)
 find_package(PCL REQUIRED)
-find_package(Qt5Core REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -177,7 +176,6 @@ add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencfg ${${PROJECT_NAME}_EXPORT
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}
     ${catkin_LIBRARIES}
-    Qt5::Core
 )
 
 #############

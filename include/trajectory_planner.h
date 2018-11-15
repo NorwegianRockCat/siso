@@ -61,9 +61,6 @@
 #include <base_local_planner/map_cell.h>
 #include <base_local_planner/map_grid.h>
 
-// For Easing Curves
-#include <QtCore/QEasingCurve>
-
 namespace siso_local_planner
 {
 using namespace base_local_planner; // We are basically using everything here, so just use the entire namespace
@@ -226,6 +223,9 @@ public:
   }
 
 private:
+  // Bring over the EasingFunction typedef from QEasingFunction. Are needs
+  // are much simpler, so there's no need to bring the entire class along.
+  typedef double (*EasingFunction)(double progress);
   /**
    * @brief  Create the trajectories we wish to explore, score them, and return the best option
    * @param x The x position of the robot
@@ -340,8 +340,8 @@ private:
   double sim_period_;        ///< @brief The number of seconds to use to compute max/min vels for dwa
 
   double inscribed_radius_, circumscribed_radius_;
-  QEasingCurve acceleration_curve_; // < @brief the acceleration_curve
-  QEasingCurve deceleration_curve_; // < @brief the deceleration_curve
+  EasingFunction acceleration_curve_; // < @brief the acceleration_curve
+  EasingFunction deceleration_curve_; // < @brief the deceleration_curve
   VelocityCurve velocity_curve_; // < @brief the currently selected velocity curve
   double total_acceleration_time_; // < @brief the amount of time it takes to accelerate from zero to the velocity limit;
 

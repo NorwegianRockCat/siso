@@ -57,23 +57,23 @@ using namespace costmap_2d;
 
 namespace siso_local_planner
 {
-qreal cubicInDerivative(qreal time)
+double cubicInDerivative(double time)
 {
   return 3.0 * time * time;
 }
 
-qreal cubicOutDerivative(qreal time)
+double cubicOutDerivative(double time)
 {
   // 3 * (time - 1)^2
   return cubicInDerivative(time - 1.0);
 }
 
-qreal linearAccelerationDerivative(qreal time)
+double linearAccelerationDerivative(double time)
 {
   return 3 * time;
 }
 
-qreal linearDecelerationDerivative(qreal time)
+double linearDecelerationDerivative(double time)
 {
   return 3 - linearAccelerationDerivative(time);
 }
@@ -190,11 +190,9 @@ void SisoTrajectoryPlanner::reconfigure(SisoLocalPlannerConfig& cfg)
   }
 
   y_vels_ = y_vels;
-  // ROS_INFO("Read %s", config.velocity_curve.c_str());
   velocity_curve_ = decode_velocity_curve_string(config.velocity_curve);
   syncEasingCurves();
   total_acceleration_time_ = max_vel_x_ / acc_lim_x_;
-  // ROS_INFO("You got %d", velocity_curve_);
 }
 
 void SisoTrajectoryPlanner::syncEasingCurves()
@@ -204,12 +202,12 @@ void SisoTrajectoryPlanner::syncEasingCurves()
     default:
     case Linear:
     case Classic:
-      acceleration_curve_.setCustomType(linearAccelerationDerivative);
-      deceleration_curve_.setCustomType(linearDecelerationDerivative);
+      acceleration_curve_ = linearAccelerationDerivative;
+      deceleration_curve_ = linearDecelerationDerivative;
       break;
     case SlowInSlowOut:
-      acceleration_curve_.setCustomType(cubicInDerivative);
-      deceleration_curve_.setCustomType(cubicOutDerivative);
+      acceleration_curve_= cubicInDerivative;
+      deceleration_curve_= cubicOutDerivative;
       break;
   }
 }
@@ -514,7 +512,7 @@ double SisoTrajectoryPlanner::velocityUp(const double vg, const double vi, const
     case SlowInSlowOut:
     {
       const auto accel_step = std::min(1.0, acc_progress + dp);
-      return std::min(vg, (acceleration_curve_.valueForProgress(accel_step) / 3.0) * max_vel_x_);
+      return std::min(vg, (acceleration_curve_(accel_step) / 3.0) * max_vel_x_);
     }
   }
 }
@@ -531,7 +529,7 @@ double SisoTrajectoryPlanner::velocityDown(const double vg, const double vi, con
     case SlowInSlowOut:
     {
       const auto decel_step = std::min(1.0, 1.0 - acc_progress + dp);
-      return std::max(vg, (deceleration_curve_.valueForProgress(decel_step) / 3.0) * max_vel_x_);
+      return std::max(vg, (deceleration_curve_(decel_step) / 3.0) * max_vel_x_);
     }
   }
 }
@@ -737,7 +735,7 @@ double SisoTrajectoryPlanner::resampleXSpeed(const double vx_sample, const doubl
       return vx_sample + dvx;
     case Linear:
     case SlowInSlowOut:
-      return (acceleration_curve_.valueForProgress(std::min(1.0, acc_progress + dvp)) / 3) * max_vel_x_;
+      return (acceleration_curve_(std::min(1.0, acc_progress + dvp)) / 3) * max_vel_x_;
   }
 }
 
