@@ -543,7 +543,6 @@ bool SisoLocalPlanner::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
 
   // compute what trajectory to drive along
   Trajectory path = tc_->findBestPath(global_pose, robot_vel, drive_cmds);
-//  ROS_INFO("in %f, out %f", robot_vel.getOrigin().getX(), drive_cmds.getOrigin().getX());
 
   map_viz_.publishCostCloud(costmap_);
   /* For timing uncomment
@@ -558,7 +557,6 @@ bool SisoLocalPlanner::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   cmd_vel.linear.x = drive_cmds.getOrigin().getX();
   cmd_vel.linear.y = drive_cmds.getOrigin().getY();
   cmd_vel.angular.z = tf::getYaw(drive_cmds.getRotation());
-  //    ROS_INFO_STREAM(cmd_vel);
 
   // if we cannot move... tell someone
   if (path.cost_ < 0)

@@ -756,25 +756,13 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
     max_vel_x = min(max_vel_x, final_goal_dist / sim_time_);
   }
 
-  const auto progress_change_over_sim_time = sim_time_ / total_acceleration_time_;
+  const auto duration = dwa_ ? sim_period_ : sim_time_;
+  const auto progress_change_over_duration = duration / total_acceleration_time_;
   const auto acc_progress = progressForSpeed(vx);
-  if (dwa_)
-  {
-    const auto progress_change_over_sim_period = sim_period_ / total_acceleration_time_;
-    max_vel_x = max(min(max_vel_x, vx + acc_x * sim_period_), min_vel_x_);
-    min_vel_x = max(min_vel_x_, vx - acc_x * sim_period_);
-
-    max_vel_theta = min(max_vel_th_, vtheta + acc_theta * sim_period_);
-    min_vel_theta = max(min_vel_th_, vtheta - acc_theta * sim_period_);
-  }
-  else
-  {
-    max_vel_x = std::max(velocityUp(max_vel_x, vx, acc_x, sim_time_, acc_progress, progress_change_over_sim_time), min_vel_x_);
-    min_vel_x = velocityDown(min_vel_x_, vx, acc_x, sim_time_, acc_progress, progress_change_over_sim_time);
-
-    max_vel_theta = min(max_vel_th_, vtheta + acc_theta * sim_time_);
-    min_vel_theta = max(min_vel_th_, vtheta - acc_theta * sim_time_);
-  }
+  max_vel_x = std::max(velocityUp(max_vel_x, vx, acc_x, duration, acc_progress, progress_change_over_duration), min_vel_x_);
+  min_vel_x = velocityDown(min_vel_x_, vx, acc_x, duration, acc_progress, progress_change_over_duration);
+  max_vel_theta = min(max_vel_th_, vtheta + acc_theta * duration);
+  min_vel_theta = max(min_vel_th_, vtheta - acc_theta * duration);
 
   // we want to sample the velocity space regularly
   const auto dvx = (max_vel_x - min_vel_x) / (vx_samples_ - 1);
