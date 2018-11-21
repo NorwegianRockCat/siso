@@ -750,13 +750,13 @@ Trajectory SisoTrajectoryPlanner::createTrajectories(const double x, const doubl
   double max_vel_x = max_vel_x_, max_vel_theta;
   double min_vel_x, min_vel_theta;
 
+  const auto duration = dwa_ ? sim_period_ : sim_time_;
   if (final_goal_position_valid_)
   {
     const auto final_goal_dist = hypot(final_goal_x_ - x, final_goal_y_ - y);
-    max_vel_x = min(max_vel_x, final_goal_dist / sim_time_);
+    max_vel_x = min(max_vel_x, final_goal_dist / duration);
   }
 
-  const auto duration = dwa_ ? sim_period_ : sim_time_;
   const auto progress_change_over_duration = duration / total_acceleration_time_;
   const auto acc_progress = progressForSpeed(vx);
   max_vel_x = std::max(velocityUp(max_vel_x, vx, acc_x, duration, acc_progress, progress_change_over_duration), min_vel_x_);
