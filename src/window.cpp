@@ -39,6 +39,7 @@ Window::Window(QWidget* parent)
   : QWidget(parent)
   , python_process_(this)
   , stop_process_(this)
+  , reconfigure_process_(this)
   , locations_({ QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
                  QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
                  QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
@@ -54,8 +55,9 @@ Window::Window(QWidget* parent)
           SLOT(pythonProcessFinished(int, QProcess::ExitStatus)));
   connect(&stop_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
           SLOT(stopProcessFinished(int, QProcess::ExitStatus)));
-  newVariables();
-  syncLabelsToIndex();
+  connect(&reconfigure_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
+          SLOT(reconfigureProcessFinished(int, QProcess::ExitStatus)));
+  advanceToNextCurve();
 }
 
 static QLabel* createOrderingLabel()
@@ -190,6 +192,13 @@ void Window::stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
   qDebug() << "Stop finished" << exitCode << exitStatus;
 }
 
+
+void Window::reconfigureProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+  qDebug() << "Stop finished" << exitCode << exitStatus;
+  next_curve_button_->setDisabled(false);
+}
+
 static QString textForVariable(int i)
 {
   return (i == 1) ? Window::tr("Slow in, Slow out") : Window::tr("Linear");
@@ -269,10 +278,24 @@ QString Window::locationToUser(const QString& location) const
 
 void Window::advanceToNextCurve()
 {
+  Q_ASSERT_X(reconfigure_process_.state() == QProcess::NotRunning, "locationClicked", "Process is still running");
   current_curve_index_++;
   if (current_curve_index_ >= current_curves_.size())
   {
     newVariables();
   }
+  const QString new_curve = QLatin1String(current_curves_.at(current_curve_index_) == 0 ? "linear" : "siso");
+
+  const QString command = QLatin1String("rosrun");
+  const QStringList arguments({QLatin1String("dynamic_reconfigure"),
+			       QLatin1String("dynparam"),
+			       QLatin1String("set"),
+			       QLatin1String("/move_base/SisoLocalPlanner"),
+			       QLatin1String("velocity_curve"),
+			       new_curve});
+
+			       
+  next_curve_button_->setDisabled(true);
+  reconfigure_process_.start(command, arguments);
   syncLabelsToIndex();
 }

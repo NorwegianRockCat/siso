@@ -52,6 +52,7 @@ private slots:
   void stopProcessStateChanged(QProcess::ProcessState newState) const;
   void pythonProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+  void reconfigureProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void emergencyStop();
   void advanceToNextCurve();
   void newVariables();
@@ -79,6 +80,7 @@ private:
   QLabel *current_location_label_;
   QProcess python_process_;
   QProcess stop_process_;
+  QProcess reconfigure_process_;
   std::vector<QString> locations_;
   std::vector<int> current_curves_;
   int current_curve_index_;
