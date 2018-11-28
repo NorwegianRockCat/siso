@@ -31,6 +31,7 @@ add_executable(uh_fetch_driver_gui
   ${QT_MOC_HPP}
   src/main.cpp
   src/window.cpp
+  src/ordergenerator.cpp
 )
 
 target_link_libraries(uh_fetch_driver_gui

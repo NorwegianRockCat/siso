@@ -32,6 +32,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QtCore/QProcess>
+#include "ordergenerator.h"
 #include <ros/ros.h>
 #include <vector>
 class QLabel;
@@ -52,10 +53,15 @@ private slots:
   void pythonProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void emergencyStop();
+  void newVariables();
 
 private:
   void setupUi();
   void disableLocationButtons(bool disable);
+  void syncLabelsToIndex();
+  QString locationToUser(const QString &location) const;
+  QString locationForButtonId(int buttonId) const;
+
   QButtonGroup *button_group_;
   QPushButton *kitchen_1_button_;
   QPushButton *kitchen_2_button_;
@@ -73,6 +79,9 @@ private:
   QProcess python_process_;
   QProcess stop_process_;
   std::vector<QString> locations_;
+  std::vector<int> current_curves_;
+  int current_curve_index_;
+  OrderGenerator order_generator_;
   ros::NodeHandle nodeHandle_;
 };
 

@@ -39,28 +39,27 @@ Window::Window(QWidget* parent)
   : QWidget(parent)
   , python_process_(this)
   , stop_process_(this)
-  , locations_({QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
-		QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
-		QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2"))})
+  , locations_({ QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
+                 QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
+                 QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
+  , current_curve_index_(-1)
   , nodeHandle_(ros::NodeHandle())
 {
-
   setupUi();
-  connect(&python_process_, SIGNAL(stateChanged(QProcess::ProcessState)),
-	  this, SLOT(pythonProcessStateChanged(QProcess::ProcessState)));
-  connect(&stop_process_, SIGNAL(stateChanged(QProcess::ProcessState)),
-	  this, SLOT(stopProcessStateChanged(QProcess::ProcessState)));
-  connect(&python_process_, SIGNAL(finished(int, QProcess::ExitStatus)),
-	  this, SLOT(pythonProcessFinished(int, QProcess::ExitStatus)));
-  connect(&stop_process_, SIGNAL(finished(int, QProcess::ExitStatus)),
-	  this, SLOT(stopProcessFinished(int, QProcess::ExitStatus)));
-
-
+  connect(&python_process_, SIGNAL(stateChanged(QProcess::ProcessState)), this,
+          SLOT(pythonProcessStateChanged(QProcess::ProcessState)));
+  connect(&stop_process_, SIGNAL(stateChanged(QProcess::ProcessState)), this,
+          SLOT(stopProcessStateChanged(QProcess::ProcessState)));
+  connect(&python_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
+          SLOT(pythonProcessFinished(int, QProcess::ExitStatus)));
+  connect(&stop_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
+          SLOT(stopProcessFinished(int, QProcess::ExitStatus)));
+  newVariables();
 }
 
-static QLabel *createOrderingLabel()
+static QLabel* createOrderingLabel()
 {
-  QLabel *label = new QLabel(Window::tr("-"));
+  QLabel* label = new QLabel(Window::tr("-"));
   label->setAlignment(Qt::AlignCenter);
   auto font = label->font();
   font.setWeight(QFont::Bold);
@@ -70,9 +69,9 @@ static QLabel *createOrderingLabel()
   return label;
 }
 
-static QPushButton *createLocationButton(const QString &buttonText, QButtonGroup *buttonGroup)
+static QPushButton* createLocationButton(const QString& buttonText, QButtonGroup* buttonGroup)
 {
-  QPushButton *button = new QPushButton(buttonText);
+  QPushButton* button = new QPushButton(buttonText);
   button->setCheckable(true);
   buttonGroup->addButton(button);
   return button;
@@ -88,12 +87,12 @@ void Window::setupUi()
   ordering_label_4_ = createOrderingLabel();
   current_location_label_ = new QLabel(tr("Unknown"));
   current_location_label_->setAlignment(Qt::AlignCenter);
-  kitchen_1_button_ = createLocationButton(tr("Kitchen 1"), button_group_);
-  kitchen_2_button_ = createLocationButton(tr("Kitchen 2"), button_group_);
-  dining_table_1_button_ = createLocationButton(tr("Dining Table 1"), button_group_);
-  dining_table_2_button_ = createLocationButton(tr("Dining Table 2"), button_group_);
-  sofa_1_button_ = createLocationButton(tr("Sofa 1"), button_group_);
-  sofa_2_button_ = createLocationButton(tr("Sofa 2"), button_group_);
+  kitchen_1_button_ = createLocationButton(locationToUser(locations_.at(0)), button_group_);
+  kitchen_2_button_ = createLocationButton(locationToUser(locations_.at(1)), button_group_);
+  dining_table_1_button_ = createLocationButton(locationToUser(locations_.at(2)), button_group_);
+  dining_table_2_button_ = createLocationButton(locationToUser(locations_.at(3)), button_group_);
+  sofa_1_button_ = createLocationButton(locationToUser(locations_.at(4)), button_group_);
+  sofa_2_button_ = createLocationButton(locationToUser(locations_.at(5)), button_group_);
 
   connect(button_group_, SIGNAL(buttonClicked(int)), SLOT(locationClicked(int)));
   emergency_stop_button_ = new QPushButton(tr("Emergency &Stop"));
@@ -105,7 +104,7 @@ void Window::setupUi()
   next_location_button_ = new QPushButton(tr("Next Location"));
   next_location_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
 
-  auto *layout = new QGridLayout();
+  auto* layout = new QGridLayout();
   layout->addWidget(ordering_label_1_, 0, 0);
   layout->addWidget(ordering_label_2_, 0, 1);
   layout->addWidget(ordering_label_3_, 0, 2);
@@ -135,24 +134,22 @@ Window::~Window()
 
 void Window::disableLocationButtons(bool disable)
 {
-  for (const auto &button : button_group_->buttons()) {
+  for (const auto& button : button_group_->buttons())
+  {
     button->setDisabled(disable);
   }
 }
 
 void Window::locationClicked(int negative_id)
 {
-  const auto id = abs(negative_id) - 2; // automatic numbering starts at -2
-  Q_ASSERT_X(id >= 0 && id < locations_.size(), "locationClicked", "index out of range");
   Q_ASSERT_X(python_process_.state() == QProcess::NotRunning, "locationClicked", "Process is still running");
-  const auto& location = locations_.at(id);
+  const auto& location = locationForButtonId(negative_id);
   const auto command = QLatin1String("rosrun");
-  const QStringList arguments({QLatin1String("uh_robots"), QLatin1String("move_base.py"),
-			    QLatin1String("-n"), location});
+  const QStringList arguments(
+      { QLatin1String("uh_robots"), QLatin1String("move_base.py"), QLatin1String("-n"), location });
   disableLocationButtons(true);
   qDebug() << "Runnining" << command << arguments;
   python_process_.start(command, arguments);
-
 }
 
 void Window::pythonProcessStateChanged(QProcess::ProcessState newState) const
@@ -169,10 +166,8 @@ void Window::emergencyStop()
 {
   Q_ASSERT_X(stop_process_.state() == QProcess::NotRunning, "emergencyStop", "Process is still running");
   const QString command(QLatin1String("rostopic"));
-  const QStringList arguments({QLatin1String("pub"), QLatin1String("-1"),
-			       QLatin1String("/enable_software_runstop"),
-			       QLatin1String("std_msgs/Bool"),
-			       QLatin1String("\"data: true\"")});
+  const QStringList arguments({ QLatin1String("pub"), QLatin1String("-1"), QLatin1String("/enable_software_runstop"),
+                                QLatin1String("std_msgs/Bool"), QLatin1String("\"data: true\"") });
   emergency_stop_button_->setText(tr("Stopping…"));
   emergency_stop_button_->setDisabled(true);
   qDebug() << "Runnining" << command << arguments;
@@ -181,6 +176,7 @@ void Window::emergencyStop()
 
 void Window::pythonProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
+  current_location_label_->setText(locationToUser(locationForButtonId(button_group_->checkedId())));
   disableLocationButtons(false);
   qDebug() << "Python finished" << exitCode << exitStatus;
 }
@@ -190,4 +186,81 @@ void Window::stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
   emergency_stop_button_->setText(tr("Emergency Stop"));
   emergency_stop_button_->setDisabled(false);
   qDebug() << "Stop finished" << exitCode << exitStatus;
+}
+
+static QString textForVariable(int i)
+{
+  return (i == 1) ? Window::tr("Slow in, Slow out") : Window::tr("Linear");
+}
+
+void Window::newVariables()
+{
+  current_curve_index_ = 0;
+  current_curves_ = order_generator_.newOrder();
+  const QVector<QLabel*> labels({
+      ordering_label_1_, ordering_label_2_, ordering_label_3_, ordering_label_4_,
+  });
+  Q_ASSERT(labels.size() == current_curves_.size());
+  const int TotalVariables = labels.size();
+  for (int place = 0; place < TotalVariables; ++place)
+  {
+    labels.at(place)->setText(textForVariable(current_curves_.at(place)));
+  }
+  syncLabelsToIndex();
+}
+
+void Window::syncLabelsToIndex()
+{
+  const QVector<QLabel*> labels({
+      ordering_label_1_, ordering_label_2_, ordering_label_3_, ordering_label_4_,
+  });
+  const int TotalVariables = labels.size();
+  for (int index = 0; index < TotalVariables; ++index)
+  {
+    auto* label = labels.at(index);
+    auto font = label->font();
+    font.setWeight(index == current_curve_index_ ? QFont::Bold : QFont::Normal);
+    label->setFont(font);
+  }
+}
+
+QString Window::locationForButtonId(int buttonId) const
+{
+  const auto id = abs(buttonId) - 2;  // automatic numbering starts at -2
+  Q_ASSERT_X(id >= 0 && id < locations_.size(), "locationClicked", "index out of range");
+  return locations_.at(id);
+}
+
+QString Window::locationToUser(const QString& location) const
+{
+  QString returnString;
+  if (location == locations_.at(0))
+  {
+    returnString = tr("Kitchen 1");
+  }
+  else if (location == locations_.at(1))
+  {
+    returnString = tr("Kitchen 2");
+  }
+  else if (location == locations_.at(2))
+  {
+    returnString = tr("Dining Table 1");
+  }
+  else if (location == locations_.at(3))
+  {
+    returnString = tr("Dining Table 2");
+  }
+  else if (location == locations_.at(4))
+  {
+    returnString = tr("Sofa 1");
+  }
+  else if (location == locations_.at(5))
+  {
+    returnString = tr("Sofa 2");
+  }
+  else
+  {
+    returnString = tr("Unknown Location");
+  }
+  return returnString;
 }
