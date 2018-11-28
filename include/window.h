@@ -32,6 +32,7 @@
 
 #include <QtWidgets/QWidget>
 #include <ros/ros.h>
+class QLabel;
 class QSpinBox;
 class QCheckBox;
 class QDoubleSpinBox;
@@ -59,6 +60,11 @@ private:
   QPushButton *sofa_2_button_;
   QPushButton *emergency_stop_button_;
   QPushButton *next_location_button_;
+  QLabel *ordering_label_1_;
+  QLabel *ordering_label_2_;
+  QLabel *ordering_label_3_;
+  QLabel *ordering_label_4_;
+  QLabel *current_location_label_;
   ros::NodeHandle nodeHandle_;
 };
 

@@ -28,6 +28,7 @@
  ******************************************************************/
 
 #include "window.h"
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialogButtonBox>
@@ -45,30 +46,70 @@ Window::Window(QWidget* parent)
   setupUi();
 }
 
+static QLabel *createOrderingLabel()
+{
+  QLabel *label = new QLabel(Window::tr("-"));
+  label->setAlignment(Qt::AlignCenter);
+  auto font = label->font();
+  font.setWeight(QFont::Bold);
+  const QFontMetrics fm(font);
+  const auto sisoWidth = fm.width(Window::tr("Slow in, Slow Out"));
+  label->setMinimumWidth(sisoWidth);
+  return label;
+}
+
+static QPushButton *createLocationButton(const QString &buttonText, QButtonGroup *buttonGroup)
+{
+  QPushButton *button = new QPushButton(buttonText);
+  button->setCheckable(true);
+  buttonGroup->addButton(button);
+  return button;
+}
+
 void Window::setupUi()
 {
   auto *layout = new QGridLayout();
-  kitchen_1_button_  = new QPushButton(tr("Kitchen 1"));
-  kitchen_2_button_ = new QPushButton(tr("Kitchen 2"));
-  dining_table_1_button_ = new QPushButton(tr("Dining Table 1"));
-  dining_table_2_button_ = new QPushButton(tr("Dining Table 2"));
-  sofa_1_button_ = new QPushButton(tr("Sofa 1"));
-  sofa_2_button_ = new QPushButton(tr("Sofa 2"));
-  emergency_stop_button_ = new QPushButton(tr("Emergency Stop"));
+  auto *buttonGroup = new QButtonGroup(this);
+  buttonGroup->setExclusive(true);
+  ordering_label_1_ = createOrderingLabel();
+  ordering_label_2_ = createOrderingLabel();
+  ordering_label_3_ = createOrderingLabel();
+  ordering_label_4_ = createOrderingLabel();
+  current_location_label_ = new QLabel(tr("Unknown"));
+  current_location_label_->setAlignment(Qt::AlignCenter);
+  kitchen_1_button_ = createLocationButton(tr("Kitchen 1"), buttonGroup);
+  kitchen_2_button_ = createLocationButton(tr("Kitchen 2"), buttonGroup);
+  dining_table_1_button_ = createLocationButton(tr("Dining Table 1"), buttonGroup);
+  dining_table_2_button_ = createLocationButton(tr("Dining Table 2"), buttonGroup);
+  sofa_1_button_ = createLocationButton(tr("Sofa 1"), buttonGroup);
+  sofa_2_button_ = createLocationButton(tr("Sofa 2"), buttonGroup);
+  emergency_stop_button_ = new QPushButton(tr("Emergency &Stop"));
   auto button_font = emergency_stop_button_->font();
   button_font.setWeight(QFont::Bold);
   emergency_stop_button_->setFont(button_font);
   emergency_stop_button_->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
   next_location_button_ = new QPushButton(tr("Next Location"));
   next_location_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
-  layout->addWidget(kitchen_1_button_, 0, 0);
-  layout->addWidget(kitchen_2_button_, 1, 0);
-  layout->addWidget(dining_table_1_button_, 0, 1);
-  layout->addWidget(dining_table_2_button_, 1, 1);
-  layout->addWidget(sofa_1_button_, 0, 2);
-  layout->addWidget(sofa_2_button_, 1, 2);
-  layout->addWidget(emergency_stop_button_, 0, 3, -1, -1);
-  layout->addWidget(next_location_button_, 2, 0, 1, 3);
+  layout->addWidget(ordering_label_1_, 0, 0);
+  layout->addWidget(ordering_label_2_, 0, 1);
+  layout->addWidget(ordering_label_3_, 0, 2);
+  layout->addWidget(ordering_label_4_, 0, 3);
+  layout->addWidget(kitchen_1_button_, 1, 0);
+  layout->addWidget(kitchen_2_button_, 2, 0);
+  layout->addWidget(dining_table_1_button_, 1, 1);
+  layout->addWidget(dining_table_2_button_, 2, 1);
+  layout->addWidget(sofa_1_button_, 1, 2);
+  layout->addWidget(sofa_2_button_, 2, 2);
+  layout->addWidget(emergency_stop_button_, 0, 4, -1, -1);
+  layout->addWidget(next_location_button_, 3, 0, 1, 2);
+  auto label = new QLabel(tr("Location"));
+  label->setAlignment(Qt::AlignCenter);
+  button_font = label->font();
+  button_font.setWeight(QFont::Bold);
+  label->setFont(button_font);
+  label->setFont(button_font);
+  layout->addWidget(label, 3, 2);
+  layout->addWidget(current_location_label_, 3, 3);
   setLayout(layout);
 }
 
