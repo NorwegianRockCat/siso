@@ -55,6 +55,7 @@ Window::Window(QWidget* parent)
   connect(&stop_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
           SLOT(stopProcessFinished(int, QProcess::ExitStatus)));
   newVariables();
+  syncLabelsToIndex();
 }
 
 static QLabel* createOrderingLabel()
@@ -101,8 +102,9 @@ void Window::setupUi()
   emergency_stop_button_->setFont(button_font);
   emergency_stop_button_->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
   connect(emergency_stop_button_, SIGNAL(clicked()), SLOT(emergencyStop()));
-  next_location_button_ = new QPushButton(tr("Next Location"));
-  next_location_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
+  next_curve_button_ = new QPushButton(tr("Next Curve"));
+  next_curve_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
+  connect(next_curve_button_, SIGNAL(clicked()), this, SLOT(advanceToNextCurve()));
 
   auto* layout = new QGridLayout();
   layout->addWidget(ordering_label_1_, 0, 0);
@@ -116,7 +118,7 @@ void Window::setupUi()
   layout->addWidget(sofa_1_button_, 1, 2);
   layout->addWidget(sofa_2_button_, 2, 2);
   layout->addWidget(emergency_stop_button_, 0, 4, -1, -1);
-  layout->addWidget(next_location_button_, 3, 0, 1, 2);
+  layout->addWidget(next_curve_button_, 3, 0, 1, 2);
   auto label = new QLabel(tr("Location"));
   label->setAlignment(Qt::AlignCenter);
   button_font = label->font();
@@ -206,7 +208,7 @@ void Window::newVariables()
   {
     labels.at(place)->setText(textForVariable(current_curves_.at(place)));
   }
-  syncLabelsToIndex();
+  current_location_label_->setText(locationToUser("Start"));
 }
 
 void Window::syncLabelsToIndex()
@@ -260,7 +262,17 @@ QString Window::locationToUser(const QString& location) const
   }
   else
   {
-    returnString = tr("Unknown Location");
+    returnString = tr("Unknown");
   }
   return returnString;
+}
+
+void Window::advanceToNextCurve()
+{
+  current_curve_index_++;
+  if (current_curve_index_ >= current_curves_.size())
+  {
+    newVariables();
+  }
+  syncLabelsToIndex();
 }

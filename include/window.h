@@ -53,6 +53,7 @@ private slots:
   void pythonProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
   void emergencyStop();
+  void advanceToNextCurve();
   void newVariables();
 
 private:
@@ -70,7 +71,7 @@ private:
   QPushButton *sofa_1_button_;
   QPushButton *sofa_2_button_;
   QPushButton *emergency_stop_button_;
-  QPushButton *next_location_button_;
+  QPushButton *next_curve_button_;
   QLabel *ordering_label_1_;
   QLabel *ordering_label_2_;
   QLabel *ordering_label_3_;
