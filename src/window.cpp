@@ -171,7 +171,7 @@ void Window::emergencyStop()
   Q_ASSERT_X(stop_process_.state() == QProcess::NotRunning, "emergencyStop", "Process is still running");
   const QString command(QLatin1String("rostopic"));
   const QStringList arguments({ QLatin1String("pub"), QLatin1String("-1"), QLatin1String("/enable_software_runstop"),
-                                QLatin1String("std_msgs/Bool"), QLatin1String("\"data: true\"") });
+                                QLatin1String("std_msgs/Bool"), QLatin1String("data: true") });
   emergency_stop_button_->setText(tr("Stopping…"));
   emergency_stop_button_->setDisabled(true);
   qDebug() << "Runnining" << command << arguments;
