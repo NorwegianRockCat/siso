@@ -296,6 +296,7 @@ void Window::advanceToNextCurve()
 
 			       
   next_curve_button_->setDisabled(true);
+  qDebug() << "Runnining" << command << arguments;
   reconfigure_process_.start(command, arguments);
   syncLabelsToIndex();
 }
