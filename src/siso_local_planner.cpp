@@ -2,6 +2,8 @@
 *
 * Software License Agreement (BSD License)
 *
+*  Copyright (c) 2018, Trenton Schulz
+*  Originally based on code:
 *  Copyright (c) 2008, Willow Garage, Inc.
 *  All rights reserved.
 *
@@ -33,6 +35,7 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *
 * Author: Eitan Marder-Eppstein
+* Author: Trenton Schulz
 *********************************************************************/
 
 #include "siso_local_planner.h"
