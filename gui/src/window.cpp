@@ -111,7 +111,9 @@ void Window::setupUi()
   emergency_stop_button_->setMinimumWidth(emergency_stop_button_->sizeHint().width());
   connect(emergency_stop_button_, SIGNAL(clicked()), SLOT(emergencyStop()));
 
-  next_curve_button_ = new QPushButton(tr("Next Curve"));
+  next_curve_button_ = new QPushButton();
+  lockNextCurveButton(true);
+  next_curve_button_->setMinimumWidth(next_curve_button_->sizeHint().width());
   next_curve_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
   connect(next_curve_button_, SIGNAL(clicked()), this, SLOT(advanceToNextCurve()));
 
@@ -184,14 +186,22 @@ void Window::emergencyStop()
   fetch_controller_.emergencyStop();
 }
 
-void Window::velocityCurveChanged()
-{
-  next_curve_button_->setDisabled(false);
-}
-
 static QString textForVariable(int i)
 {
   return (i == 1) ? Window::tr("Slow in, Slow out") : Window::tr("Linear");
+}
+
+void Window::velocityCurveChanged()
+{
+  if (current_curve_index_ == current_curves_.size() - 1) {
+    lockNextCurveButton(true);
+  } else {
+    next_curve_button_->setDisabled(false);
+  }
+  const auto& variableName = textForVariable(current_curves_.at(current_curve_index_));
+
+  ROS_INFO("ID %s now using %s curve (index %d)", current_id_.toUtf8().constData(),
+	   variableName.toUtf8().constData(), current_curve_index_);
 }
 
 static int maxVariableNameLength()
@@ -224,7 +234,7 @@ void Window::newVariables()
     }
   }
   current_location_label_->setText(locationToUser("Start"));
-  ROS_INFO("current_user_id %s has new variables: %s", current_id_.toUtf8().constData(), logString.c_str());
+  ROS_INFO("ID: %s has new variables: %s", current_id_.toUtf8().constData(), logString.c_str());
 }
 
 void Window::syncLabelsToIndex()
@@ -295,6 +305,7 @@ void Window::advanceToNextCurve()
   next_curve_button_->setDisabled(true);
   fetch_controller_.changeVelocityCurve(new_curve);
   syncLabelsToIndex();
+  // disable the next button until we change the id…
 }
 
 void Window::moveFinished()
@@ -313,10 +324,13 @@ void Window::stopFinished()
 
 void Window::checkLockButtons()
 {
-  // Turn off everything unless we have a basic id.
-  const auto lockDown = id_line_edit_->text().isEmpty();
-  disableLocationButtons(lockDown);
-  next_curve_button_->setDisabled(lockDown);
+  const auto& editText = id_line_edit_->text();
+  if (current_id_ != editText) {
+    // Turn off everything unless we have a basic id.
+    const auto lockDown = id_line_edit_->text().isEmpty();
+    disableLocationButtons(lockDown);
+    lockNextCurveButton(lockDown);
+  }
 }
 
 
@@ -325,7 +339,13 @@ void Window::logIdChanged()
   const auto& editText = id_line_edit_->text();
   if (current_id_ != editText) {
     current_id_ = editText;
-    advanceToNextCurve();
     ROS_INFO("ID changed to %s", current_id_.toUtf8().constData());
+    advanceToNextCurve();
   }
+}
+
+void Window::lockNextCurveButton(bool disable)
+{
+  next_curve_button_->setDisabled(disable);
+  next_curve_button_->setText(disable ? tr("Enter new ID") : tr("Next Curve"));
 }

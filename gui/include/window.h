@@ -64,6 +64,7 @@ private:
   void setupUi();
   void disableLocationButtons(bool disable);
   void syncLabelsToIndex();
+  void lockNextCurveButton(bool disable);
   QString locationToUser(const QString &location) const;
   QString locationForButtonId(int buttonId) const;
 
