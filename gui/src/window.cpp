@@ -37,26 +37,19 @@
 
 Window::Window(QWidget* parent)
   : QWidget(parent)
-  , python_process_(this)
-  , stop_process_(this)
-  , reconfigure_process_(this)
   , locations_({ QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
                  QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
                  QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
   , current_curve_index_(-1)
   , nodeHandle_(ros::NodeHandle())
+  , fetch_controller_(this)
+  , going_to_move(false)
 {
   setupUi();
-  connect(&python_process_, SIGNAL(stateChanged(QProcess::ProcessState)), this,
-          SLOT(pythonProcessStateChanged(QProcess::ProcessState)));
-  connect(&stop_process_, SIGNAL(stateChanged(QProcess::ProcessState)), this,
-          SLOT(stopProcessStateChanged(QProcess::ProcessState)));
-  connect(&python_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
-          SLOT(pythonProcessFinished(int, QProcess::ExitStatus)));
-  connect(&stop_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
-          SLOT(stopProcessFinished(int, QProcess::ExitStatus)));
-  connect(&reconfigure_process_, SIGNAL(finished(int, QProcess::ExitStatus)), this,
-          SLOT(reconfigureProcessFinished(int, QProcess::ExitStatus)));
+  connect(&fetch_controller_, SIGNAL(moveFinished()), this, SLOT(moveFinished()));
+  connect(&fetch_controller_, SIGNAL(torsoFinished()), this, SLOT(torsoFinished()));
+  connect(&fetch_controller_, SIGNAL(stopFinished()), this, SLOT(stopFinished()));
+  connect(&fetch_controller_, SIGNAL(velocityCurveChanged()), this, SLOT(velocityCurveChanged()));
   advanceToNextCurve();
 }
 
@@ -144,58 +137,31 @@ void Window::disableLocationButtons(bool disable)
   }
 }
 
+void Window::torsoFinished()
+{
+  if (going_to_move) {
+    const auto negative_id = button_group_->checkedId();
+    const auto &location = locationForButtonId(negative_id);
+    fetch_controller_.travelToLocation(location);
+  }
+}
+
 void Window::locationClicked(int negative_id)
 {
-  Q_ASSERT_X(python_process_.state() == QProcess::NotRunning, "locationClicked", "Process is still running");
-  const auto& location = locationForButtonId(negative_id);
-  const auto command = QLatin1String("rosrun");
-  const QStringList arguments(
-      { QLatin1String("uh_robots"), QLatin1String("move_base.py"), QLatin1String("-n"), location });
   disableLocationButtons(true);
-  qDebug() << "Runnining" << command << arguments;
-  python_process_.start(command, arguments);
-}
-
-void Window::pythonProcessStateChanged(QProcess::ProcessState newState) const
-{
-  qDebug() << "python process Got new state" << newState;
-}
-
-void Window::stopProcessStateChanged(QProcess::ProcessState newState) const
-{
-  qDebug() << "stop got new state" << newState;
+  going_to_move = true;
+  fetch_controller_.moveTorso(0.0);
 }
 
 void Window::emergencyStop()
 {
-  Q_ASSERT_X(stop_process_.state() == QProcess::NotRunning, "emergencyStop", "Process is still running");
-  const QString command(QLatin1String("rostopic"));
-  const QStringList arguments({ QLatin1String("pub"), QLatin1String("-1"), QLatin1String("/enable_software_runstop"),
-                                QLatin1String("std_msgs/Bool"), QLatin1String("data: true") });
   emergency_stop_button_->setText(tr("Stopping…"));
   emergency_stop_button_->setDisabled(true);
-  qDebug() << "Runnining" << command << arguments;
-  stop_process_.start(command, arguments);
+  fetch_controller_.emergencyStop();
 }
 
-void Window::pythonProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void Window::velocityCurveChanged()
 {
-  current_location_label_->setText(locationToUser(locationForButtonId(button_group_->checkedId())));
-  disableLocationButtons(false);
-  qDebug() << "Python finished" << exitCode << exitStatus;
-}
-
-void Window::stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
-{
-  emergency_stop_button_->setText(tr("Emergency Stop"));
-  emergency_stop_button_->setDisabled(false);
-  qDebug() << "Stop finished" << exitCode << exitStatus;
-}
-
-
-void Window::reconfigureProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
-{
-  qDebug() << "Stop finished" << exitCode << exitStatus;
   next_curve_button_->setDisabled(false);
 }
 
@@ -278,7 +244,6 @@ QString Window::locationToUser(const QString& location) const
 
 void Window::advanceToNextCurve()
 {
-  Q_ASSERT_X(reconfigure_process_.state() == QProcess::NotRunning, "locationClicked", "Process is still running");
   current_curve_index_++;
   if (current_curve_index_ >= current_curves_.size())
   {
@@ -286,17 +251,21 @@ void Window::advanceToNextCurve()
   }
   const QString new_curve = QLatin1String(current_curves_.at(current_curve_index_) == 0 ? "linear" : "siso");
 
-  const QString command = QLatin1String("rosrun");
-  const QStringList arguments({QLatin1String("dynamic_reconfigure"),
-			       QLatin1String("dynparam"),
-			       QLatin1String("set"),
-			       QLatin1String("/move_base/SisoLocalPlanner"),
-			       QLatin1String("velocity_curve"),
-			       new_curve});
-
-			       
   next_curve_button_->setDisabled(true);
-  qDebug() << "Runnining" << command << arguments;
-  reconfigure_process_.start(command, arguments);
+  fetch_controller_.changeVelocityCurve(new_curve);
   syncLabelsToIndex();
+}
+
+void Window::moveFinished()
+{
+  disableLocationButtons(false);
+  going_to_move = false;
+  fetch_controller_.moveTorso(0.25);
+  current_location_label_->setText(locationToUser(locationForButtonId(button_group_->checkedId())));
+}
+
+void Window::stopFinished()
+{
+  emergency_stop_button_->setText(tr("Emergency Stop"));
+  emergency_stop_button_->setDisabled(false);
 }

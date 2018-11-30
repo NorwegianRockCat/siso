@@ -16,6 +16,7 @@ find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
 qt5_wrap_cpp(QT_MOC_HPP
   include/window.h
+  include/fetch_process_controller.h
 )
 
 include_directories(
@@ -32,6 +33,7 @@ add_executable(uh_fetch_driver_gui
   src/main.cpp
   src/window.cpp
   src/ordergenerator.cpp
+  src/fetch_process_controller.cpp
 )
 
 target_link_libraries(uh_fetch_driver_gui

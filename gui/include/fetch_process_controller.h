@@ -27,64 +27,44 @@
  *
  ******************************************************************/
 // -*- mode: c++ -*-
-#ifndef WINDOW_H
-#define WINDOW_H
 
-#include <QtWidgets/QWidget>
-#include <ros/ros.h>
-#include <vector>
-#include "fetch_process_controller.h"
-#include "ordergenerator.h"
+#ifndef FETCHPROCESSCONTROLLER_H
+#define FETCHPROCESSCONTROLLER_H
+#include <QtCore/QProcess>
 
-class QLabel;
-class QPushButton;
-class QButtonGroup;
-
-class Window : public QWidget
+class FetchProcessController : public QObject
 {
   Q_OBJECT
 public:
-  Window(QWidget* parent = 0);
-  ~Window();
+  FetchProcessController(QObject* parent);
+  ~FetchProcessController();
 
-private slots:
-  void locationClicked(int negative_id);
-  void emergencyStop();
-  void advanceToNextCurve();
-  void newVariables();
-  void moveFinished();
+signals:
   void torsoFinished();
+  void moveFinished();
   void stopFinished();
   void velocityCurveChanged();
 
-private:
-  void setupUi();
-  void disableLocationButtons(bool disable);
-  void syncLabelsToIndex();
-  QString locationToUser(const QString &location) const;
-  QString locationForButtonId(int buttonId) const;
+public slots:
+  void moveTorso(double heightInMeters);
+  void travelToLocation(const QString& location);
+  void emergencyStop();
+  void changeVelocityCurve(const QString& newCurve);
 
-  QButtonGroup *button_group_;
-  QPushButton *kitchen_1_button_;
-  QPushButton *kitchen_2_button_;
-  QPushButton *dining_table_1_button_;
-  QPushButton *dining_table_2_button_;
-  QPushButton *sofa_1_button_;
-  QPushButton *sofa_2_button_;
-  QPushButton *emergency_stop_button_;
-  QPushButton *next_curve_button_;
-  QLabel *ordering_label_1_;
-  QLabel *ordering_label_2_;
-  QLabel *ordering_label_3_;
-  QLabel *ordering_label_4_;
-  QLabel *current_location_label_;
-  std::vector<QString> locations_;
-  std::vector<int> current_curves_;
-  int current_curve_index_;
-  OrderGenerator order_generator_;
-  ros::NodeHandle nodeHandle_;
-  FetchProcessController fetch_controller_;
-  bool going_to_move;
+private slots:
+  void baseProcessStateChanged(QProcess::ProcessState newState) const;
+  void stopProcessStateChanged(QProcess::ProcessState newState) const;
+  void torsoProcessStateChanged(QProcess::ProcessState newState) const;
+  void baseProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+  void stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+  void torsoProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+  void reconfigureProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+private:
+  QProcess base_process_;
+  QProcess torso_process_;
+  QProcess stop_process_;
+  QProcess reconfigure_process_;
 };
 
-#endif
+#endif  // FETCHPROCESSCONTROLLER_H
