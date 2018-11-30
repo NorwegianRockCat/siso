@@ -34,7 +34,7 @@
 int main(int argc, char* argv[])
 {
   QApplication app(argc, argv);
-  ros::init(argc, argv, "fetch_driver");
+  ros::init(argc, argv, "uh_fetch_driver_gui");
   Window window;
   window.show();
   return app.exec();
