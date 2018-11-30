@@ -28,7 +28,7 @@
  ******************************************************************/
 
 #include "fetch_process_controller.h"
-#include <QtCore/QDebug>
+#include <ros/console.h>
 
 FetchProcessController::FetchProcessController(QObject *parent)
   : QObject(parent)
@@ -72,44 +72,44 @@ FetchProcessController::~FetchProcessController()
 
 void FetchProcessController::baseProcessStateChanged(QProcess::ProcessState newState) const
 {
-  qDebug() << "base process Got new state" << newState;
+  ROS_DEBUG("base process Got new state: %d", newState);
 }
 
 void FetchProcessController::torsoProcessStateChanged(QProcess::ProcessState newState) const
 {
-  qDebug() << "torso process Got new state" << newState;
+  ROS_DEBUG("torso process Got new state: %d", newState);
 }
 
 void FetchProcessController::stopProcessStateChanged(QProcess::ProcessState newState) const
 {
-  qDebug() << "stop got new state" << newState;
+  ROS_DEBUG("stop process Got new state: %d", newState);
 }
 
 void FetchProcessController::baseProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-  qDebug() << "Base finished" << exitCode << exitStatus;
+  ROS_DEBUG("Base finished exit code: %d ExitStatus: %d", exitCode, exitStatus);
   emit moveFinished();
 }
 
 void FetchProcessController::torsoProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-  qDebug() << "Torso finished" << exitCode << exitStatus;
+  ROS_DEBUG("Torso finished exit code: %d ExitStatus: %d", exitCode, exitStatus);
   emit torsoFinished();
 }
 
 void FetchProcessController::stopProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-  qDebug() << "Stop finished" << exitCode << exitStatus;
+  ROS_DEBUG("Stop finished exit code: %d ExitStatus: %d", exitCode, exitStatus);
   emit stopFinished();
 }
 
 void FetchProcessController::travelToLocation(const QString &location)
 {
   Q_ASSERT_X(base_process_.state() == QProcess::NotRunning, "travelToLocation", "Process is still running");
-  const auto command = QLatin1String("rosrun");
+  const QString command(QLatin1String("rosrun"));
   const QStringList arguments(
     { QLatin1String("uh_robots"), QLatin1String("move_base.py"), QLatin1String("base"), QLatin1String("-n"), location });
-  qDebug() << "Runnining" << command << arguments;
+  ROS_DEBUG("Running %s %s", command.toUtf8().constData(), arguments.join(", ").toUtf8().constData());
   base_process_.start(command, arguments);
 }
 
@@ -119,24 +119,24 @@ void FetchProcessController::emergencyStop()
   const QString command(QLatin1String("rostopic"));
   const QStringList arguments({ QLatin1String("pub"), QLatin1String("-1"), QLatin1String("/enable_software_runstop"),
                                 QLatin1String("std_msgs/Bool"), QLatin1String("data: true") });
-  qDebug() << "Runnining" << command << arguments;
+  ROS_DEBUG("Running %s %s", command.toUtf8().constData(), arguments.join(", ").toUtf8().constData());
   stop_process_.start(command, arguments);
 }
 
 void FetchProcessController::moveTorso(double heightInMeters)
 {
-  const auto command = QLatin1String("rosrun");
+  const QString command(QLatin1String("rosrun"));
   const QStringList arguments(
     { QLatin1String("uh_robots"), QLatin1String("move_base.py"), QLatin1String("torso"), QLatin1String("-p"),
       QString::number(heightInMeters) });
-  qDebug() << "Runnining" << command << arguments;
+  ROS_DEBUG("Running %s %s", command.toUtf8().constData(), arguments.join(", ").toUtf8().constData());
   torso_process_.start(command, arguments);
 }
 
 void FetchProcessController::changeVelocityCurve(const QString& newCurve)
 {
   Q_ASSERT_X(reconfigure_process_.state() == QProcess::NotRunning, "locationClicked", "Process is still running");
-  const QString command = QLatin1String("rosrun");
+  const QString command(QLatin1String("rosrun"));
   const QStringList arguments({QLatin1String("dynamic_reconfigure"),
 			       QLatin1String("dynparam"),
 			       QLatin1String("set"),
@@ -144,7 +144,7 @@ void FetchProcessController::changeVelocityCurve(const QString& newCurve)
 			       QLatin1String("velocity_curve"),
 			       newCurve});
 
-  qDebug() << "Runnining" << command << arguments;
+  ROS_DEBUG("Running %s %s", command.toUtf8().constData(), arguments.join(", ").toUtf8().constData());
   reconfigure_process_.start(command, arguments);
 			       
 }
@@ -152,6 +152,6 @@ void FetchProcessController::changeVelocityCurve(const QString& newCurve)
 
 void FetchProcessController::reconfigureProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-  qDebug() << "Reconfigure finished" << exitCode << exitStatus;
+  ROS_DEBUG("Reconfigure finished exit code: %d ExitStatus: %d", exitCode, exitStatus);
   emit velocityCurveChanged();
 }
