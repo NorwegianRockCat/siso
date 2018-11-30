@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>uh_fetch_driver</name>
+  <name>uh_siso_experiment</name>
   <version>0.1.0</version>
   <description>A GUI-based driver for Fetch at Robot House</description>
   <maintainer email="trentonw@ifi.uio.no">Trenton Schulz</maintainer>
