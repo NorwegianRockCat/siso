@@ -37,6 +37,8 @@
 #include <ros/console.h>
 #include <algorithm>
 
+static const char *const Experiment_Log_Name = "Experiment";
+
 Window::Window(QWidget* parent)
   : QWidget(parent)
   , locations_({ QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
@@ -200,7 +202,7 @@ void Window::velocityCurveChanged()
   }
   const auto& variableName = textForVariable(current_curves_.at(current_curve_index_));
 
-  ROS_INFO("ID %s now using %s curve (index %d)", current_id_.toUtf8().constData(),
+  ROS_INFO_NAMED(Experiment_Log_Name, "ID %s now using %s curve (index %d)", current_id_.toUtf8().constData(),
 	   variableName.toUtf8().constData(), current_curve_index_);
 }
 
@@ -234,7 +236,7 @@ void Window::newVariables()
     }
   }
   current_location_label_->setText(locationToUser("Start"));
-  ROS_INFO("ID: %s has new variables: %s", current_id_.toUtf8().constData(), logString.c_str());
+  ROS_INFO_NAMED(Experiment_Log_Name, "ID: %s has new variables: %s", current_id_.toUtf8().constData(), logString.c_str());
 }
 
 void Window::syncLabelsToIndex()
@@ -339,7 +341,7 @@ void Window::logIdChanged()
   const auto& editText = id_line_edit_->text();
   if (current_id_ != editText) {
     current_id_ = editText;
-    ROS_INFO("ID changed to %s", current_id_.toUtf8().constData());
+    ROS_INFO_NAMED(Experiment_Log_Name, "ID changed to %s", current_id_.toUtf8().constData());
     advanceToNextCurve();
   }
 }
