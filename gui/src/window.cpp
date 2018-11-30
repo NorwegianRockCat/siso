@@ -208,7 +208,7 @@ void Window::newVariables()
 {
   current_curve_index_ = 0;
   current_curves_ = order_generator_.newOrder();
-  const QVector<QLabel*> labels({
+  const std::vector<QLabel*> labels({
       ordering_label_1_, ordering_label_2_, ordering_label_3_, ordering_label_4_,
   });
   Q_ASSERT(labels.size() == current_curves_.size());
@@ -222,7 +222,7 @@ void Window::newVariables()
 
 void Window::syncLabelsToIndex()
 {
-  const QVector<QLabel*> labels({
+  const std::vector<QLabel*> labels({
       ordering_label_1_, ordering_label_2_, ordering_label_3_, ordering_label_4_,
   });
   const int TotalVariables = labels.size();
