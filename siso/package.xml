@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rh_experiments_siso</name>
+  <version>0.1.0</version>
+  <description>Repo for all the experiments involving Slow In, Slow Out at robot house</description>
+  <maintainer email="trentonw@ifi.uio.no">Trenton Schulz</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <export>
+    <metapackage/>
+  </export>
+
+</package>
