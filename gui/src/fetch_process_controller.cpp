@@ -55,16 +55,17 @@ FetchProcessController::FetchProcessController(QObject *parent)
 
 static void terminateIfRunning(QProcess &process)
 {
-  if (process.state() == QProcess::NotRunning)
-  {
-    process.terminate();
-  }
+  process.terminate();
+  process.waitForFinished();
 }
 
 FetchProcessController::~FetchProcessController()
 {
-  terminateIfRunning(base_process_);
+  // Let everything terminate without a cascade.
+  // We are going down anyway, but we don't need to crash.
+  QSignalBlocker blocker(this); 
   terminateIfRunning(torso_process_);
+  terminateIfRunning(base_process_);
   terminateIfRunning(stop_process_);
   terminateIfRunning(reconfigure_process_);
 }
