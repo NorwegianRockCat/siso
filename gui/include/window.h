@@ -37,6 +37,7 @@
 #include "ordergenerator.h"
 
 class QLabel;
+class QLineEdit;
 class QPushButton;
 class QButtonGroup;
 
@@ -56,6 +57,8 @@ private slots:
   void torsoFinished();
   void stopFinished();
   void velocityCurveChanged();
+  void checkLockButtons();
+  void logIdChanged();
 
 private:
   void setupUi();
@@ -64,6 +67,7 @@ private:
   QString locationToUser(const QString &location) const;
   QString locationForButtonId(int buttonId) const;
 
+  QLineEdit *id_line_edit_;
   QButtonGroup *button_group_;
   QPushButton *kitchen_1_button_;
   QPushButton *kitchen_2_button_;
@@ -85,6 +89,7 @@ private:
   ros::NodeHandle nodeHandle_;
   FetchProcessController fetch_controller_;
   bool going_to_move;
+  QString current_id_;
 };
 
 #endif

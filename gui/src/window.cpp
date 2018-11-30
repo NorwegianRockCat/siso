@@ -30,9 +30,11 @@
 #include "window.h"
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QPushButton>
 #include <QtCore/QDebug>
+#include <ros/console.h>
 #include <algorithm>
 
 Window::Window(QWidget* parent)
@@ -50,7 +52,12 @@ Window::Window(QWidget* parent)
   connect(&fetch_controller_, SIGNAL(torsoFinished()), this, SLOT(torsoFinished()));
   connect(&fetch_controller_, SIGNAL(stopFinished()), this, SLOT(stopFinished()));
   connect(&fetch_controller_, SIGNAL(velocityCurveChanged()), this, SLOT(velocityCurveChanged()));
-  advanceToNextCurve();
+  // Make sure that we have info level, since we are dependent on that for logging.
+  if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
+    ros::console::notifyLoggerLevelsChanged();
+  }
+  // Prime the GUI
+  checkLockButtons();
 }
 
 static QLabel* createOrderingLabel()
@@ -75,6 +82,11 @@ static QPushButton* createLocationButton(const QString& buttonText, QButtonGroup
 
 void Window::setupUi()
 {
+  auto idLabel = new QLabel(tr("ID:"));
+  id_line_edit_ = new QLineEdit();
+  connect(id_line_edit_, SIGNAL(editingFinished()), this, SLOT(checkLockButtons()));
+  connect(id_line_edit_, SIGNAL(editingFinished()), this, SLOT(logIdChanged()));
+
   button_group_ = new QButtonGroup(this);
   button_group_->setExclusive(true);
   ordering_label_1_ = createOrderingLabel();
@@ -89,39 +101,51 @@ void Window::setupUi()
   dining_table_2_button_ = createLocationButton(locationToUser(locations_.at(3)), button_group_);
   sofa_1_button_ = createLocationButton(locationToUser(locations_.at(4)), button_group_);
   sofa_2_button_ = createLocationButton(locationToUser(locations_.at(5)), button_group_);
-
   connect(button_group_, SIGNAL(buttonClicked(int)), SLOT(locationClicked(int)));
+
   emergency_stop_button_ = new QPushButton(tr("Emergency &Stop"));
-  auto button_font = emergency_stop_button_->font();
-  button_font.setWeight(QFont::Bold);
-  emergency_stop_button_->setFont(button_font);
+  auto widget_font = emergency_stop_button_->font();
+  widget_font.setWeight(QFont::Bold);
+  emergency_stop_button_->setFont(widget_font);
   emergency_stop_button_->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+  emergency_stop_button_->setMinimumWidth(emergency_stop_button_->sizeHint().width());
   connect(emergency_stop_button_, SIGNAL(clicked()), SLOT(emergencyStop()));
+
   next_curve_button_ = new QPushButton(tr("Next Curve"));
   next_curve_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
   connect(next_curve_button_, SIGNAL(clicked()), this, SLOT(advanceToNextCurve()));
 
-  auto* layout = new QGridLayout();
-  layout->addWidget(ordering_label_1_, 0, 0);
-  layout->addWidget(ordering_label_2_, 0, 1);
-  layout->addWidget(ordering_label_3_, 0, 2);
-  layout->addWidget(ordering_label_4_, 0, 3);
-  layout->addWidget(kitchen_1_button_, 1, 0);
-  layout->addWidget(kitchen_2_button_, 2, 0);
-  layout->addWidget(dining_table_1_button_, 1, 1);
-  layout->addWidget(dining_table_2_button_, 2, 1);
-  layout->addWidget(sofa_1_button_, 1, 2);
-  layout->addWidget(sofa_2_button_, 2, 2);
-  layout->addWidget(emergency_stop_button_, 0, 4, -1, -1);
-  layout->addWidget(next_curve_button_, 3, 0, 1, 2);
   auto label = new QLabel(tr("Location"));
   label->setAlignment(Qt::AlignCenter);
-  button_font = label->font();
-  button_font.setWeight(QFont::Bold);
-  label->setFont(button_font);
-  label->setFont(button_font);
-  layout->addWidget(label, 3, 2);
-  layout->addWidget(current_location_label_, 3, 3);
+  widget_font = label->font();
+  widget_font.setWeight(QFont::Bold);
+  label->setFont(widget_font);
+  label->setFont(widget_font);
+
+  static const int IdRow = 0;
+  static const int OrderingRow = 1;
+  static const int Location1Row = OrderingRow + 1;
+  static const int Location2Row = Location1Row + 1;
+  static const int CurveRow = Location2Row + 1;
+  auto* idLayout = new QHBoxLayout();
+  idLayout->addWidget(idLabel);
+  idLayout->addWidget(id_line_edit_);
+  auto* layout = new QGridLayout();
+  layout->addLayout(idLayout, IdRow, 0, 1, 4);
+  layout->addWidget(ordering_label_1_, OrderingRow, 0);
+  layout->addWidget(ordering_label_2_, OrderingRow, 1);
+  layout->addWidget(ordering_label_3_, OrderingRow, 2);
+  layout->addWidget(ordering_label_4_, OrderingRow, 3);
+  layout->addWidget(kitchen_1_button_, Location1Row, 0);
+  layout->addWidget(kitchen_2_button_, Location2Row, 0);
+  layout->addWidget(dining_table_1_button_, Location1Row, 1);
+  layout->addWidget(dining_table_2_button_, Location2Row, 1);
+  layout->addWidget(sofa_1_button_, Location1Row, 2);
+  layout->addWidget(sofa_2_button_, Location2Row, 2);
+  layout->addWidget(emergency_stop_button_, IdRow, 4, -1, -1);
+  layout->addWidget(next_curve_button_, CurveRow, 0, 1, 2);
+  layout->addWidget(label, CurveRow, 2);
+  layout->addWidget(current_location_label_, CurveRow, 3);
   setLayout(layout);
 }
 
@@ -170,6 +194,13 @@ static QString textForVariable(int i)
   return (i == 1) ? Window::tr("Slow in, Slow out") : Window::tr("Linear");
 }
 
+static int maxVariableNameLength()
+{
+  const auto& s0 = textForVariable(0);
+  const auto& s1 = textForVariable(1);
+  return std::max(s0.toUtf8().size(), s1.toUtf8().size());
+}
+
 void Window::newVariables()
 {
   current_curve_index_ = 0;
@@ -179,11 +210,21 @@ void Window::newVariables()
   });
   Q_ASSERT(labels.size() == current_curves_.size());
   const int TotalVariables = labels.size();
+  // Build a long enough string
+  std::string logString;
+  logString.reserve(4 * maxVariableNameLength() + 6);
+
   for (int place = 0; place < TotalVariables; ++place)
   {
-    labels.at(place)->setText(textForVariable(current_curves_.at(place)));
+    const auto &name = textForVariable(current_curves_.at(place));
+    labels.at(place)->setText(name);
+    logString.append(name.toStdString());
+    if (place != TotalVariables - 1) {
+      logString.append(", ");
+    }
   }
   current_location_label_->setText(locationToUser("Start"));
+  ROS_INFO("current_user_id %s has new variables: %s", current_id_.toUtf8().constData(), logString.c_str());
 }
 
 void Window::syncLabelsToIndex()
@@ -268,4 +309,23 @@ void Window::stopFinished()
 {
   emergency_stop_button_->setText(tr("Emergency Stop"));
   emergency_stop_button_->setDisabled(false);
+}
+
+void Window::checkLockButtons()
+{
+  // Turn off everything unless we have a basic id.
+  const auto lockDown = id_line_edit_->text().isEmpty();
+  disableLocationButtons(lockDown);
+  next_curve_button_->setDisabled(lockDown);
+}
+
+
+void Window::logIdChanged()
+{
+  const auto& editText = id_line_edit_->text();
+  if (current_id_ != editText) {
+    current_id_ = editText;
+    advanceToNextCurve();
+    ROS_INFO("ID changed to %s", current_id_.toUtf8().constData());
+  }
 }
