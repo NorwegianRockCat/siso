@@ -72,9 +72,6 @@ OrderGenerator::OrderGenerator()
   } else {
     die_pool_file_name_ = "diepool.txt"; // That's right, drop it in CWD.
   }
-  qDebug() << "pool file is " << die_pool_file_name_;
-
-
   readDiePool();
 }
 
