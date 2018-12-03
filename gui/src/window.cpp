@@ -28,6 +28,7 @@
  ******************************************************************/
 
 #include "window.h"
+#include <QtCore/QSettings>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -37,13 +38,13 @@
 #include <ros/console.h>
 #include <algorithm>
 
-static const char *const Experiment_Log_Name = "Experiment";
+static const char* const Experiment_Log_Name = "Experiment";
 
 Window::Window(QWidget* parent)
   : QWidget(parent)
   , locations_({ QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
-                 QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
-                 QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
+		 QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
+		 QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
   , current_curve_index_(-1)
   , nodeHandle_(ros::NodeHandle())
   , fetch_controller_(this)
@@ -55,10 +56,12 @@ Window::Window(QWidget* parent)
   connect(&fetch_controller_, SIGNAL(stopFinished()), this, SLOT(stopFinished()));
   connect(&fetch_controller_, SIGNAL(velocityCurveChanged()), this, SLOT(velocityCurveChanged()));
   // Make sure that we have info level, since we are dependent on that for logging.
-  if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info)) {
+  if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info))
+  {
     ros::console::notifyLoggerLevelsChanged();
   }
-  // Prime the GUI
+  // Read the settings and sync the GUI
+  readSettings();
   checkLockButtons();
 }
 
@@ -153,8 +156,84 @@ void Window::setupUi()
   setLayout(layout);
 }
 
+class WriteSettingsArrayWrapper
+{
+public:
+  WriteSettingsArrayWrapper(QSettings* settings, const QString& arrayName) : m_settings(settings)
+  {
+    m_settings->beginWriteArray(arrayName);
+  }
+  ~WriteSettingsArrayWrapper()
+  {
+    m_settings->endArray();
+  }
+
+private:
+  QSettings* m_settings;
+};
+
+class ReadSettingsArrayWrapper
+{
+public:
+  ReadSettingsArrayWrapper(QSettings* settings, const QString& arrayName) : m_settings(settings)
+  {
+    m_settings->beginReadArray(arrayName);
+  }
+  ~ReadSettingsArrayWrapper()
+  {
+    m_settings->endArray();
+  }
+
+private:
+  QSettings* m_settings;
+};
+
+void Window::readSettings()
+{
+  QSettings settings;
+  current_curves_.clear();
+  current_curves_.reserve(4);
+
+  current_id_ = settings.value(QLatin1String("current_id"), QString()).toString();
+  current_curve_index_ = settings.value(QLatin1String("current_curve_index"), -1).toInt();
+  if (current_curve_index_ >= 0)
+  {
+    ReadSettingsArrayWrapper arrayStart(&settings, QLatin1String("current_curves"));
+    const int curves_size = current_curves_.capacity();
+    for (int index = 0; index < curves_size; ++index)
+    {
+      settings.setArrayIndex(index);
+      current_curves_.push_back(settings.value(QLatin1String("current_curve_element"), -1).toInt());
+    }
+  }
+  id_line_edit_->setText(current_id_);
+  if (!current_curves_.empty())
+  {
+    syncLabelsToCurves();
+    advanceToCurve();
+  }
+}
+
+void Window::writeSettings()
+{
+  QSettings settings;
+  settings.setValue(QLatin1String("current_id"), current_id_);
+  settings.setValue(QLatin1String("current_curve_index"), current_curve_index_);
+  if (current_curve_index_ >= 0)
+  {
+    const int curves_size = current_curves_.size();
+    WriteSettingsArrayWrapper arrayStart(&settings, QLatin1String("current_curves"));
+    for (int index = 0; index < curves_size; ++index)
+    {
+      settings.setArrayIndex(index);
+      settings.setValue(QLatin1String("current_curve_element"), current_curves_.at(index));
+    }
+  }
+}
+
 Window::~Window()
 {
+  writeSettings();
 }
 
 void Window::disableLocationButtons(bool disable)
@@ -167,9 +246,10 @@ void Window::disableLocationButtons(bool disable)
 
 void Window::torsoFinished()
 {
-  if (going_to_move) {
+  if (going_to_move)
+  {
     const auto negative_id = button_group_->checkedId();
-    const auto &location = locationForButtonId(negative_id);
+    const auto& location = locationForButtonId(negative_id);
     fetch_controller_.travelToLocation(location);
   }
 }
@@ -195,15 +275,11 @@ static QString textForVariable(int i)
 
 void Window::velocityCurveChanged()
 {
-  if (current_curve_index_ == current_curves_.size() - 1) {
-    lockNextCurveButton(true);
-  } else {
-    next_curve_button_->setDisabled(false);
-  }
+  lockNextCurveButton(current_curve_index_ == current_curves_.size() - 1);
   const auto& variableName = textForVariable(current_curves_.at(current_curve_index_));
 
   ROS_INFO_NAMED(Experiment_Log_Name, "ID %s now using %s curve (index %d)", current_id_.toUtf8().constData(),
-	   variableName.toUtf8().constData(), current_curve_index_);
+		 variableName.toUtf8().constData(), current_curve_index_);
 }
 
 static int maxVariableNameLength()
@@ -217,6 +293,12 @@ void Window::newVariables()
 {
   current_curve_index_ = 0;
   current_curves_ = order_generator_.newOrder();
+  syncLabelsToCurves();
+  current_location_label_->setText(locationToUser("Start"));
+}
+
+void Window::syncLabelsToCurves()
+{
   const std::vector<QLabel*> labels({
       ordering_label_1_, ordering_label_2_, ordering_label_3_, ordering_label_4_,
   });
@@ -228,15 +310,16 @@ void Window::newVariables()
 
   for (int place = 0; place < TotalVariables; ++place)
   {
-    const auto &name = textForVariable(current_curves_.at(place));
+    const auto& name = textForVariable(current_curves_.at(place));
     labels.at(place)->setText(name);
     logString.append(name.toStdString());
-    if (place != TotalVariables - 1) {
+    if (place != TotalVariables - 1)
+    {
       logString.append(", ");
     }
   }
-  current_location_label_->setText(locationToUser("Start"));
-  ROS_INFO_NAMED(Experiment_Log_Name, "ID: %s has new variables: %s", current_id_.toUtf8().constData(), logString.c_str());
+  ROS_INFO_NAMED(Experiment_Log_Name, "ID: %s has new variables: %s", current_id_.toUtf8().constData(),
+		 logString.c_str());
 }
 
 void Window::syncLabelsToIndex()
@@ -302,12 +385,16 @@ void Window::advanceToNextCurve()
   {
     newVariables();
   }
+  advanceToCurve();
+}
+
+void Window::advanceToCurve()
+{
   const QString new_curve = QLatin1String(current_curves_.at(current_curve_index_) == 0 ? "linear" : "siso");
 
   next_curve_button_->setDisabled(true);
   fetch_controller_.changeVelocityCurve(new_curve);
   syncLabelsToIndex();
-  // disable the next button until we change the id…
 }
 
 void Window::moveFinished()
@@ -327,7 +414,8 @@ void Window::stopFinished()
 void Window::checkLockButtons()
 {
   const auto& editText = id_line_edit_->text();
-  if (current_id_ != editText) {
+  if (current_id_ != editText)
+  {
     // Turn off everything unless we have a basic id.
     const auto lockDown = id_line_edit_->text().isEmpty();
     disableLocationButtons(lockDown);
@@ -335,11 +423,11 @@ void Window::checkLockButtons()
   }
 }
 
-
 void Window::logIdChanged()
 {
   const auto& editText = id_line_edit_->text();
-  if (current_id_ != editText) {
+  if (current_id_ != editText)
+  {
     current_id_ = editText;
     ROS_INFO_NAMED(Experiment_Log_Name, "ID changed to %s", current_id_.toUtf8().constData());
     advanceToNextCurve();

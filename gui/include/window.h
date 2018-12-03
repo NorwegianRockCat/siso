@@ -62,8 +62,12 @@ private slots:
 
 private:
   void setupUi();
+  void readSettings();
+  void writeSettings();
   void disableLocationButtons(bool disable);
+  void syncLabelsToCurves();
   void syncLabelsToIndex();
+  void advanceToCurve();
   void lockNextCurveButton(bool disable);
   QString locationToUser(const QString &location) const;
   QString locationForButtonId(int buttonId) const;
