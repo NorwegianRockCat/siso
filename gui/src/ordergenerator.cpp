@@ -27,9 +27,16 @@
  *
  ******************************************************************/
 #include "ordergenerator.h"
-#include <functional>
 #include <chrono>
+#include <functional>
 #include <random>
+
+#include <ros/console.h>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
+#include <QtCore/QDebug>
+
+
 
 OrderGenerator::OrderGenerator()
 {
@@ -56,10 +63,12 @@ OrderGenerator::OrderGenerator()
   velocity_curve_pool_.push_back(lssl);
   const std::vector<int> slls({1, 0, 0, 1});
   velocity_curve_pool_.push_back(slls);
+  readDiePool();
 }
 
 OrderGenerator::~OrderGenerator()
 {
+  writeDiePool();
 }
 
 void OrderGenerator::fillDiePool()
@@ -69,8 +78,7 @@ void OrderGenerator::fillDiePool()
   std::mt19937 generator(seed);
   std::uniform_int_distribution<int> distribution(1, velocity_curve_pool_.size());
   auto dice = std::bind(distribution, generator);
-  die_pool_.clear();
-  die_pool_.reserve(1024);
+  prepareDiePool();
   auto rolls = 0;
   const auto total = die_pool_.capacity();
   while (rolls < total) {
@@ -81,10 +89,57 @@ void OrderGenerator::fillDiePool()
 
 std::vector<int> OrderGenerator::newOrder()
 {
+  ROS_DEBUG("pool is empty? %d", die_pool_.empty());
   if (die_pool_.empty()) {
     fillDiePool();
   }
   const auto index = die_pool_.back() - 1;
   die_pool_.pop_back();
+  ROS_DEBUG("return index %d", index);
   return velocity_curve_pool_.at(index);
+}
+
+void OrderGenerator::readDiePool()
+{
+  // We are just going to use standard text streams to make this easier.
+  QString fileName(QLatin1String("diepool.txt"));
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly)) {
+    // This won't be seen because we are still in initialization
+    ROS_DEBUG("Could not open the die pool (%s). It will be generated later.", fileName.toUtf8().constData());
+    return;
+  }
+  prepareDiePool();
+  QTextStream in(&file);
+  in.setCodec("UTF-8"); // Not necessary, but let's be correct.
+  while (!in.atEnd()) {
+    int roll;
+    in >> roll;
+    die_pool_.push_back(roll);
+  }
+  // It seems that me reading the EOF adds a zero, so throw it away.
+  // this happens when you go with a very, very simple file.
+  die_pool_.pop_back();
+}
+
+void OrderGenerator::prepareDiePool()
+{
+  die_pool_.clear();
+  die_pool_.reserve(1024);
+}
+
+void OrderGenerator::writeDiePool()
+{
+  ROS_DEBUG("write");
+  QString fileName(QLatin1String("diepool.txt"));
+  QFile file(fileName);
+  if (!file.open(QIODevice::WriteOnly)) {
+    ROS_DEBUG("Could not open the die pool (%s) for saving. The rest of your pool is gone.", fileName.toUtf8().constData());
+    return;
+  }
+  QTextStream out(&file);
+  out.setCodec("UTF-8"); // Not necessary, but let's be correct.
+  for (const auto roll : die_pool_) {
+    out << roll << endl;
+  }
 }

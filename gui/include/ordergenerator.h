@@ -41,7 +41,10 @@ public:
   std::vector<int> newOrder();
 
 private:
+  void readDiePool();
+  void writeDiePool();
   void fillDiePool();
+  void prepareDiePool();
   std::vector<std::vector<int> > velocity_curve_pool_;
   std::vector<int> die_pool_;
 };
