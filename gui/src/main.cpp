@@ -34,6 +34,9 @@
 int main(int argc, char* argv[])
 {
   QApplication app(argc, argv);
+  QCoreApplication::setOrganizationName(QLatin1String("University of Oslo"));
+  QCoreApplication::setOrganizationDomain(QLatin1String("uio.no"));
+  QCoreApplication::setApplicationName(QLatin1String("uh_fetch_driver_gui"));
   ros::init(argc, argv, "uh_fetch_driver_gui");
   Window window;
   window.show();
