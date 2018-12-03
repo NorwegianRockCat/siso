@@ -34,7 +34,6 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QPushButton>
-#include <QtCore/QDebug>
 #include <ros/console.h>
 #include <algorithm>
 
@@ -46,10 +45,11 @@ Window::Window(QWidget* parent)
 		 QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
 		 QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
   , current_curve_index_(-1)
+  , robot_path_index_(-1)
   , nodeHandle_(ros::NodeHandle())
   , fetch_controller_(this)
-  , going_to_move(false)
 {
+  buildPath();
   setupUi();
   connect(&fetch_controller_, SIGNAL(moveFinished()), this, SLOT(moveFinished()));
   connect(&fetch_controller_, SIGNAL(torsoFinished()), this, SLOT(torsoFinished()));
@@ -98,8 +98,6 @@ void Window::setupUi()
   ordering_label_2_ = createOrderingLabel();
   ordering_label_3_ = createOrderingLabel();
   ordering_label_4_ = createOrderingLabel();
-  current_location_label_ = new QLabel(tr("Unknown"));
-  current_location_label_->setAlignment(Qt::AlignCenter);
   kitchen_1_button_ = createLocationButton(locationToUser(locations_.at(0)), button_group_);
   kitchen_2_button_ = createLocationButton(locationToUser(locations_.at(1)), button_group_);
   dining_table_1_button_ = createLocationButton(locationToUser(locations_.at(2)), button_group_);
@@ -122,37 +120,54 @@ void Window::setupUi()
   next_curve_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
   connect(next_curve_button_, SIGNAL(clicked()), this, SLOT(advanceToNextCurve()));
 
-  auto label = new QLabel(tr("Location"));
-  label->setAlignment(Qt::AlignCenter);
-  widget_font = label->font();
-  widget_font.setWeight(QFont::Bold);
-  label->setFont(widget_font);
-  label->setFont(widget_font);
+  next_path_button_ = new QPushButton(tr("Next Stop"));
+  next_path_button_->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum));
+  connect(next_path_button_, SIGNAL(clicked()), this, SLOT(advanceToNextStop()));
+
+  buildPathLabels();
 
   static const int IdRow = 0;
-  static const int OrderingRow = 1;
-  static const int Location1Row = OrderingRow + 1;
+  static const int CurveRow = IdRow + 1;
+  static const int PathRow = CurveRow + 1;
+  static const int PathButtonRow = PathRow + 1;
+  static const int SpacerRow = PathButtonRow + 1;
+  static const int Location1Row = SpacerRow + 2;
   static const int Location2Row = Location1Row + 1;
-  static const int CurveRow = Location2Row + 1;
+
   auto* idLayout = new QHBoxLayout();
   idLayout->addWidget(idLabel);
   idLayout->addWidget(id_line_edit_);
+
+  auto* orderingLayout = new QHBoxLayout();
+  orderingLayout->addWidget(ordering_label_1_);
+  orderingLayout->addWidget(ordering_label_2_);
+  orderingLayout->addWidget(ordering_label_3_);
+  orderingLayout->addWidget(ordering_label_4_);
+
+
   auto* layout = new QGridLayout();
-  layout->addLayout(idLayout, IdRow, 0, 1, 4);
-  layout->addWidget(ordering_label_1_, OrderingRow, 0);
-  layout->addWidget(ordering_label_2_, OrderingRow, 1);
-  layout->addWidget(ordering_label_3_, OrderingRow, 2);
-  layout->addWidget(ordering_label_4_, OrderingRow, 3);
+  layout->addLayout(idLayout, IdRow, 0, 1, 3);
+  layout->addLayout(orderingLayout, IdRow, 4, 1, -1);
+  layout->addWidget(next_curve_button_, CurveRow, 6, 1, -1);
+
+  auto *pathLayout = new QHBoxLayout();
+  for (auto *label : path_labels_) {
+    pathLayout->addWidget(label);
+  }
+  layout->addLayout(pathLayout, PathRow, 0, 1, 10);
+  layout->addWidget(next_path_button_, PathButtonRow, 0, 1, 3);
+
+  // Add some space
+  layout->addWidget(new QLabel(), SpacerRow, 0, 1, -1);
+  layout->setRowStretch(SpacerRow, 1);
+
   layout->addWidget(kitchen_1_button_, Location1Row, 0);
   layout->addWidget(kitchen_2_button_, Location2Row, 0);
   layout->addWidget(dining_table_1_button_, Location1Row, 1);
   layout->addWidget(dining_table_2_button_, Location2Row, 1);
   layout->addWidget(sofa_1_button_, Location1Row, 2);
   layout->addWidget(sofa_2_button_, Location2Row, 2);
-  layout->addWidget(emergency_stop_button_, IdRow, 4, -1, -1);
-  layout->addWidget(next_curve_button_, CurveRow, 0, 1, 2);
-  layout->addWidget(label, CurveRow, 2);
-  layout->addWidget(current_location_label_, CurveRow, 3);
+  layout->addWidget(emergency_stop_button_, Location1Row, 4, -1, -1);
   setLayout(layout);
 }
 
@@ -212,6 +227,11 @@ void Window::readSettings()
     syncLabelsToCurves();
     advanceToCurve();
   }
+
+  robot_path_index_ = settings.value(QLatin1String("robot_path_index"), 0).toInt();
+  if (robot_path_index_ >= 0) {
+    syncPath();
+  }
 }
 
 void Window::writeSettings()
@@ -242,22 +262,21 @@ void Window::disableLocationButtons(bool disable)
   {
     button->setDisabled(disable);
   }
+  next_path_button_->setDisabled(disable);
 }
 
 void Window::torsoFinished()
 {
-  if (going_to_move)
+  if (!next_location_.isEmpty())
   {
-    const auto negative_id = button_group_->checkedId();
-    const auto& location = locationForButtonId(negative_id);
-    fetch_controller_.travelToLocation(location);
+    fetch_controller_.travelToLocation(next_location_);
   }
 }
 
 void Window::locationClicked(int negative_id)
 {
   disableLocationButtons(true);
-  going_to_move = true;
+  next_location_ = locationForButtonId(negative_id);
   fetch_controller_.moveTorso(0.0);
 }
 
@@ -294,7 +313,6 @@ void Window::newVariables()
   current_curve_index_ = 0;
   current_curves_ = order_generator_.newOrder();
   syncLabelsToCurves();
-  current_location_label_->setText(locationToUser("Start"));
 }
 
 void Window::syncLabelsToCurves()
@@ -380,12 +398,27 @@ QString Window::locationToUser(const QString& location) const
 
 void Window::advanceToNextCurve()
 {
-  current_curve_index_++;
+  ++current_curve_index_;
   if (current_curve_index_ >= current_curves_.size())
   {
     newVariables();
   }
   advanceToCurve();
+}
+
+void Window::advanceToNextStop()
+{
+  ++robot_path_index_;
+  if (robot_path_index_ >= robot_path_.size()) {
+    robot_path_index_ = 0;
+  }
+  advancePath();
+}
+
+void Window::advancePath()
+{
+  next_location_ = robot_path_.at(robot_path_index_);
+  fetch_controller_.moveTorso(0.00);
 }
 
 void Window::advanceToCurve()
@@ -400,9 +433,9 @@ void Window::advanceToCurve()
 void Window::moveFinished()
 {
   disableLocationButtons(false);
-  going_to_move = false;
+  next_location_ = QString();
   fetch_controller_.moveTorso(0.25);
-  current_location_label_->setText(locationToUser(locationForButtonId(button_group_->checkedId())));
+  syncPath();
 }
 
 void Window::stopFinished()
@@ -438,4 +471,46 @@ void Window::lockNextCurveButton(bool disable)
 {
   next_curve_button_->setDisabled(disable);
   next_curve_button_->setText(disable ? tr("Enter new ID") : tr("Next Curve"));
+}
+
+void Window::buildPath()
+{
+  // Build our paths out of the locations we built.
+  // I'm assuming we aren't change the order of them in the constructor.
+  const int TotalStops = 11;
+  robot_path_.clear();
+  robot_path_.reserve(TotalStops);
+  robot_path_.push_back(locations_[1]);
+  robot_path_.push_back(locations_[2]);
+  robot_path_.push_back(locations_[3]);
+  robot_path_.push_back(locations_[4]);
+  robot_path_.push_back(locations_[5]);
+  robot_path_.push_back(locations_[0]);
+  robot_path_.push_back(locations_[1]);
+  robot_path_.push_back(locations_[2]);
+  robot_path_.push_back(locations_[3]);
+  robot_path_.push_back(locations_[0]);
+  robot_path_.push_back(locations_[1]);
+}
+
+void Window::buildPathLabels()
+{
+  path_labels_.clear();
+  path_labels_.reserve(robot_path_.size());
+
+  for (const auto &stop : robot_path_) {
+    auto *label = new QLabel(locationToUser(stop));
+    path_labels_.push_back(label);
+  }
+}
+
+void Window::syncPath()
+{
+  int index = 0;
+  for (auto *label : path_labels_) {
+    auto font = label->font();
+    font.setWeight(index == robot_path_index_ ? QFont::Bold : QFont::Normal);
+    label->setFont(font);
+    ++index;
+  }
 }

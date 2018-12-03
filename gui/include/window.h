@@ -52,6 +52,7 @@ private slots:
   void locationClicked(int negative_id);
   void emergencyStop();
   void advanceToNextCurve();
+  void advanceToNextStop();
   void newVariables();
   void moveFinished();
   void torsoFinished();
@@ -62,12 +63,16 @@ private slots:
 
 private:
   void setupUi();
+  void buildPath();
+  void buildPathLabels();
   void readSettings();
   void writeSettings();
   void disableLocationButtons(bool disable);
   void syncLabelsToCurves();
   void syncLabelsToIndex();
+  void syncPath();
   void advanceToCurve();
+  void advancePath();
   void lockNextCurveButton(bool disable);
   QString locationToUser(const QString &location) const;
   QString locationForButtonId(int buttonId) const;
@@ -82,19 +87,22 @@ private:
   QPushButton *sofa_2_button_;
   QPushButton *emergency_stop_button_;
   QPushButton *next_curve_button_;
+  QPushButton *next_path_button_;
   QLabel *ordering_label_1_;
   QLabel *ordering_label_2_;
   QLabel *ordering_label_3_;
   QLabel *ordering_label_4_;
-  QLabel *current_location_label_;
   std::vector<QString> locations_;
+  std::vector<QString> robot_path_;
+  std::vector<QLabel *> path_labels_;
   std::vector<int> current_curves_;
   int current_curve_index_;
+  int robot_path_index_;
   OrderGenerator order_generator_;
   ros::NodeHandle nodeHandle_;
   FetchProcessController fetch_controller_;
-  bool going_to_move;
   QString current_id_;
+  QString next_location_;
 };
 
 #endif
