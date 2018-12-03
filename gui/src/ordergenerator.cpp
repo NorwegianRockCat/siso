@@ -35,8 +35,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtCore/QDebug>
-
-
+#include <QtCore/QCoreApplication>
 
 OrderGenerator::OrderGenerator()
 {
@@ -63,6 +62,19 @@ OrderGenerator::OrderGenerator()
   velocity_curve_pool_.push_back(lssl);
   const std::vector<int> slls({1, 0, 0, 1});
   velocity_curve_pool_.push_back(slls);
+
+  // brain dead argument parsing at the worst spot, but honestly I don't want
+  // to build a command line parser and this will be running through roslaunch anyway
+  const auto arguments = QCoreApplication::instance()->arguments();
+  const auto argPosition  = arguments.indexOf(QLatin1String("--diepool"));
+  if (argPosition != -1 && argPosition + 1 < arguments.size()) {
+    die_pool_file_name_ = arguments.at(argPosition + 1);
+  } else {
+    die_pool_file_name_ = "diepool.txt"; // That's right, drop it in CWD.
+  }
+  qDebug() << "pool file is " << die_pool_file_name_;
+
+
   readDiePool();
 }
 
@@ -89,24 +101,21 @@ void OrderGenerator::fillDiePool()
 
 std::vector<int> OrderGenerator::newOrder()
 {
-  ROS_DEBUG("pool is empty? %d", die_pool_.empty());
   if (die_pool_.empty()) {
     fillDiePool();
   }
   const auto index = die_pool_.back() - 1;
   die_pool_.pop_back();
-  ROS_DEBUG("return index %d", index);
   return velocity_curve_pool_.at(index);
 }
 
 void OrderGenerator::readDiePool()
 {
   // We are just going to use standard text streams to make this easier.
-  QString fileName(QLatin1String("diepool.txt"));
-  QFile file(fileName);
+  QFile file(die_pool_file_name_);
   if (!file.open(QIODevice::ReadOnly)) {
     // This won't be seen because we are still in initialization
-    ROS_DEBUG("Could not open the die pool (%s). It will be generated later.", fileName.toUtf8().constData());
+    ROS_DEBUG("Could not open the die pool (%s). It will be generated later.", die_pool_file_name_.toUtf8().constData());
     return;
   }
   prepareDiePool();
@@ -130,11 +139,9 @@ void OrderGenerator::prepareDiePool()
 
 void OrderGenerator::writeDiePool()
 {
-  ROS_DEBUG("write");
-  QString fileName(QLatin1String("diepool.txt"));
-  QFile file(fileName);
+  QFile file(die_pool_file_name_);
   if (!file.open(QIODevice::WriteOnly)) {
-    ROS_DEBUG("Could not open the die pool (%s) for saving. The rest of your pool is gone.", fileName.toUtf8().constData());
+    ROS_DEBUG("Could not open the die pool (%s) for saving. The rest of your pool is gone.", die_pool_file_name_.toUtf8().constData());
     return;
   }
   QTextStream out(&file);

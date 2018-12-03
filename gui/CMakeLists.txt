@@ -4,12 +4,15 @@ set (CMAKE_CXX_STANDARD 14)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  roslaunch
   std_msgs
 )
 
 catkin_package()
 
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+
+roslaunch_add_file_check(launch)
 
 #set(CMAKE_AUTOMOC ON)
 #set(CMAKE_INCLUDE_CURRENT_DIR ON)

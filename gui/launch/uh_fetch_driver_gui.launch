@@ -1,0 +1,4 @@
+<launch>
+  <arg name="diepool_file" default="$(find uh_siso_experiment)/data/diepool.txt" />
+  <node name="uh_fetch_driver_gui" pkg="uh_siso_experiment" type="uh_fetch_driver_gui" args="--diepool $(arg diepool_file)" output="log" />
+</launch>

@@ -30,6 +30,7 @@
 #include <QtWidgets/QApplication>
 #include "window.h"
 #include <ros/ros.h>
+#include <QtCore/QDebug>
 
 int main(int argc, char* argv[])
 {

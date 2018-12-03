@@ -30,6 +30,7 @@
 #ifndef ORDERGENERATOR_H
 #define ORDERGENERATOR_H
 
+#include <QtCore/QString>
 #include <vector>
 
 class OrderGenerator
@@ -47,6 +48,7 @@ private:
   void prepareDiePool();
   std::vector<std::vector<int> > velocity_curve_pool_;
   std::vector<int> die_pool_;
+  QString die_pool_file_name_;
 };
 
 #endif  // ORDERGENERATOR_H
