@@ -352,7 +352,6 @@ void SisoTrajectoryPlanner::generateTrajectory(const double x, const double y, c
   const auto dt = sim_time_ / num_steps;
   const auto acc_progress_dp = (sim_time_ / total_acceleration_time_) / num_steps;
   double time = 0.0;
-  static int i = 0;
   // create a potential trajectory
   traj.resetPoints();
   traj.xv_ = vx_samp;
