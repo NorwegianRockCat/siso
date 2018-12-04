@@ -6,8 +6,5 @@
   <maintainer email="trentonw@ifi.uio.no">Trenton Schulz</maintainer>
   <license>BSD</license>
   <buildtool_depend>catkin</buildtool_depend>
-  <export>
-    <metapackage/>
-  </export>
 
 </package>
