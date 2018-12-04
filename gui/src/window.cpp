@@ -434,7 +434,7 @@ void Window::moveFinished()
 {
   disableLocationButtons(false);
   next_location_ = QString();
-  fetch_controller_.moveTorso(0.25);
+  fetch_controller_.moveTorso(0.10);
   syncPath();
 }
 
