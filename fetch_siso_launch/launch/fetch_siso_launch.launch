@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!-- uploads navigation goals to script server and starts navigation -->
+
+<launch>
+    <arg name="env" default="$(optenv ROBOT_ENV robothouse)" />
+    <arg name="map" default="$(find uh_robots)/config/envs/$(arg env)/map.yaml"/>
+    
+    <rosparam command="load" ns="/script_server/base" file="$(find uh_robots)/config/envs/$(arg env)/navigation_goals.yaml"/>
+
+    <!-- <machine name="cob4-16-b1" address="cob4-16-b1" user="demo" password="demo" default="true"/> -->
+    <include file="$(find fetch_navigation)/launch/fetch_nav.launch">
+        <arg name="map_file" value="$(arg map)"/>
+	<param name="base_local_planner" value="siso_local_planner/SisoLocalPlanner" />
+    </include>
+</launch>
