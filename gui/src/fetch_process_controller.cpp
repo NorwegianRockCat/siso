@@ -88,7 +88,11 @@ void FetchProcessController::stopProcessStateChanged(QProcess::ProcessState newS
 void FetchProcessController::baseProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
   ROS_DEBUG("Base finished exit code: %d ExitStatus: %d", exitCode, exitStatus);
-  emit moveFinished();
+  if (!location_queue_.empty()) {
+    travelToNextStop();
+  } else {
+    emit moveFinished();
+  }
 }
 
 void FetchProcessController::torsoProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -106,6 +110,23 @@ void FetchProcessController::stopProcessFinished(int exitCode, QProcess::ExitSta
 void FetchProcessController::travelToLocation(const QString &location)
 {
   Q_ASSERT_X(base_process_.state() == QProcess::NotRunning, "travelToLocation", "Process is still running");
+  location_queue_.push_back(location);
+  travelToNextStop();
+}
+
+void FetchProcessController::travelToLocations(const std::vector<QString> &locations)
+{
+  for (const auto &location : locations) {
+    location_queue_.push_back(location);
+  }
+  travelToNextStop();
+}
+
+void FetchProcessController::travelToNextStop()
+{
+  Q_ASSERT_X(!location_queue_.empty(), "FetchProcesscontroller::travelToNextstop()", "location queue was empty, but we wanted to go to another location");
+  const auto location = location_queue_.front();
+  location_queue_.pop_front();
   const QString command(QLatin1String("rosrun"));
   const QStringList arguments(
     { QLatin1String("uh_robots"), QLatin1String("move_base.py"), QLatin1String("base"), QLatin1String("-n"), location });

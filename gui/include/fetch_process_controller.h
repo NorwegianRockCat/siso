@@ -30,6 +30,7 @@
 
 #ifndef FETCHPROCESSCONTROLLER_H
 #define FETCHPROCESSCONTROLLER_H
+#include <deque>
 #include <QtCore/QProcess>
 
 class FetchProcessController : public QObject
@@ -48,6 +49,7 @@ signals:
 public slots:
   void moveTorso(double heightInMeters);
   void travelToLocation(const QString& location);
+  void travelToLocations(const std::vector<QString> &locations);
   void emergencyStop();
   void changeVelocityCurve(const QString& newCurve);
 
@@ -61,10 +63,13 @@ private slots:
   void reconfigureProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
+  void travelToNextStop();
   QProcess base_process_;
   QProcess torso_process_;
   QProcess stop_process_;
   QProcess reconfigure_process_;
+  std::deque<QString> location_queue_;
+
 };
 
 #endif  // FETCHPROCESSCONTROLLER_H
