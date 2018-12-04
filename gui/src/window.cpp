@@ -49,6 +49,7 @@ Window::Window(QWidget* parent)
   , nodeHandle_(ros::NodeHandle())
   , fetch_controller_(this)
 {
+  next_locations_.reserve(2); // Most of the time, it will be two items max.
   buildPath();
   setupUi();
   connect(&fetch_controller_, SIGNAL(moveFinished()), this, SLOT(moveFinished()));
@@ -268,16 +269,16 @@ void Window::disableLocationButtons(bool disable)
 
 void Window::torsoFinished()
 {
-  if (!next_location_.isEmpty())
+  if (!next_locations_.empty())
   {
-    fetch_controller_.travelToLocation(next_location_);
+    fetch_controller_.travelToLocations(next_locations_);
   }
 }
 
 void Window::locationClicked(int negative_id)
 {
   disableLocationButtons(true);
-  next_location_ = locationForButtonId(negative_id);
+  next_locations_.push_back(locationForButtonId(negative_id));
   fetch_controller_.moveTorso(0.0);
 }
 
@@ -419,7 +420,11 @@ void Window::advanceToNextStop()
 
 void Window::advancePath()
 {
-  next_location_ = robot_path_.at(robot_path_index_);
+  const auto &nextStep = robot_path_.at(robot_path_index_);
+  const auto listSteps = nextStep.split(QLatin1Char(','));
+  for (const auto &step : listSteps) {
+    next_locations_.push_back(step);
+  }
   fetch_controller_.moveTorso(0.00);
 }
 
@@ -435,7 +440,7 @@ void Window::advanceToCurve()
 void Window::moveFinished()
 {
   disableLocationButtons(false);
-  next_location_ = QString();
+  next_locations_.clear();
   fetch_controller_.moveTorso(0.10);
   syncPath();
 }
@@ -484,14 +489,33 @@ void Window::buildPath()
   robot_path_.reserve(TotalStops);
   robot_path_.push_back(locations_[1]);
   robot_path_.push_back(locations_[2]);
-  robot_path_.push_back(locations_[3]);
-  robot_path_.push_back(locations_[4]);
-  robot_path_.push_back(locations_[5]);
-  robot_path_.push_back(locations_[0]);
-  robot_path_.push_back(locations_[1]);
-  robot_path_.push_back(locations_[2]);
-  robot_path_.push_back(locations_[3]);
-  robot_path_.push_back(locations_[0]);
+  QString twosteps;
+  const auto &loc3 = locations_[3];
+  const auto &loc4 = locations_[4];
+  twosteps.reserve(loc3.size() + loc4.size() + 1);
+  twosteps.append(loc3);
+  twosteps.append(QLatin1Char(','));
+  twosteps.append(loc4);
+  robot_path_.push_back(twosteps);
+  twosteps.clear();
+  const auto &loc5 = locations_[5];
+  const auto &loc0 = locations_[0];
+  twosteps.append(loc5);
+  twosteps.append(QLatin1Char(','));
+  twosteps.append(loc0);
+  robot_path_.push_back(twosteps);
+  const auto &loc1 = locations_[1];
+  const auto &loc2 = locations_[2];
+  twosteps.clear();
+  twosteps.append(loc1);
+  twosteps.append(QLatin1Char(','));
+  twosteps.append(loc2);
+  robot_path_.push_back(twosteps);
+  twosteps.clear();
+  twosteps.append(loc3);
+  twosteps.append(QLatin1Char(','));
+  twosteps.append(loc0);
+  robot_path_.push_back(twosteps);
   robot_path_.push_back(locations_[1]);
 }
 
@@ -501,7 +525,8 @@ void Window::buildPathLabels()
   path_labels_.reserve(robot_path_.size());
 
   for (const auto &stop : robot_path_) {
-    auto *label = new QLabel(locationToUser(stop));
+    const auto stopList = stop.split(QLatin1Char(','));
+    auto *label = new QLabel(locationToUser(stopList.back()));
     path_labels_.push_back(label);
   }
 }

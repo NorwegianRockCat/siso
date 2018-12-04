@@ -102,7 +102,7 @@ private:
   ros::NodeHandle nodeHandle_;
   FetchProcessController fetch_controller_;
   QString current_id_;
-  QString next_location_;
+  std::vector<QString> next_locations_;
 };
 
 #endif
