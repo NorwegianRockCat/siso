@@ -408,6 +408,7 @@ void Window::advanceToNextCurve()
 
 void Window::advanceToNextStop()
 {
+  disableLocationButtons(true);
   ++robot_path_index_;
   if (robot_path_index_ >= robot_path_.size()) {
     robot_path_index_ = 0;
