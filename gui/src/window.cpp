@@ -249,6 +249,7 @@ void Window::writeSettings()
       settings.setValue(QLatin1String("current_curve_element"), current_curves_.at(index));
     }
   }
+  settings.setValue(QLatin1String("robot_path_index"), robot_path_index_);
 }
 
 Window::~Window()
