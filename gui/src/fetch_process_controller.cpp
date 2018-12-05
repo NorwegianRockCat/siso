@@ -129,7 +129,12 @@ void FetchProcessController::travelToNextStop()
   location_queue_.pop_front();
   const QString command(QLatin1String("rosrun"));
   const QStringList arguments(
-    { QLatin1String("uh_robots"), QLatin1String("move_base.py"), QLatin1String("base"), QLatin1String("-n"), location });
+    { QLatin1String("uh_robots"),
+      QLatin1String("move_base.py"),
+      QLatin1String("base"),
+      QLatin1String("-n"), location,
+      QLatin1String("--timeout"),
+      QLatin1String("60")});
   ROS_DEBUG("Running %s %s", command.toUtf8().constData(), arguments.join(", ").toUtf8().constData());
   base_process_.start(command, arguments);
 }
