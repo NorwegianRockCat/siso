@@ -498,6 +498,7 @@ void Window::buildPath()
   // Build our paths out of the locations we built.
   // I'm assuming we aren't change the order of them in the constructor.
   const int TotalStops = 11;
+  const QString Comma(QLatin1Char(';'));
   robot_path_.clear();
   robot_path_.reserve(TotalStops);
   robot_path_.push_back(locations_[1]);
@@ -507,26 +508,26 @@ void Window::buildPath()
   const auto &loc4 = locations_[4];
   twosteps.reserve(loc3.size() + loc4.size() + 1);
   twosteps.append(loc3);
-  twosteps.append(QLatin1Char(','));
+  twosteps.append(Comma);
   twosteps.append(loc4);
   robot_path_.push_back(twosteps);
   twosteps.clear();
   const auto &loc5 = locations_[5];
   const auto &loc0 = locations_[0];
   twosteps.append(loc5);
-  twosteps.append(QLatin1Char(','));
+  twosteps.append(Comma);
   twosteps.append(loc0);
   robot_path_.push_back(twosteps);
   const auto &loc1 = locations_[1];
   const auto &loc2 = locations_[2];
   twosteps.clear();
   twosteps.append(loc1);
-  twosteps.append(QLatin1Char(','));
+  twosteps.append(Comma);
   twosteps.append(loc2);
   robot_path_.push_back(twosteps);
   twosteps.clear();
   twosteps.append(loc3);
-  twosteps.append(QLatin1Char(','));
+  twosteps.append(Comma);
   twosteps.append(loc0);
   robot_path_.push_back(twosteps);
   robot_path_.push_back(locations_[1]);
