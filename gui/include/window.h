@@ -31,6 +31,7 @@
 #define WINDOW_H
 
 #include <QtWidgets/QWidget>
+#include <QtCore/QTime>
 #include <ros/ros.h>
 #include <vector>
 #include "fetch_process_controller.h"
@@ -107,6 +108,7 @@ private:
   FetchProcessController fetch_controller_;
   QString current_id_;
   std::vector<QString> next_locations_;
+  QTime move_stopwatch_;
 };
 
 #endif

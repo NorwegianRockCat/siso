@@ -280,6 +280,7 @@ void Window::disableLocationButtons(bool disable)
 
 void Window::torsoFinished()
 {
+  move_stopwatch_.start();
   if (!next_locations_.empty())
   {
     fetch_controller_.travelToLocations(next_locations_);
@@ -452,6 +453,7 @@ void Window::moveFinished()
 {
   disableLocationButtons(false);
   next_locations_.clear();
+  ROS_INFO_NAMED(Experiment_Log_Name, "Move finished time to complete: %d ms", move_stopwatch_.elapsed());
   fetch_controller_.moveTorso(TorsoUpHeight);
   syncPath();
 }
