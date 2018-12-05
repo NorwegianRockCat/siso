@@ -78,11 +78,16 @@ static QLabel* createOrderingLabel()
   return label;
 }
 
-static QPushButton* createLocationButton(const QString& buttonText, QButtonGroup* buttonGroup)
+static const int TorsoUpId = 1;
+static const int TorsoDownId = 2;
+static const double TorsoUpHeight = 0.10;
+static const double TorsoDownHeight = 0.00;
+
+static QPushButton* createLocationButton(const QString& buttonText, QButtonGroup* buttonGroup, int id = -1)
 {
   QPushButton* button = new QPushButton(buttonText);
   button->setCheckable(true);
-  buttonGroup->addButton(button);
+  buttonGroup->addButton(button, id);
   return button;
 }
 
@@ -95,6 +100,8 @@ void Window::setupUi()
 
   button_group_ = new QButtonGroup(this);
   button_group_->setExclusive(true);
+  torso_button_group_ = new QButtonGroup(this);
+  torso_button_group_->setExclusive(true);
   ordering_label_1_ = createOrderingLabel();
   ordering_label_2_ = createOrderingLabel();
   ordering_label_3_ = createOrderingLabel();
@@ -105,7 +112,10 @@ void Window::setupUi()
   dining_table_2_button_ = createLocationButton(locationToUser(locations_.at(3)), button_group_);
   sofa_1_button_ = createLocationButton(locationToUser(locations_.at(4)), button_group_);
   sofa_2_button_ = createLocationButton(locationToUser(locations_.at(5)), button_group_);
+  torso_up_button_ = createLocationButton(tr("Torso Up"), torso_button_group_, TorsoUpId);
+  torso_down_button_ = createLocationButton(tr("Torso Down"), torso_button_group_, TorsoDownId);
   connect(button_group_, SIGNAL(buttonClicked(int)), SLOT(locationClicked(int)));
+  connect(torso_button_group_, SIGNAL(buttonClicked(int)), SLOT(changeTorso(int)));
 
   emergency_stop_button_ = new QPushButton(tr("Emergency &Stop"));
   auto widget_font = emergency_stop_button_->font();
@@ -145,7 +155,6 @@ void Window::setupUi()
   orderingLayout->addWidget(ordering_label_3_);
   orderingLayout->addWidget(ordering_label_4_);
 
-
   auto* layout = new QGridLayout();
   layout->addLayout(idLayout, IdRow, 0, 1, 3);
   layout->addLayout(orderingLayout, IdRow, 4, 1, -1);
@@ -168,6 +177,8 @@ void Window::setupUi()
   layout->addWidget(dining_table_2_button_, Location2Row, 1);
   layout->addWidget(sofa_1_button_, Location1Row, 2);
   layout->addWidget(sofa_2_button_, Location2Row, 2);
+  layout->addWidget(torso_up_button_, Location1Row, 3);
+  layout->addWidget(torso_down_button_, Location2Row, 3);
   layout->addWidget(emergency_stop_button_, Location1Row, 4, -1, -1);
   setLayout(layout);
 }
@@ -279,7 +290,7 @@ void Window::locationClicked(int negative_id)
 {
   disableLocationButtons(true);
   next_locations_.push_back(locationForButtonId(negative_id));
-  fetch_controller_.moveTorso(0.0);
+  fetch_controller_.moveTorso(TorsoDownHeight);
 }
 
 void Window::emergencyStop()
@@ -425,7 +436,7 @@ void Window::advancePath()
   for (const auto &step : listSteps) {
     next_locations_.push_back(step);
   }
-  fetch_controller_.moveTorso(0.00);
+  fetch_controller_.moveTorso(TorsoDownHeight);
 }
 
 void Window::advanceToCurve()
@@ -441,7 +452,7 @@ void Window::moveFinished()
 {
   disableLocationButtons(false);
   next_locations_.clear();
-  fetch_controller_.moveTorso(0.10);
+  fetch_controller_.moveTorso(TorsoUpHeight);
   syncPath();
 }
 
@@ -517,6 +528,11 @@ void Window::buildPath()
   twosteps.append(loc0);
   robot_path_.push_back(twosteps);
   robot_path_.push_back(locations_[1]);
+}
+
+void Window::changeTorso(int torso_id)
+{
+  fetch_controller_.moveTorso(torso_id == TorsoUpId ? TorsoUpHeight : TorsoDownHeight);
 }
 
 void Window::buildPathLabels()

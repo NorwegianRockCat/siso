@@ -60,6 +60,7 @@ private slots:
   void velocityCurveChanged();
   void checkLockButtons();
   void logIdChanged();
+  void changeTorso(int torso_id);
 
 private:
   void setupUi();
@@ -88,6 +89,9 @@ private:
   QPushButton *emergency_stop_button_;
   QPushButton *next_curve_button_;
   QPushButton *next_path_button_;
+  QButtonGroup *torso_button_group_;
+  QPushButton *torso_up_button_;
+  QPushButton *torso_down_button_;
   QLabel *ordering_label_1_;
   QLabel *ordering_label_2_;
   QLabel *ordering_label_3_;
