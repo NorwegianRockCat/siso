@@ -498,7 +498,7 @@ void Window::buildPath()
   // Build our paths out of the locations we built.
   // I'm assuming we aren't change the order of them in the constructor.
   const int TotalStops = 11;
-  const QString Comma(QLatin1Char(';'));
+  const QString Comma(QLatin1Char(','));
   robot_path_.clear();
   robot_path_.reserve(TotalStops);
   robot_path_.push_back(locations_[1]);
