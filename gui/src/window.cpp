@@ -276,6 +276,10 @@ void Window::disableLocationButtons(bool disable)
     button->setDisabled(disable);
   }
   next_path_button_->setDisabled(disable);
+  for (const auto &button : torso_button_group_->buttons())
+  {
+    button->setDisabled(disable);
+  }
 }
 
 void Window::torsoFinished()
@@ -284,6 +288,9 @@ void Window::torsoFinished()
   if (!next_locations_.empty())
   {
     fetch_controller_.travelToLocations(next_locations_);
+  } else {
+    // No movements about to happen, so re-enable the buttons.
+    disableLocationButtons(false);
   }
 }
 
@@ -451,7 +458,6 @@ void Window::advanceToCurve()
 
 void Window::moveFinished()
 {
-  disableLocationButtons(false);
   next_locations_.clear();
   ROS_INFO_NAMED(Experiment_Log_Name, "Move finished time to complete: %d ms", move_stopwatch_.elapsed());
   fetch_controller_.moveTorso(TorsoUpHeight);

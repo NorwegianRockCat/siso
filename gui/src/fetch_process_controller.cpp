@@ -151,6 +151,10 @@ void FetchProcessController::emergencyStop()
 
 void FetchProcessController::moveTorso(double heightInMeters)
 {
+  if (torso_process_.state() != QProcess::NotRunning) {
+    ROS_DEBUG("Torso process still running, waiting for it to finish");
+    torso_process_.waitForFinished();
+  }
   const QString command(QLatin1String("rosrun"));
   const QStringList arguments(
     { QLatin1String("uh_robots"), QLatin1String("move_base.py"), QLatin1String("torso"), QLatin1String("-p"),
@@ -161,7 +165,11 @@ void FetchProcessController::moveTorso(double heightInMeters)
 
 void FetchProcessController::changeVelocityCurve(const QString& newCurve)
 {
-  Q_ASSERT_X(reconfigure_process_.state() == QProcess::NotRunning, "locationClicked", "Process is still running");
+
+  if (torso_process_.state() != QProcess::NotRunning) {
+    ROS_DEBUG("base process still running, waiting for it to finish");
+    torso_process_.waitForFinished();
+  }
   const QString command(QLatin1String("rosrun"));
   const QStringList arguments({QLatin1String("dynamic_reconfigure"),
 			       QLatin1String("dynparam"),
