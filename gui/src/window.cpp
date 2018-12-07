@@ -503,7 +503,7 @@ void Window::buildPath()
 {
   // Build our paths out of the locations we built.
   // I'm assuming we aren't change the order of them in the constructor.
-  const int TotalStops = 11;
+  const int TotalStops = 10;
   const QString Comma(QLatin1Char(','));
   robot_path_.clear();
   robot_path_.reserve(TotalStops);
@@ -536,7 +536,6 @@ void Window::buildPath()
   twosteps.append(Comma);
   twosteps.append(loc0);
   robot_path_.push_back(twosteps);
-  robot_path_.push_back(locations_[1]);
 }
 
 void Window::changeTorso(int torso_id)
@@ -546,12 +545,18 @@ void Window::changeTorso(int torso_id)
 
 void Window::buildPathLabels()
 {
+  const auto longestLocation = max_element(locations_.cbegin(), locations_.cend());
+  const auto UserString = locationToUser(*longestLocation);
+  
   path_labels_.clear();
   path_labels_.reserve(robot_path_.size());
 
   for (const auto &stop : robot_path_) {
     const auto stopList = stop.split(QLatin1Char(','));
     auto *label = new QLabel(locationToUser(stopList.back()));
+    auto fontMetrics = label->fontMetrics();
+    label->setMinimumWidth(fontMetrics.boundingRect(UserString).width());
+    label->setAlignment(Qt::AlignCenter);
     path_labels_.push_back(label);
   }
 }
