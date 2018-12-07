@@ -42,14 +42,14 @@ static const char* const Experiment_Log_Name = "Experiment";
 Window::Window(QWidget* parent)
   : QWidget(parent)
   , locations_({ QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
-		 QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
-		 QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
+                 QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
+                 QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
   , current_curve_index_(-1)
   , robot_path_index_(-1)
   , nodeHandle_(ros::NodeHandle())
   , fetch_controller_(this)
 {
-  next_locations_.reserve(2); // Most of the time, it will be two items max.
+  next_locations_.reserve(2);  // Most of the time, it will be two items max.
   buildPath();
   setupUi();
   connect(&fetch_controller_, SIGNAL(moveFinished()), this, SLOT(moveFinished()));
@@ -160,8 +160,9 @@ void Window::setupUi()
   layout->addLayout(orderingLayout, IdRow, 4, 1, -1);
   layout->addWidget(next_curve_button_, CurveRow, 6, 1, -1);
 
-  auto *pathLayout = new QHBoxLayout();
-  for (auto *label : path_labels_) {
+  auto* pathLayout = new QHBoxLayout();
+  for (auto* label : path_labels_)
+  {
     pathLayout->addWidget(label);
   }
   layout->addLayout(pathLayout, PathRow, 0, 1, 10);
@@ -241,7 +242,8 @@ void Window::readSettings()
   }
 
   robot_path_index_ = settings.value(QLatin1String("robot_path_index"), 0).toInt();
-  if (robot_path_index_ >= 0) {
+  if (robot_path_index_ >= 0)
+  {
     syncPath();
   }
 }
@@ -276,7 +278,7 @@ void Window::disableLocationButtons(bool disable)
     button->setDisabled(disable);
   }
   next_path_button_->setDisabled(disable);
-  for (const auto &button : torso_button_group_->buttons())
+  for (const auto& button : torso_button_group_->buttons())
   {
     button->setDisabled(disable);
   }
@@ -288,7 +290,9 @@ void Window::torsoFinished()
   if (!next_locations_.empty())
   {
     fetch_controller_.travelToLocations(next_locations_);
-  } else {
+  }
+  else
+  {
     // No movements about to happen, so re-enable the buttons.
     disableLocationButtons(false);
   }
@@ -319,7 +323,7 @@ void Window::velocityCurveChanged()
   const auto& variableName = textForVariable(current_curves_.at(current_curve_index_));
 
   ROS_INFO_NAMED(Experiment_Log_Name, "ID %s now using %s curve (index %d)", current_id_.toUtf8().constData(),
-		 variableName.toUtf8().constData(), current_curve_index_);
+                 variableName.toUtf8().constData(), current_curve_index_);
 }
 
 static int maxVariableNameLength()
@@ -358,7 +362,7 @@ void Window::syncLabelsToCurves()
     }
   }
   ROS_INFO_NAMED(Experiment_Log_Name, "ID: %s has new variables: %s", current_id_.toUtf8().constData(),
-		 logString.c_str());
+                 logString.c_str());
 }
 
 void Window::syncLabelsToIndex()
@@ -431,7 +435,8 @@ void Window::advanceToNextStop()
 {
   disableLocationButtons(true);
   ++robot_path_index_;
-  if (robot_path_index_ >= robot_path_.size()) {
+  if (robot_path_index_ >= robot_path_.size())
+  {
     robot_path_index_ = 0;
   }
   advancePath();
@@ -439,9 +444,10 @@ void Window::advanceToNextStop()
 
 void Window::advancePath()
 {
-  const auto &nextStep = robot_path_.at(robot_path_index_);
+  const auto& nextStep = robot_path_.at(robot_path_index_);
   const auto listSteps = nextStep.split(QLatin1Char(','));
-  for (const auto &step : listSteps) {
+  for (const auto& step : listSteps)
+  {
     next_locations_.push_back(step);
   }
   fetch_controller_.moveTorso(TorsoDownHeight);
@@ -510,22 +516,22 @@ void Window::buildPath()
   robot_path_.push_back(locations_[1]);
   robot_path_.push_back(locations_[2]);
   QString twosteps;
-  const auto &loc3 = locations_[3];
-  const auto &loc4 = locations_[4];
+  const auto& loc3 = locations_[3];
+  const auto& loc4 = locations_[4];
   twosteps.reserve(loc3.size() + loc4.size() + 1);
   twosteps.append(loc3);
   twosteps.append(Comma);
   twosteps.append(loc4);
   robot_path_.push_back(twosteps);
   twosteps.clear();
-  const auto &loc5 = locations_[5];
-  const auto &loc0 = locations_[0];
+  const auto& loc5 = locations_[5];
+  const auto& loc0 = locations_[0];
   twosteps.append(loc5);
   twosteps.append(Comma);
   twosteps.append(loc0);
   robot_path_.push_back(twosteps);
-  const auto &loc1 = locations_[1];
-  const auto &loc2 = locations_[2];
+  const auto& loc1 = locations_[1];
+  const auto& loc2 = locations_[2];
   twosteps.clear();
   twosteps.append(loc1);
   twosteps.append(Comma);
@@ -547,13 +553,14 @@ void Window::buildPathLabels()
 {
   const auto longestLocation = max_element(locations_.cbegin(), locations_.cend());
   const auto UserString = locationToUser(*longestLocation);
-  
+
   path_labels_.clear();
   path_labels_.reserve(robot_path_.size());
 
-  for (const auto &stop : robot_path_) {
+  for (const auto& stop : robot_path_)
+  {
     const auto stopList = stop.split(QLatin1Char(','));
-    auto *label = new QLabel(locationToUser(stopList.back()));
+    auto* label = new QLabel(locationToUser(stopList.back()));
     auto fontMetrics = label->fontMetrics();
     label->setMinimumWidth(fontMetrics.boundingRect(UserString).width());
     label->setAlignment(Qt::AlignCenter);
@@ -564,7 +571,8 @@ void Window::buildPathLabels()
 void Window::syncPath()
 {
   int index = 0;
-  for (auto *label : path_labels_) {
+  for (auto* label : path_labels_)
+  {
     auto font = label->font();
     font.setWeight(index == robot_path_index_ ? QFont::Bold : QFont::Normal);
     label->setFont(font);
