@@ -502,7 +502,12 @@ void Window::logIdChanged()
 void Window::lockNextCurveButton(bool disable)
 {
   next_curve_button_->setDisabled(disable);
-  next_curve_button_->setText(disable ? tr("Enter new ID") : tr("Next Curve"));
+  // Give me a clue about what I need to do to re-enable thing.
+  if (disable && (id_line_edit_->text().isEmpty() || current_curve_index_ == current_curves_.size() - 1)) {
+    next_curve_button_->setText(tr("Enter new ID"));
+  } else {
+    next_curve_button_->setText(tr("Next Curve"));
+  }
 }
 
 void Window::buildPath()
