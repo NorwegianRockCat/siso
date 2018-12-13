@@ -378,6 +378,7 @@ void Window::syncLabelsToIndex()
     font.setWeight(index == current_curve_index_ ? QFont::Bold : QFont::Normal);
     label->setFont(font);
   }
+  writeSettings();
 }
 
 QString Window::locationForButtonId(int buttonId) const
@@ -583,4 +584,5 @@ void Window::syncPath()
     label->setFont(font);
     ++index;
   }
+  writeSettings();
 }
