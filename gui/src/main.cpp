@@ -30,6 +30,7 @@
 #include <QtWidgets/QApplication>
 #include "window.h"
 #include <ros/ros.h>
+#include <ros/console.h>
 #include <QtCore/QDebug>
 
 int main(int argc, char* argv[])
@@ -41,5 +42,8 @@ int main(int argc, char* argv[])
   ros::init(argc, argv, "uh_fetch_driver_gui");
   Window window;
   window.show();
+  if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
+    ros::console::notifyLoggerLevelsChanged();
+  }
   return app.exec();
 }
