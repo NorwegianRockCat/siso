@@ -66,11 +66,11 @@ OrderGenerator::OrderGenerator()
   // brain dead argument parsing at the worst spot, but honestly I don't want
   // to build a command line parser and this will be running through roslaunch anyway
   const auto arguments = QCoreApplication::instance()->arguments();
-  const auto argPosition  = arguments.indexOf(QLatin1String("--diepool"));
+  const auto argPosition  = arguments.indexOf(QStringLiteral(u"--diepool"));
   if (argPosition != -1 && argPosition + 1 < arguments.size()) {
     die_pool_file_name_ = arguments.at(argPosition + 1);
   } else {
-    die_pool_file_name_ = "diepool.txt"; // That's right, drop it in CWD.
+    die_pool_file_name_ = QStringLiteral(u"diepool.txt"); // That's right, drop it in CWD.
   }
   readDiePool();
 }
@@ -88,7 +88,7 @@ void OrderGenerator::fillDiePool()
   std::uniform_int_distribution<int> distribution(1, velocity_curve_pool_.size());
   auto dice = std::bind(distribution, generator);
   prepareDiePool();
-  auto rolls = 0;
+  auto rolls = 0U;
   const auto total = die_pool_.capacity();
   while (rolls < total) {
     die_pool_.push_back(dice());

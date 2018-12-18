@@ -133,12 +133,12 @@ void FetchProcessController::travelToNextStop()
              "location queue was empty, but we wanted to go to another location");
   const auto location = location_queue_.front();
   location_queue_.pop_front();
-  const QString command(QLatin1String("rosrun"));
-  const QStringList arguments({ QLatin1String("uh_robots"), QLatin1String("move_base.py"),
-                                QLatin1String("base"), QLatin1String("-n"), location,
-                                QLatin1String("--timeout"), QLatin1String("60") });
+  const QString command(QStringLiteral(u"rosrun"));
+  const QStringList arguments({ QStringLiteral(u"uh_robots"), QStringLiteral(u"move_base.py"),
+                                QStringLiteral(u"base"), QStringLiteral(u"-n"), location,
+                                QStringLiteral(u"--timeout"), QStringLiteral(u"60") });
   ROS_DEBUG("Running %s %s", command.toUtf8().constData(),
-            arguments.join(", ").toUtf8().constData());
+            arguments.join(QLatin1String(", ")).toUtf8().constData());
   base_process_.start(command, arguments);
 }
 
@@ -146,12 +146,12 @@ void FetchProcessController::emergencyStop()
 {
   Q_ASSERT_X(stop_process_.state() == QProcess::NotRunning, "emergencyStop", "Process is still "
                                                                              "running");
-  const QString command(QLatin1String("rostopic"));
-  const QStringList arguments({ QLatin1String("pub"), QLatin1String("-1"),
-                                QLatin1String("/enable_software_runstop"),
-                                QLatin1String("std_msgs/Bool"), QLatin1String("data: true") });
+  const QString command(QStringLiteral(u"rostopic"));
+  const QStringList arguments({ QStringLiteral(u"pub"), QStringLiteral(u"-1"),
+                                QStringLiteral(u"/enable_software_runstop"),
+                                QStringLiteral(u"std_msgs/Bool"), QStringLiteral(u"data: true") });
   ROS_DEBUG("Running %s %s", command.toUtf8().constData(),
-            arguments.join(", ").toUtf8().constData());
+            arguments.join(QLatin1String(", ")).toUtf8().constData());
   stop_process_.start(command, arguments);
 }
 
@@ -162,13 +162,13 @@ void FetchProcessController::moveTorso(double heightInMeters)
     ROS_DEBUG("Torso process still running, waiting for it to finish");
     torso_process_.waitForFinished();
   }
-  const QString command(QLatin1String("rosrun"));
-  const QStringList arguments({ QLatin1String("uh_robots"), QLatin1String("move_base.py"),
-                                QLatin1String("torso"), QLatin1String("-p"),
-                                QString::number(heightInMeters), QLatin1String("--timeout"),
-                                QLatin1String("5") });
+  const QString command(QStringLiteral(u"rosrun"));
+  const QStringList arguments({ QStringLiteral(u"uh_robots"), QStringLiteral(u"move_base.py"),
+                                QStringLiteral(u"torso"), QStringLiteral(u"-p"),
+                                QString::number(heightInMeters), QStringLiteral(u"--timeout"),
+                                QStringLiteral(u"5") });
   ROS_DEBUG("Running %s %s", command.toUtf8().constData(),
-            arguments.join(", ").toUtf8().constData());
+            arguments.join(QLatin1String(", ")).toUtf8().constData());
   torso_process_.start(command, arguments);
 }
 
@@ -179,13 +179,14 @@ void FetchProcessController::changeVelocityCurve(const QString& newCurve)
     ROS_DEBUG("base process still running, waiting for it to finish");
     torso_process_.waitForFinished();
   }
-  const QString command(QLatin1String("rosrun"));
-  const QStringList arguments({ QLatin1String("dynamic_reconfigure"), QLatin1String("dynparam"),
-                                QLatin1String("set"), QLatin1String("/move_base/SisoLocalPlanner"),
-                                QLatin1String("velocity_curve"), newCurve });
+  const QString command(QStringLiteral(u"rosrun"));
+  const QStringList arguments({ QStringLiteral(u"dynamic_reconfigure"), QStringLiteral(u"dynparam"),
+                                QStringLiteral(u"set"),
+                                QStringLiteral(u"/move_base/SisoLocalPlanner"),
+                                QStringLiteral(u"velocity_curve"), newCurve });
 
   ROS_DEBUG("Running %s %s", command.toUtf8().constData(),
-            arguments.join(", ").toUtf8().constData());
+            arguments.join(QLatin1String(", ")).toUtf8().constData());
   reconfigure_process_.start(command, arguments);
 }
 

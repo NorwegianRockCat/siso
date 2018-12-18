@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(uh_siso_experiment)
 set (CMAKE_CXX_STANDARD 14)
+add_definitions(-Wall -Wextra -DQT_NO_CAST_FROM_ASCII)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp

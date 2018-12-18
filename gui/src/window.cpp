@@ -41,9 +41,9 @@ static const char* const Experiment_Log_Name = "Experiment";
 
 Window::Window(QWidget* parent)
   : QWidget(parent)
-  , locations_({ QString(QLatin1String("kitchen1")), QString(QLatin1String("kitchen2")),
-                 QString(QLatin1String("dining_table1")), QString(QLatin1String("dining_table2")),
-                 QString(QLatin1String("sofa1")), QString(QLatin1String("sofa2")) })
+  , locations_({ QStringLiteral(u"kitchen1"), QStringLiteral(u"kitchen2"),
+                 QStringLiteral(u"dining_table1"), QStringLiteral(u"dining_table2"),
+                 QStringLiteral(u"sofa1"), QStringLiteral(u"sofa2") })
   , current_curve_index_(-1)
   , robot_path_index_(-1)
   , nodeHandle_(ros::NodeHandle())
