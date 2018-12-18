@@ -63,6 +63,16 @@ Window::Window(QWidget* parent)
   }
   // Read the settings and sync the GUI
   readSettings();
+  // Sync the settings
+  if (!current_curves_.empty())
+  {
+    syncLabelsToCurves();
+    advanceToCurve();
+  }
+  if (robot_path_index_ >= 0)
+  {
+    syncPath();
+  }
   checkLockButtons();
 }
 
@@ -216,54 +226,51 @@ private:
   QSettings* m_settings;
 };
 
+static const QString CurrentIDKey = QStringLiteral(u"current_id");
+static const QString CurrentCurveIndexKey = QStringLiteral(u"current_curve_index");
+static const QString CurrentCurvesKey = QStringLiteral(u"current_curves");
+static const QString CurrentCurvesElementKey = QStringLiteral(u"current_curve_element");
+static const QString RobotPathIndex = QStringLiteral(u"robot_path_index");
+
 void Window::readSettings()
 {
   QSettings settings;
   current_curves_.clear();
   current_curves_.reserve(4);
 
-  current_id_ = settings.value(QLatin1String("current_id"), QString()).toString();
-  current_curve_index_ = settings.value(QLatin1String("current_curve_index"), -1).toInt();
+  current_id_ = settings.value(CurrentIDKey, QString()).toString();
+  current_curve_index_ = settings.value(CurrentCurveIndexKey, -1).toInt();
   if (current_curve_index_ >= 0)
   {
-    ReadSettingsArrayWrapper arrayStart(&settings, QLatin1String("current_curves"));
+    ReadSettingsArrayWrapper arrayStart(&settings, CurrentCurvesKey);
     const int curves_size = current_curves_.capacity();
     for (int index = 0; index < curves_size; ++index)
     {
       settings.setArrayIndex(index);
-      current_curves_.push_back(settings.value(QLatin1String("current_curve_element"), -1).toInt());
+      current_curves_.push_back(settings.value(CurrentCurvesElementKey, -1).toInt());
     }
   }
   id_line_edit_->setText(current_id_);
-  if (!current_curves_.empty())
-  {
-    syncLabelsToCurves();
-    advanceToCurve();
-  }
 
-  robot_path_index_ = settings.value(QLatin1String("robot_path_index"), 0).toInt();
-  if (robot_path_index_ >= 0)
-  {
-    syncPath();
-  }
+  robot_path_index_ = settings.value(RobotPathIndex, 0).toInt();
 }
 
 void Window::writeSettings()
 {
   QSettings settings;
-  settings.setValue(QLatin1String("current_id"), current_id_);
-  settings.setValue(QLatin1String("current_curve_index"), current_curve_index_);
+  settings.setValue(CurrentIDKey, current_id_);
+  settings.setValue(CurrentCurveIndexKey, current_curve_index_);
   if (current_curve_index_ >= 0)
   {
     const int curves_size = current_curves_.size();
-    WriteSettingsArrayWrapper arrayStart(&settings, QLatin1String("current_curves"));
+    WriteSettingsArrayWrapper arrayStart(&settings, CurrentCurvesKey);
     for (int index = 0; index < curves_size; ++index)
     {
       settings.setArrayIndex(index);
-      settings.setValue(QLatin1String("current_curve_element"), current_curves_.at(index));
+      settings.setValue(CurrentCurvesElementKey, current_curves_.at(index));
     }
   }
-  settings.setValue(QLatin1String("robot_path_index"), robot_path_index_);
+  settings.setValue(RobotPathIndex, robot_path_index_);
 }
 
 Window::~Window()
