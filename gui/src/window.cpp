@@ -39,13 +39,27 @@
 
 static const char* const Experiment_Log_Name = "Experiment";
 
+static const uint CurrentCurvesSize = 4;
+static const uint RobotPathsSize = 10;
+
+static const int TorsoUpId = 1;
+static const int TorsoDownId = 2;
+static const double TorsoUpHeight = 0.10;
+static const double TorsoDownHeight = 0.00;
+
+static const QString CurrentIDKey = QStringLiteral(u"current_id");
+static const QString CurrentCurveIndexKey = QStringLiteral(u"current_curve_index");
+static const QString CurrentCurvesKey = QStringLiteral(u"current_curves");
+static const QString CurrentCurvesElementKey = QStringLiteral(u"current_curve_element");
+static const QString RobotPathIndexKey = QStringLiteral(u"robot_path_index");
+
 Window::Window(QWidget* parent)
   : QWidget(parent)
   , locations_({ QStringLiteral(u"kitchen1"), QStringLiteral(u"kitchen2"),
                  QStringLiteral(u"dining_table1"), QStringLiteral(u"dining_table2"),
                  QStringLiteral(u"sofa1"), QStringLiteral(u"sofa2") })
-  , current_curve_index_(-1)
-  , robot_path_index_(-1)
+  , current_curve_index_(CurrentCurvesSize)
+  , robot_path_index_(RobotPathsSize)
   , nodeHandle_(ros::NodeHandle())
   , fetch_controller_(this)
 {
@@ -69,7 +83,7 @@ Window::Window(QWidget* parent)
     syncLabelsToCurves();
     advanceToCurve();
   }
-  if (robot_path_index_ >= 0)
+  if (robot_path_index_ < RobotPathsSize)
   {
     syncPath();
   }
@@ -87,11 +101,6 @@ static QLabel* createOrderingLabel()
   label->setMinimumWidth(sisoWidth);
   return label;
 }
-
-static const int TorsoUpId = 1;
-static const int TorsoDownId = 2;
-static const double TorsoUpHeight = 0.10;
-static const double TorsoDownHeight = 0.00;
 
 static QPushButton* createLocationButton(const QString& buttonText, QButtonGroup* buttonGroup, int id = -1)
 {
@@ -226,14 +235,6 @@ private:
   QSettings* m_settings;
 };
 
-static const QString CurrentIDKey = QStringLiteral(u"current_id");
-static const QString CurrentCurveIndexKey = QStringLiteral(u"current_curve_index");
-static const QString CurrentCurvesKey = QStringLiteral(u"current_curves");
-static const QString CurrentCurvesElementKey = QStringLiteral(u"current_curve_element");
-static const QString RobotPathIndex = QStringLiteral(u"robot_path_index");
-
-static const int CurrentCurvesSize = 4;
-
 void Window::readSettings()
 {
   QSettings settings;
@@ -241,8 +242,8 @@ void Window::readSettings()
   current_curves_.reserve(CurrentCurvesSize);
 
   current_id_ = settings.value(CurrentIDKey, QString()).toString();
-  current_curve_index_ = settings.value(CurrentCurveIndexKey, -1).toInt();
-  if (current_curve_index_ >= 0)
+  current_curve_index_ = settings.value(CurrentCurveIndexKey, CurrentCurvesSize).toInt();
+  if (current_curve_index_ < CurrentCurvesSize)
   {
     ReadSettingsArrayWrapper arrayStart(&settings, CurrentCurvesKey);
     const int curves_size = current_curves_.capacity();
@@ -254,7 +255,7 @@ void Window::readSettings()
   }
   id_line_edit_->setText(current_id_);
 
-  robot_path_index_ = settings.value(RobotPathIndex, 0).toInt();
+  robot_path_index_ = settings.value(RobotPathIndexKey, RobotPathsSize).toInt();
 }
 
 void Window::writeSettings()
@@ -262,7 +263,7 @@ void Window::writeSettings()
   QSettings settings;
   settings.setValue(CurrentIDKey, current_id_);
   settings.setValue(CurrentCurveIndexKey, current_curve_index_);
-  if (current_curve_index_ >= 0)
+  if (current_curve_index_ < CurrentCurvesSize)
   {
     const int curves_size = current_curves_.size();
     WriteSettingsArrayWrapper arrayStart(&settings, CurrentCurvesKey);
@@ -272,7 +273,7 @@ void Window::writeSettings()
       settings.setValue(CurrentCurvesElementKey, current_curves_.at(index));
     }
   }
-  settings.setValue(RobotPathIndex, robot_path_index_);
+  settings.setValue(RobotPathIndexKey, robot_path_index_);
 }
 
 Window::~Window()
@@ -328,7 +329,7 @@ static QString textForVariable(int i)
 
 void Window::velocityCurveChanged()
 {
-  lockNextCurveButton(current_curve_index_ == CurrentCurvesSize - 1);
+  lockNextCurveButton(current_curve_index_ == current_curves_.size() - 1);
   const auto& variableName = textForVariable(current_curves_.at(current_curve_index_));
 
   ROS_INFO_NAMED(Experiment_Log_Name, "ID %s now using %s curve (index %d)", current_id_.toUtf8().constData(),
@@ -379,8 +380,8 @@ void Window::syncLabelsToIndex()
   const std::vector<QLabel*> labels({
       ordering_label_1_, ordering_label_2_, ordering_label_3_, ordering_label_4_,
   });
-  const int TotalVariables = labels.size();
-  for (int index = 0; index < TotalVariables; ++index)
+  const auto TotalVariables = labels.size();
+  for (auto index = 0U; index < TotalVariables; ++index)
   {
     auto* label = labels.at(index);
     auto font = label->font();
@@ -434,7 +435,7 @@ QString Window::locationToUser(const QString& location) const
 void Window::advanceToNextCurve()
 {
   ++current_curve_index_;
-  if (current_curve_index_ >= CurrentCurvesSize)
+  if (current_curve_index_ >= current_curves_.size())
   {
     newVariables();
   }
@@ -445,7 +446,7 @@ void Window::advanceToNextStop()
 {
   disableLocationButtons(true);
   ++robot_path_index_;
-  if (robot_path_index_ >= int(robot_path_.size()))
+  if (robot_path_index_ >= robot_path_.size())
   {
     robot_path_index_ = 0;
   }
@@ -513,7 +514,7 @@ void Window::lockNextCurveButton(bool disable)
 {
   next_curve_button_->setDisabled(disable);
   // Give me a clue about what I need to do to re-enable thing.
-  if (disable && (id_line_edit_->text().isEmpty() || current_curve_index_ == int(current_curves_.size()) - 1)) {
+  if (disable && (id_line_edit_->text().isEmpty() || current_curve_index_ == current_curves_.size() - 1)) {
     next_curve_button_->setText(tr("Enter new ID"));
   } else {
     next_curve_button_->setText(tr("Next Curve"));
@@ -524,10 +525,9 @@ void Window::buildPath()
 {
   // Build our paths out of the locations we built.
   // I'm assuming we aren't change the order of them in the constructor.
-  const int TotalStops = 10;
   const QString Comma(QLatin1Char(','));
   robot_path_.clear();
-  robot_path_.reserve(TotalStops);
+  robot_path_.reserve(RobotPathsSize);
   robot_path_.push_back(locations_[1]);
   robot_path_.push_back(locations_[2]);
   QString twosteps;
@@ -585,7 +585,7 @@ void Window::buildPathLabels()
 
 void Window::syncPath()
 {
-  int index = 0;
+  auto index = 0U;
   for (auto* label : path_labels_)
   {
     auto font = label->font();

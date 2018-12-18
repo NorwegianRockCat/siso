@@ -101,8 +101,8 @@ private:
   std::vector<QString> robot_path_;
   std::vector<QLabel *> path_labels_;
   std::vector<int> current_curves_;
-  int current_curve_index_;
-  int robot_path_index_;
+  uint current_curve_index_;
+  uint robot_path_index_;
   OrderGenerator order_generator_;
   ros::NodeHandle nodeHandle_;
   FetchProcessController fetch_controller_;
