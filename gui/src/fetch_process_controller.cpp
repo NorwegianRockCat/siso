@@ -166,7 +166,7 @@ void FetchProcessController::moveTorso(double heightInMeters)
   const QStringList arguments({ QLatin1String("uh_robots"), QLatin1String("move_base.py"),
                                 QLatin1String("torso"), QLatin1String("-p"),
                                 QString::number(heightInMeters), QLatin1String("--timeout"),
-                                QLatin1String("10") });
+                                QLatin1String("5") });
   ROS_DEBUG("Running %s %s", command.toUtf8().constData(),
             arguments.join(", ").toUtf8().constData());
   torso_process_.start(command, arguments);
