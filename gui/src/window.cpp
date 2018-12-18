@@ -232,11 +232,13 @@ static const QString CurrentCurvesKey = QStringLiteral(u"current_curves");
 static const QString CurrentCurvesElementKey = QStringLiteral(u"current_curve_element");
 static const QString RobotPathIndex = QStringLiteral(u"robot_path_index");
 
+static const int CurrentCurvesSize = 4;
+
 void Window::readSettings()
 {
   QSettings settings;
   current_curves_.clear();
-  current_curves_.reserve(4);
+  current_curves_.reserve(CurrentCurvesSize);
 
   current_id_ = settings.value(CurrentIDKey, QString()).toString();
   current_curve_index_ = settings.value(CurrentCurveIndexKey, -1).toInt();
@@ -326,7 +328,7 @@ static QString textForVariable(int i)
 
 void Window::velocityCurveChanged()
 {
-  lockNextCurveButton(current_curve_index_ == current_curves_.size() - 1);
+  lockNextCurveButton(current_curve_index_ == CurrentCurvesSize - 1);
   const auto& variableName = textForVariable(current_curves_.at(current_curve_index_));
 
   ROS_INFO_NAMED(Experiment_Log_Name, "ID %s now using %s curve (index %d)", current_id_.toUtf8().constData(),
@@ -432,7 +434,7 @@ QString Window::locationToUser(const QString& location) const
 void Window::advanceToNextCurve()
 {
   ++current_curve_index_;
-  if (current_curve_index_ >= current_curves_.size())
+  if (current_curve_index_ >= CurrentCurvesSize)
   {
     newVariables();
   }
@@ -443,7 +445,7 @@ void Window::advanceToNextStop()
 {
   disableLocationButtons(true);
   ++robot_path_index_;
-  if (robot_path_index_ >= robot_path_.size())
+  if (robot_path_index_ >= int(robot_path_.size()))
   {
     robot_path_index_ = 0;
   }
@@ -511,7 +513,7 @@ void Window::lockNextCurveButton(bool disable)
 {
   next_curve_button_->setDisabled(disable);
   // Give me a clue about what I need to do to re-enable thing.
-  if (disable && (id_line_edit_->text().isEmpty() || current_curve_index_ == current_curves_.size() - 1)) {
+  if (disable && (id_line_edit_->text().isEmpty() || current_curve_index_ == int(current_curves_.size()) - 1)) {
     next_curve_button_->setText(tr("Enter new ID"));
   } else {
     next_curve_button_->setText(tr("Next Curve"));
