@@ -3,7 +3,7 @@
 <!-- uploads navigation goals to script server and starts navigation -->
 
 <launch>
-    <arg name="env" default="$(optenv ROBOT_ENV robothouse)" />
+    <arg name="env" default="$(optenv ROBOT_ENV siso-experiment)" />
     <arg name="map" default="$(find fetch_navigation)/maps/map.yaml" />
     <arg name="move_base_include" default="$(find fetch_siso_launch)/launch/include/move_base.launch.xml" />
     
