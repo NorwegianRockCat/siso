@@ -19,7 +19,7 @@ listOfAlphasForSisoData <- function(resultsDataFrame) {
     alphaAnimacy <- alpha(animacyFrame)
     alphaLikeability <- alpha(likeabilityFrame)
     alphaInt <- alpha(intelligenceFrame)
-    alphaSafety <- alpha(safetyFrame, c("GSS1.1"))
+    alphaSafety <- alpha(safetyFrame, keys = c("GSS1.1"))
     listOfAlphas <- list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
     listOfAlphas
 }
