@@ -9,8 +9,15 @@ readFetchSisoData <- function() {
 # Return a list of psych alpha results, one for each movement thing
 listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
 
-    # Pull the frames out
+    # Pull the frames out, put calculate the index
     anthroIndex <- 6
+    if (iteration == 2)
+        anthroIndex <- 6 + 26
+    else if (iteration == 3)
+        anthroIndex <- 6 + 26 + 26
+    else if (iteration == 4)
+        anthroIndex <- 6 + 26 + 26 + 26
+
     anthroEndIndex <- anthroIndex + 4 # 10
 
     animacyIndex <- anthroEndIndex + 2 # 12
@@ -36,7 +43,7 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     alphaAnimacy <- alpha(animacyFrame)
     alphaLikeability <- alpha(likeabilityFrame)
     alphaInt <- alpha(intelligenceFrame)
-    alphaSafety <- alpha(safetyFrame, keys = c("GSS1.1"))
+    alphaSafety <- alpha(safetyFrame, keys = c(paste("GSS", iteration, ".1", sep = '')))
     listOfAlphas <- list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
     listOfAlphas
 }
