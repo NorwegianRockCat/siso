@@ -1,9 +1,10 @@
 # We are dependent on the pysch package
 library(psych)
+library(dplyr)
 
 readFetchSisoData <- function() {
     results <- read.csv("results.csv", header = TRUE)
-    results
+    rename(results,  Experience.Robots = Experience.with.Robots.Unedited)
 }
 
 # Return a list of psych alpha results, one for each movement thing
@@ -42,9 +43,41 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     listOfAlphas
 }
 
-library(dplyr)
-
 filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
     quo_instance_var <- enquo(instance)
     filter(resultsDataFrame, !!quo_instance_var == movementType)
+}
+
+compute_averages_for_movement <- function(resultsDataFrame, ...) {
+    # Storing this here now for safe keeping.
+    group_var <- quos(...)
+    resultsDataFrame %>%
+        group_by(!!!group_var) %>%
+        summarize(
+            count = n(),
+            anthro1 = mean(GSAnthro1.1, na.rm = TRUE),
+            anthro2 = mean(GSAnthro1.2, na.rm = TRUE),
+            anthro3 = mean(GSAnthro1.3, na.rm = TRUE),
+            anthro4 = mean(GSAnthro1.4, na.rm = TRUE),
+            anthro5 = mean(GSAnthro1.5, na.rm = TRUE),
+            pm = mean(PM1.1, na.rm = TRUE),
+            animacy1 = mean(GSAnimacy1.1, na.rm = TRUE),
+            animacy2 = mean(GSAnimacy1.2, na.rm = TRUE),
+            animacy3 = mean(GSAnimacy1.3, na.rm = TRUE),
+            animacy4 = mean(GSAnimacy1.4, na.rm = TRUE),
+            animacy5 = mean(GSAnimacy1.5, na.rm = TRUE),
+            like1 = mean(GSL1.1, na.rm = TRUE),
+            like2 = mean(GSL1.2, na.rm = TRUE),
+            like3 = mean(GSL1.3, na.rm = TRUE),
+            like4 = mean(GSL1.4, na.rm = TRUE),
+            like5 = mean(GSL1.5, na.rm = TRUE),
+            intel1 = mean(GSI1.1, na.rm = TRUE),
+            intel2 = mean(GSI1.2, na.rm = TRUE),
+            intel3 = mean(GSI1.3, na.rm = TRUE),
+            intel4 = mean(GSI1.4, na.rm = TRUE),
+            intel5 = mean(GSI1.5, na.rm = TRUE),
+            intel6 = mean(GSI1.6, na.rm = TRUE),
+            safe1 = mean(GSS1.1, na.rm = TRUE),
+            safe2 = mean(GSS1.2, na.rm = TRUE),
+            safe3 = mean(GSS1.3, na.rm = TRUE))
 }
