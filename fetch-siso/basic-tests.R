@@ -47,18 +47,52 @@ filter_movement_for_instance <- function(resultsDataFrame, instance, movementTyp
     filter(resultsDataFrame, !!quo_instance_var == movementType)
 }
 
+is_movement <- function(x) { grepl("Movement.", x, fixed = TRUE) }
+
 summary_averages_for_movement <- function(resultsDataFrame, ...) {
     # All the variables are hard coded for the moment, but this will change.
     group_var <- quos(...)
+
+    GSAnthro1 = quo(GSAnthro1.1)
+    GSAnthro2 = quo(GSAnthro1.2)
+    GSAnthro3 = quo(GSAnthro1.3)
+    GSAnthro4 = quo(GSAnthro1.4)
+    GSAnthro5 = quo(GSAnthro1.5)
+
+    movement_list <- Filter(f = is_movement, Map(f = quo_name, group_var))
+    
+    if (length(movement_list) > 0) {
+        movement <- movement_list[[1]]
+        if (movement == "Movement.2") {
+            GSAnthro1 = quo(GSAnthro2.1)
+            GSAnthro2 = quo(GSAnthro2.2)
+            GSAnthro3 = quo(GSAnthro2.3)
+            GSAnthro4 = quo(GSAnthro2.4)
+            GSAnthro5 = quo(GSAnthro2.5)
+        } else if (movement == "Movement.3") {
+            GSAnthro1 = quo(GSAnthro3.1)
+            GSAnthro2 = quo(GSAnthro3.2)
+            GSAnthro3 = quo(GSAnthro3.3)
+            GSAnthro4 = quo(GSAnthro3.4)
+            GSAnthro5 = quo(GSAnthro3.5)
+        } else if (movement == "Movement.2") {
+            GSAnthro1 = quo(GSAnthro4.1)
+            GSAnthro2 = quo(GSAnthro4.2)
+            GSAnthro3 = quo(GSAnthro4.3)
+            GSAnthro4 = quo(GSAnthro4.4)
+            GSAnthro5 = quo(GSAnthro4.5)
+        }
+    }
+    
     resultsDataFrame %>%
         group_by(!!!group_var) %>%
         summarize(
             count = n(),
-            anthro1 = mean(GSAnthro1.1, na.rm = TRUE),
-            anthro2 = mean(GSAnthro1.2, na.rm = TRUE),
-            anthro3 = mean(GSAnthro1.3, na.rm = TRUE),
-            anthro4 = mean(GSAnthro1.4, na.rm = TRUE),
-            anthro5 = mean(GSAnthro1.5, na.rm = TRUE),
+            anthro1 = mean(!!GSAnthro1, na.rm = TRUE),
+            anthro2 = mean(!!GSAnthro2, na.rm = TRUE),
+            anthro3 = mean(!!GSAnthro3, na.rm = TRUE),
+            anthro4 = mean(!!GSAnthro4, na.rm = TRUE),
+            anthro5 = mean(!!GSAnthro5, na.rm = TRUE),
             pm = mean(PM1.1, na.rm = TRUE),
             animacy1 = mean(GSAnimacy1.1, na.rm = TRUE),
             animacy2 = mean(GSAnimacy1.2, na.rm = TRUE),
