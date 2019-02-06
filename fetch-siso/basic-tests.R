@@ -10,14 +10,9 @@ readFetchSisoData <- function() {
 listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
 
     # Pull the frames out, put calculate the index
-    anthroIndex <- 6
-    if (iteration == 2)
-        anthroIndex <- 6 + 26
-    else if (iteration == 3)
-        anthroIndex <- 6 + 26 + 26
-    else if (iteration == 4)
-        anthroIndex <- 6 + 26 + 26 + 26
+    anthroIndex <- 6 + (iteration - 1) * 26
 
+    # The numbers on the side are calculated based on the first iteration
     anthroEndIndex <- anthroIndex + 4 # 10
 
     animacyIndex <- anthroEndIndex + 2 # 12
@@ -32,7 +27,6 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     safetyIndex <- intelligenceEndIndex + 1 # 28
     safetyEndIndex <- safetyIndex + 2 # 30
 
-    
     anthroFrame <- resultsDataFrame[anthroIndex:anthroEndIndex]
     animacyFrame <- resultsDataFrame[animacyIndex:animacyEndIndex]
     likeabilityFrame <- resultsDataFrame[likeabilityIndex:likeabilityEndIndex]
@@ -46,4 +40,11 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     alphaSafety <- alpha(safetyFrame, keys = c(paste("GSS", iteration, ".1", sep = '')))
     listOfAlphas <- list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
     listOfAlphas
+}
+
+library(dplyr)
+
+filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
+    quo_instance_var <- enquo(instance)
+    filter(resultsDataFrame, !!quo_instance_var == movementType)
 }
