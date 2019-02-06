@@ -39,8 +39,7 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     alphaLikeability <- alpha(likeabilityFrame)
     alphaInt <- alpha(intelligenceFrame)
     alphaSafety <- alpha(safetyFrame, keys = c(paste("GSS", iteration, ".1", sep = '')))
-    listOfAlphas <- list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
-    listOfAlphas
+    list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
 }
 
 filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
@@ -48,8 +47,8 @@ filter_movement_for_instance <- function(resultsDataFrame, instance, movementTyp
     filter(resultsDataFrame, !!quo_instance_var == movementType)
 }
 
-compute_averages_for_movement <- function(resultsDataFrame, ...) {
-    # Storing this here now for safe keeping.
+summary_averages_for_movement <- function(resultsDataFrame, ...) {
+    # All the variables are hard coded for the moment, but this will change.
     group_var <- quos(...)
     resultsDataFrame %>%
         group_by(!!!group_var) %>%
