@@ -300,3 +300,13 @@ allEncounters <- function(resultsDataFrame) {
 
    bind_rows(move1, move2, move3, move4)
 }
+
+allSisoEncounters <- function(resultsDataFrame) {
+    allmoves <- allEncounters(resultsDataFrame)
+    filter(allmoves, movement == "Siso")
+}
+
+allLinearEncounters <- function(resultsDataFrame) {
+    allmoves <- allEncounters(resultsDataFrame)
+    filter(allmoves, movement == "Linear")
+}
