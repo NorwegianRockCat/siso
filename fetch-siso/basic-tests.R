@@ -7,6 +7,39 @@ readFetchSisoData <- function() {
     rename(results,  Experience.Robots = Experience.with.Robots.Unedited)
 }
 
+
+tws.Movement0VariableNames = list(
+    GSAnthro1 = quo(GSAnthro1),
+    GSAnthro2 = quo(GSAnthro2),
+    GSAnthro3 = quo(GSAnthro3),
+    GSAnthro4 = quo(GSAnthro4),
+    GSAnthro5 = quo(GSAnthro5),
+
+    GSAnimacy1 = quo(GSAnimacy1),
+    GSAnimacy2 = quo(GSAnimacy2),
+    GSAnimacy3 = quo(GSAnimacy3),
+    GSAnimacy4 = quo(GSAnimacy4),
+    GSAnimacy5 = quo(GSAnimacy5),
+
+    PM1 = quo(PM1),
+
+    GSL1 = quo(GSL1),
+    GSL2 = quo(GSL2),
+    GSL3 = quo(GSL3),
+    GSL4 = quo(GSL4),
+    GSL5 = quo(GSL5),
+
+    GSI1 = quo(GSI1),
+    GSI2 = quo(GSI2),
+    GSI3 = quo(GSI3),
+    GSI4 = quo(GSI4),
+    GSI5 = quo(GSI5),
+    GSI6 = quo(GSI6),
+
+    GSS1 = quo(GSS1),
+    GSS2 = quo(GSS2),
+    GSS3 = quo(GSS3))
+
 tws.Movement1VariableNames = list(
     GSAnthro1 = quo(GSAnthro1.1),
     GSAnthro2 = quo(GSAnthro1.2),
@@ -136,7 +169,7 @@ tws.Movement4VariableNames = list(
             GSS2 = quo(GSS4.2),
             GSS3 = quo(GSS4.3))
 
-tws.MovementVariableNames = list(tws.Movement1VariableNames, tws.Movement2VariableNames, tws.Movement3VariableNames, tws.Movement4VariableNames)
+tws.MovementVariableNames = list(tws.Movement1VariableNames, tws.Movement2VariableNames, tws.Movement3VariableNames, tws.Movement4VariableNames, tws.Movement0VariableNames)
 
 
 # Return a list of psych alpha results, one for each movement thing
@@ -183,17 +216,22 @@ tws.is_movement <- function(x) { grepl("Movement.", x, fixed = TRUE) }
 
 tws.find_variable_names_for_movement <- function(group_var) {
     movement_list <- Filter(f = tws.is_movement, Map(f = quo_name, group_var))
+    variable_list <- list()
 
-    variable_list <- tws.MovementVariableNames[[1]]
     if (length(movement_list) > 0) {
         movement <- movement_list[[1]]
-        if (movement == "Movement.2") {
+        if (movement == "Movement.1") {
+            variable_list <- tws.MovementVariableNames[[1]]
+        } else if (movement == "Movement.2") {
             variable_list <- tws.MovementVariableNames[[2]]
         } else if (movement == "Movement.3") {
             variable_list <- tws.MovementVariableNames[[3]]
         } else if (movement == "Movement.2") {
             variable_list <- tws.MovementVariableNames[[4]]
         }
+
+    } else {
+        variable_list <- tws.MovementVariableNames[[5]]
     }
     variable_list
 }
@@ -254,3 +292,11 @@ tws.summary <- function(resultsDataFrame, func, variable_list) {
 }
 
 # Select each variables and put them together.
+allEncounters <- function(resultsDataFrame) {
+   move1 <- select(resultsDataFrame, movement = Movement.1, !!!tws.Movement1VariableNames)
+   move2 <- select(resultsDataFrame, movement = Movement.2, !!!tws.Movement2VariableNames)
+   move3 <- select(resultsDataFrame, movement = Movement.3, !!!tws.Movement3VariableNames)
+   move4 <- select(resultsDataFrame, movement = Movement.4, !!!tws.Movement4VariableNames)
+
+   bind_rows(move1, move2, move3, move4)
+}
