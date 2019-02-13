@@ -21,8 +21,6 @@ tws.Movement0VariableNames = list(
     GSAnimacy4 = quo(GSAnimacy4),
     GSAnimacy5 = quo(GSAnimacy5),
 
-    PM1 = quo(PM1),
-
     GSL1 = quo(GSL1),
     GSL2 = quo(GSL2),
     GSL3 = quo(GSL3),
@@ -35,6 +33,8 @@ tws.Movement0VariableNames = list(
     GSI4 = quo(GSI4),
     GSI5 = quo(GSI5),
     GSI6 = quo(GSI6),
+
+    PM1 = quo(PM1),
 
     GSS1 = quo(GSS1),
     GSS2 = quo(GSS2),
@@ -53,8 +53,6 @@ tws.Movement1VariableNames = list(
     GSAnimacy4 = quo(GSAnimacy1.4),
     GSAnimacy5 = quo(GSAnimacy1.5),
 
-    PM1 = quo(PM1.1),
-
     GSL1 = quo(GSL1.1),
     GSL2 = quo(GSL1.2),
     GSL3 = quo(GSL1.3),
@@ -67,6 +65,8 @@ tws.Movement1VariableNames = list(
     GSI4 = quo(GSI1.4),
     GSI5 = quo(GSI1.5),
     GSI6 = quo(GSI1.6),
+
+    PM1 = quo(PM1.1),
 
     GSS1 = quo(GSS1.1),
     GSS2 = quo(GSS1.2),
@@ -85,8 +85,6 @@ tws.Movement2VariableNames = list(
             GSAnimacy4 = quo(GSAnimacy2.4),
             GSAnimacy5 = quo(GSAnimacy2.5),
 
-            PM1 = quo(PM2.1),
-
             GSL1 = quo(GSL2.1),
             GSL2 = quo(GSL2.2),
             GSL3 = quo(GSL2.3),
@@ -99,6 +97,8 @@ tws.Movement2VariableNames = list(
             GSI4 = quo(GSI2.4),
             GSI5 = quo(GSI2.5),
             GSI6 = quo(GSI2.6),
+
+            PM1 = quo(PM2.1),
 
             GSS1 = quo(GSS2.1),
             GSS2 = quo(GSS2.2),
@@ -117,8 +117,6 @@ tws.Movement3VariableNames = list(
             GSAnimacy4 = quo(GSAnimacy3.4),
             GSAnimacy5 = quo(GSAnimacy3.5),
 
-            PM1 = quo(PM3.1),
-
             GSL1 = quo(GSL3.1),
             GSL2 = quo(GSL3.2),
             GSL3 = quo(GSL3.3),
@@ -131,6 +129,8 @@ tws.Movement3VariableNames = list(
             GSI4 = quo(GSI3.4),
             GSI5 = quo(GSI3.5),
             GSI6 = quo(GSI3.6),
+
+            PM1 = quo(PM3.1),
 
             GSS1 = quo(GSS3.1),
             GSS2 = quo(GSS3.2),
@@ -150,8 +150,6 @@ tws.Movement4VariableNames = list(
             GSAnimacy4 = quo(GSAnimacy4.4),
             GSAnimacy5 = quo(GSAnimacy4.5),
 
-            PM1 = quo(PM4.1),
-
             GSL1 = quo(GSL4.1),
             GSL2 = quo(GSL4.2),
             GSL3 = quo(GSL4.3),
@@ -164,6 +162,8 @@ tws.Movement4VariableNames = list(
             GSI4 = quo(GSI4.4),
             GSI5 = quo(GSI4.5),
             GSI6 = quo(GSI4.6),
+
+            PM1 = quo(PM4.1),
 
             GSS1 = quo(GSS4.1),
             GSS2 = quo(GSS4.2),
@@ -204,6 +204,21 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     alphaLikeability <- alpha(likeabilityFrame)
     alphaInt <- alpha(intelligenceFrame)
     alphaSafety <- alpha(safetyFrame, keys = c(paste("GSS", iteration, ".1", sep = '')))
+    list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
+}
+
+alphaAllEncounters <- function(allencdf) {
+    anthroFrame <- allencdf[2:6] # GSAnthro1:GSAnthro6
+    animacyFrame <- allencdf[7:11] # GSAnimacy1:GSAnimacy5
+    likeabilityFrame <- allencdf[12:16] # GSL1:GSL5
+    intelligenceFrame <- allencdf[17:22] # GSI1:GSI6
+    safetyFrame <- allencdf[23:26] # PM1:GSS3
+
+    alphaAnthro <- alpha(anthroFrame)
+    alphaAnimacy <- alpha(animacyFrame)
+    alphaLikeability <- alpha(likeabilityFrame)
+    alphaInt <- alpha(intelligenceFrame)
+    alphaSafety <- alpha(safetyFrame, keys = c("GSS1", "PM1"))
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
 }
 
