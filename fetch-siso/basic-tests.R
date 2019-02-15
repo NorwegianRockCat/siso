@@ -1,6 +1,5 @@
-# We are dependent on the pysch package
-library(psych)
-library(dplyr)
+require(psych)
+require(dplyr)
 
 readFetchSisoData <- function() {
     results <- read.csv("results.csv", header = TRUE)
@@ -199,11 +198,11 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     intelligenceFrame <- resultsDataFrame[intelligenceIndex:intelligenceEndIndex]
     safetyFrame <- resultsDataFrame[safetyIndex:safetyEndIndex]
 
-    alphaAnthro <- alpha(anthroFrame)
-    alphaAnimacy <- alpha(animacyFrame)
-    alphaLikeability <- alpha(likeabilityFrame)
-    alphaInt <- alpha(intelligenceFrame)
-    alphaSafety <- alpha(safetyFrame, keys = c(paste("GSS", iteration, ".1", sep = '')))
+    alphaAnthro <- pysch::alpha(anthroFrame)
+    alphaAnimacy <- pysch::alpha(animacyFrame)
+    alphaLikeability <- pysch::alpha(likeabilityFrame)
+    alphaInt <- pysch::alpha(intelligenceFrame)
+    alphaSafety <- pysch::alpha(safetyFrame, keys = c(paste("GSS", iteration, ".1", sep = '')))
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
 }
 
@@ -214,17 +213,17 @@ alphaAllEncounters <- function(allencdf) {
     intelligenceFrame <- allencdf[17:22] # GSI1:GSI6
     safetyFrame <- allencdf[23:26] # PM1:GSS3
 
-    alphaAnthro <- alpha(anthroFrame)
-    alphaAnimacy <- alpha(animacyFrame)
-    alphaLikeability <- alpha(likeabilityFrame)
-    alphaInt <- alpha(intelligenceFrame)
-    alphaSafety <- alpha(safetyFrame, keys = c("GSS1", "PM1"))
+    alphaAnthro <- psych::alpha(anthroFrame)
+    alphaAnimacy <- psych::alpha(animacyFrame)
+    alphaLikeability <- psych::alpha(likeabilityFrame)
+    alphaInt <- psych::alpha(intelligenceFrame)
+    alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS1", "PM1"))
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
 }
 
 filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
     quo_instance_var <- enquo(instance)
-    filter(resultsDataFrame, !!quo_instance_var == movementType)
+    dplyr::filter(resultsDataFrame, !!quo_instance_var == movementType)
 }
 
 tws.is_movement <- function(x) { grepl("Movement.", x, fixed = TRUE) }
@@ -258,7 +257,7 @@ summary_averages_for_movement <- function(resultsDataFrame, ...) {
     variable_list <- tws.find_variable_names_for_movement(group_var)
     
     resultsDataFrame %>%
-        group_by(!!!group_var) %>%
+        dplyr::group_by(!!!group_var) %>%
         tws.summary(mean, variable_list)
 }
 
@@ -277,7 +276,7 @@ summary_medians_for_movement <- function(resultsDataFrame, ...) {
 
 tws.summary <- function(resultsDataFrame, func, variable_list) {
     resultsDataFrame %>%
-        summarize(
+        dpylr::summarize(
             count = n(),
             anthro1 = func(!!variable_list$GSAnthro1, na.rm = TRUE),
             anthro2 = func(!!variable_list$GSAnthro2, na.rm = TRUE),
@@ -308,20 +307,431 @@ tws.summary <- function(resultsDataFrame, func, variable_list) {
 
 # Select each variables and put them together.
 allEncounters <- function(resultsDataFrame) {
-   move1 <- select(resultsDataFrame, movement = Movement.1, !!!tws.Movement1VariableNames)
-   move2 <- select(resultsDataFrame, movement = Movement.2, !!!tws.Movement2VariableNames)
-   move3 <- select(resultsDataFrame, movement = Movement.3, !!!tws.Movement3VariableNames)
-   move4 <- select(resultsDataFrame, movement = Movement.4, !!!tws.Movement4VariableNames)
+   move1 <- dplyr::select(resultsDataFrame, movement = Movement.1, !!!tws.Movement1VariableNames)
+   move2 <- dplyr::select(resultsDataFrame, movement = Movement.2, !!!tws.Movement2VariableNames)
+   move3 <- dplyr::select(resultsDataFrame, movement = Movement.3, !!!tws.Movement3VariableNames)
+   move4 <- dplyr::select(resultsDataFrame, movement = Movement.4, !!!tws.Movement4VariableNames)
 
    bind_rows(move1, move2, move3, move4)
 }
 
 allSisoEncounters <- function(resultsDataFrame) {
     allmoves <- allEncounters(resultsDataFrame)
-    filter(allmoves, movement == "Siso")
+    dplyr::filter(allmoves, movement == "Siso")
 }
 
 allLinearEncounters <- function(resultsDataFrame) {
     allmoves <- allEncounters(resultsDataFrame)
-    filter(allmoves, movement == "Linear")
+    dplyr::filter(allmoves, movement == "Linear")
+}
+
+calculateAverages <- function(df) {
+    df %>% dplyr::mutate(Siso.GSAntro1 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.1 + GSAnthro2.1) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.1 + GSAnthro3.1) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.1 + GSAnthro4.1) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro2.1 + GSAnthro3.1) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.1 + GSAnthro4.1) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.1 + GSAnthro4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAntro2 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.2 + GSAnthro2.2) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.2 + GSAnthro3.2) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.2 + GSAnthro4.2) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro2.2 + GSAnthro3.2) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.2 + GSAnthro4.2) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.2 + GSAnthro4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAntro3 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.3 + GSAnthro2.3) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.3 + GSAnthro3.3) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.3 + GSAnthro4.3) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro2.3 + GSAnthro3.3) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.3 + GSAnthro4.3) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.3 + GSAnthro4.3) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAntro4 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.4 + GSAnthro2.4) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.4 + GSAnthro3.4) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.4 + GSAnthro4.4) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro2.4 + GSAnthro3.4) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.4 + GSAnthro4.4) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.4 + GSAnthro4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAntro5 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.5 + GSAnthro2.5) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.5 + GSAnthro3.5) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.5 + GSAnthro4.5) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro2.5 + GSAnthro3.5) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.5 + GSAnthro4.5) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.5 + GSAnthro4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.PM1 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (PM1.1 + PM2.1) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (PM1.1 + PM3.1) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (PM1.1 + PM4.1) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (PM2.1 + PM3.1) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (PM2.1 + PM4.1) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (PM3.1 + PM4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAnimacy1 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnimacy1.1 + GSAnimacy2.1) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy1.1 + GSAnimacy3.1) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy1.1 + GSAnimacy4.1) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy2.1 + GSAnimacy3.1) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy2.1 + GSAnimacy4.1) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy3.1 + GSAnimacy4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAnimacy2 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnimacy1.2 + GSAnimacy2.2) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy1.2 + GSAnimacy3.2) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy1.2 + GSAnimacy4.2) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy2.2 + GSAnimacy3.2) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy2.2 + GSAnimacy4.2) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy3.2 + GSAnimacy4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAnimacy3 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnimacy1.3 + GSAnimacy2.3) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy1.3 + GSAnimacy3.3) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy1.3 + GSAnimacy4.3) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy2.3 + GSAnimacy3.3) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy2.3 + GSAnimacy4.3) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy3.3 + GSAnimacy4.3) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAnimacy4 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnimacy1.4 + GSAnimacy2.4) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy1.4 + GSAnimacy3.4) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy1.4 + GSAnimacy4.4) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy2.4 + GSAnimacy3.4) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy2.4 + GSAnimacy4.4) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy3.4 + GSAnimacy4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSAnimacy5 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnimacy1.5 + GSAnimacy2.5) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy1.5 + GSAnimacy3.5) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy1.5 + GSAnimacy4.5) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSAnimacy2.5 + GSAnimacy3.5) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy2.5 + GSAnimacy4.5) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnimacy3.5 + GSAnimacy4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSL1 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSL1.1 + GSL2.1) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSL1.1 + GSL3.1) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSL1.1 + GSL4.1) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSL2.1 + GSL3.1) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSL2.1 + GSL4.1) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSL3.1 + GSL4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSL2 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSL1.2 + GSL2.2) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSL1.2 + GSL3.2) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSL1.2 + GSL4.2) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSL2.2 + GSL3.2) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSL2.2 + GSL4.2) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSL3.2 + GSL4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSL3 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSL1.2 + GSL2.2) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSL1.2 + GSL3.2) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSL1.2 + GSL4.2) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSL2.2 + GSL3.2) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSL2.2 + GSL4.2) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSL3.2 + GSL4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSL4 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSL1.4 + GSL2.4) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSL1.4 + GSL3.4) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSL1.4 + GSL4.4) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSL2.4 + GSL3.4) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSL2.4 + GSL4.4) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSL3.4 + GSL4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSL5 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSL1.5 + GSL2.5) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSL1.5 + GSL3.5) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSL1.5 + GSL4.5) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSL2.5 + GSL3.5) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSL2.5 + GSL4.5) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSL3.5 + GSL4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSI1 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSI1.1 + GSI2.1) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSI1.1 + GSI3.1) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSI1.1 + GSI4.1) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSI2.1 + GSI3.1) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSI2.1 + GSI4.1) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSI3.1 + GSI4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSI2 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSI1.2 + GSI2.2) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSI1.2 + GSI3.2) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSI1.2 + GSI4.2) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSI2.2 + GSI3.2) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSI2.2 + GSI4.2) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSI3.2 + GSI4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSI3 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSI1.3 + GSI2.3) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSI1.3 + GSI3.3) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSI1.3 + GSI4.3) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSI2.3 + GSI3.3) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSI2.3 + GSI4.3) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSI3.3 + GSI4.3) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSI4 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSI1.4 + GSI2.4) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSI1.4 + GSI3.4) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSI1.4 + GSI4.4) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSI2.4 + GSI3.4) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSI2.4 + GSI4.4) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSI3.4 + GSI4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSI5 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSI1.5 + GSI2.5) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSI1.5 + GSI3.5) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSI1.5 + GSI4.5) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSI2.5 + GSI3.5) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSI2.5 + GSI4.5) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSI3.5 + GSI4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSI6 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSI1.6 + GSI2.6) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSI1.6 + GSI3.6) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSI1.6 + GSI4.6) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSI2.6 + GSI3.6) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSI2.6 + GSI4.6) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSI3.6 + GSI4.6) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSS1 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSS1.1 + GSS2.1) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSS1.1 + GSS3.1) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSS1.1 + GSS4.1) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSS2.1 + GSS3.1) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSS2.1 + GSS4.1) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSS3.1 + GSS4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSS2 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSS1.2 + GSS2.2) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSS1.2 + GSS3.2) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSS1.2 + GSS4.2) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSS2.2 + GSS3.2) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSS2.2 + GSS4.2) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSS3.2 + GSS4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Siso.GSS3 =
+                             case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSS1.3 + GSS2.3) / 2,
+                                       Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSS1.3 + GSS3.3) / 2,
+                                       Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSS1.3 + GSS4.3) / 2,
+                                       Movement.2 == "Siso" & Movement.3 == "Siso" ~ (GSS2.3 + GSS3.3) / 2,
+                                       Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSS2.3 + GSS4.3) / 2,
+                                       Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSS3.3 + GSS4.3) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAntro1 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.1 + GSAnthro2.1) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.1 + GSAnthro3.1) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.1 + GSAnthro4.1) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro2.1 + GSAnthro3.1) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.1 + GSAnthro4.1) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.1 + GSAnthro4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAntro2 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.2 + GSAnthro2.2) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.2 + GSAnthro3.2) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.2 + GSAnthro4.2) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro2.2 + GSAnthro3.2) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.2 + GSAnthro4.2) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.2 + GSAnthro4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAntro3 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.3 + GSAnthro2.3) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.3 + GSAnthro3.3) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.3 + GSAnthro4.3) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro2.3 + GSAnthro3.3) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.3 + GSAnthro4.3) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.3 + GSAnthro4.3) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAntro4 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.4 + GSAnthro2.4) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.4 + GSAnthro3.4) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.4 + GSAnthro4.4) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro2.4 + GSAnthro3.4) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.4 + GSAnthro4.4) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.4 + GSAnthro4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAntro5 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.5 + GSAnthro2.5) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.5 + GSAnthro3.5) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.5 + GSAnthro4.5) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro2.5 + GSAnthro3.5) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.5 + GSAnthro4.5) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.5 + GSAnthro4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.PM1 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (PM1.1 + PM2.1) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (PM1.1 + PM3.1) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (PM1.1 + PM4.1) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (PM2.1 + PM3.1) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (PM2.1 + PM4.1) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (PM3.1 + PM4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAnimacy1 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnimacy1.1 + GSAnimacy2.1) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy1.1 + GSAnimacy3.1) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy1.1 + GSAnimacy4.1) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy2.1 + GSAnimacy3.1) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy2.1 + GSAnimacy4.1) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy3.1 + GSAnimacy4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAnimacy2 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnimacy1.2 + GSAnimacy2.2) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy1.2 + GSAnimacy3.2) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy1.2 + GSAnimacy4.2) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy2.2 + GSAnimacy3.2) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy2.2 + GSAnimacy4.2) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy3.2 + GSAnimacy4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAnimacy3 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnimacy1.3 + GSAnimacy2.3) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy1.3 + GSAnimacy3.3) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy1.3 + GSAnimacy4.3) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy2.3 + GSAnimacy3.3) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy2.3 + GSAnimacy4.3) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy3.3 + GSAnimacy4.3) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAnimacy4 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnimacy1.4 + GSAnimacy2.4) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy1.4 + GSAnimacy3.4) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy1.4 + GSAnimacy4.4) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy2.4 + GSAnimacy3.4) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy2.4 + GSAnimacy4.4) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy3.4 + GSAnimacy4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSAnimacy5 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnimacy1.5 + GSAnimacy2.5) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy1.5 + GSAnimacy3.5) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy1.5 + GSAnimacy4.5) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSAnimacy2.5 + GSAnimacy3.5) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy2.5 + GSAnimacy4.5) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnimacy3.5 + GSAnimacy4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSL1 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSL1.1 + GSL2.1) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSL1.1 + GSL3.1) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSL1.1 + GSL4.1) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSL2.1 + GSL3.1) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSL2.1 + GSL4.1) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSL3.1 + GSL4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSL2 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSL1.2 + GSL2.2) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSL1.2 + GSL3.2) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSL1.2 + GSL4.2) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSL2.2 + GSL3.2) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSL2.2 + GSL4.2) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSL3.2 + GSL4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSL3 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSL1.2 + GSL2.2) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSL1.2 + GSL3.2) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSL1.2 + GSL4.2) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSL2.2 + GSL3.2) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSL2.2 + GSL4.2) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSL3.2 + GSL4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSL4 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSL1.4 + GSL2.4) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSL1.4 + GSL3.4) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSL1.4 + GSL4.4) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSL2.4 + GSL3.4) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSL2.4 + GSL4.4) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSL3.4 + GSL4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSL5 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSL1.5 + GSL2.5) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSL1.5 + GSL3.5) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSL1.5 + GSL4.5) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSL2.5 + GSL3.5) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSL2.5 + GSL4.5) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSL3.5 + GSL4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSI1 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSI1.1 + GSI2.1) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSI1.1 + GSI3.1) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSI1.1 + GSI4.1) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSI2.1 + GSI3.1) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSI2.1 + GSI4.1) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSI3.1 + GSI4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSI2 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSI1.2 + GSI2.2) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSI1.2 + GSI3.2) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSI1.2 + GSI4.2) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSI2.2 + GSI3.2) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSI2.2 + GSI4.2) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSI3.2 + GSI4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSI3 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSI1.3 + GSI2.3) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSI1.3 + GSI3.3) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSI1.3 + GSI4.3) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSI2.3 + GSI3.3) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSI2.3 + GSI4.3) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSI3.3 + GSI4.3) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSI4 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSI1.4 + GSI2.4) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSI1.4 + GSI3.4) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSI1.4 + GSI4.4) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSI2.4 + GSI3.4) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSI2.4 + GSI4.4) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSI3.4 + GSI4.4) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSI5 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSI1.5 + GSI2.5) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSI1.5 + GSI3.5) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSI1.5 + GSI4.5) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSI2.5 + GSI3.5) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSI2.5 + GSI4.5) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSI3.5 + GSI4.5) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSI6 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSI1.6 + GSI2.6) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSI1.6 + GSI3.6) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSI1.6 + GSI4.6) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSI2.6 + GSI3.6) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSI2.6 + GSI4.6) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSI3.6 + GSI4.6) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSS1 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSS1.1 + GSS2.1) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSS1.1 + GSS3.1) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSS1.1 + GSS4.1) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSS2.1 + GSS3.1) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSS2.1 + GSS4.1) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSS3.1 + GSS4.1) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSS2 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSS1.2 + GSS2.2) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSS1.2 + GSS3.2) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSS1.2 + GSS4.2) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSS2.2 + GSS3.2) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSS2.2 + GSS4.2) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSS3.2 + GSS4.2) / 2,
+                                       TRUE ~ NA_real_),
+                         Linear.GSS3 =
+                             case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSS1.3 + GSS2.3) / 2,
+                                       Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSS1.3 + GSS3.3) / 2,
+                                       Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSS1.3 + GSS4.3) / 2,
+                                       Movement.2 == "Linear" & Movement.3 == "Linear" ~ (GSS2.3 + GSS3.3) / 2,
+                                       Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSS2.3 + GSS4.3) / 2,
+                                       Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSS3.3 + GSS4.3) / 2,
+                                       TRUE ~ NA_real_)
+                         ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, Siso.GSAntro1, Siso.GSAntro2, Siso.GSAntro3, Siso.GSAntro4,
+                      Siso.GSAntro5, Siso.PM1, Siso.GSAnimacy1, Siso.GSAnimacy2, Siso.GSAnimacy3, Siso.GSAnimacy4,
+                      Siso.GSAnimacy5, Siso.GSL1, Siso.GSL2, Siso.GSL3, Siso.GSL4, Siso.GSL5, Siso.GSI1, Siso.GSI2,
+                      Siso.GSI3, Siso.GSI4, Siso.GSI5, Siso.GSI6, Siso.GSS1, Siso.GSS2, Siso.GSS3, Linear.GSAntro1,
+                      Linear.GSAntro2, Linear.GSAntro3, Linear.GSAntro4, Linear.GSAntro5, Linear.PM1,
+                      Linear.GSAnimacy1, Linear.GSAnimacy2, Linear.GSAnimacy3, Linear.GSAnimacy4, Linear.GSAnimacy5,
+                      Linear.GSL1, Linear.GSL2, Linear.GSL3, Linear.GSL4, Linear.GSL5, Linear.GSI1, Linear.GSI2,
+                      Linear.GSI3, Linear.GSI4, Linear.GSI5, Linear.GSI6, Linear.GSS1, Linear.GSS2, Linear.GSS3)
 }
