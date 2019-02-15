@@ -6,8 +6,59 @@ readFetchSisoData <- function() {
     rename(results,  Experience.Robots = Experience.with.Robots.Unedited)
 }
 
+tws.AverageVariableNames <- list(
+    Siso.GSAntro1 = quo(Siso.GSAntro1),
+    Siso.GSAntro2 = quo(Siso.GSAntro2),
+    Siso.GSAntro3 = quo(Siso.GSAntro3),
+    Siso.GSAntro4 = quo(Siso.GSAntro4),
+    Siso.GSAntro5 = quo(Siso.GSAntro5),
+    Siso.PM1 = quo(Siso.PM1),
+    Siso.GSAnimacy1 = quo(Siso.GSAnimacy1),
+    Siso.GSAnimacy2 = quo(Siso.GSAnimacy2),
+    Siso.GSAnimacy3 = quo(Siso.GSAnimacy3),
+    Siso.GSAnimacy4 = quo(Siso.GSAnimacy4),
+    Siso.GSAnimacy5 = quo(Siso.GSAnimacy5),
+    Siso.GSL1 = quo(Siso.GSL1),
+    Siso.GSL2 = quo(Siso.GSL2),
+    Siso.GSL3 = quo(Siso.GSL3),
+    Siso.GSL4 = quo(Siso.GSL4),
+    Siso.GSL5 = quo(Siso.GSL5),
+    Siso.GSI1 = quo(Siso.GSI1),
+    Siso.GSI2 = quo(Siso.GSI2),
+    Siso.GSI3 = quo(Siso.GSI3),
+    Siso.GSI4 = quo(Siso.GSI4),
+    Siso.GSI5 = quo(Siso.GSI5),
+    Siso.GSI6 = quo(Siso.GSI6),
+    Siso.GSS1 = quo(Siso.GSS1),
+    Siso.GSS2 = quo(Siso.GSS2),
+    Siso.GSS3 = quo(Siso.GSS3),
+    Linear.GSAntro1 = quo(Linear.GSAntro1),
+    Linear.GSAntro2 = quo(Linear.GSAntro2),
+    Linear.GSAntro3 = quo(Linear.GSAntro3),
+    Linear.GSAntro4 = quo(Linear.GSAntro4),
+    Linear.GSAntro5 = quo(Linear.GSAntro5),
+    Linear.PM1 = quo(Linear.PM1),
+    Linear.GSAnimacy1 = quo(Linear.GSAnimacy1),
+    Linear.GSAnimacy2 = quo(Linear.GSAnimacy2),
+    Linear.GSAnimacy3 = quo(Linear.GSAnimacy3),
+    Linear.GSAnimacy4 = quo(Linear.GSAnimacy4),
+    Linear.GSAnimacy5 = quo(Linear.GSAnimacy5),
+    Linear.GSL1 = quo(Linear.GSL1),
+    Linear.GSL2 = quo(Linear.GSL2),
+    Linear.GSL3 = quo(Linear.GSL3),
+    Linear.GSL4 = quo(Linear.GSL4),
+    Linear.GSL5 = quo(Linear.GSL5),
+    Linear.GSI1 = quo(Linear.GSI1),
+    Linear.GSI2 = quo(Linear.GSI2),
+    Linear.GSI3 = quo(Linear.GSI3),
+    Linear.GSI4 = quo(Linear.GSI4),
+    Linear.GSI5 = quo(Linear.GSI5),
+    Linear.GSI6 = quo(Linear.GSI6),
+    Linear.GSS1 = quo(Linear.GSS1),
+    Linear.GSS2 = quo(Linear.GSS2),
+    Linear.GSS3 = quo(Linear.GSS3))
 
-tws.Movement0VariableNames = list(
+tws.Movement0VariableNames <- list(
     GSAnthro1 = quo(GSAnthro1),
     GSAnthro2 = quo(GSAnthro2),
     GSAnthro3 = quo(GSAnthro3),
@@ -39,7 +90,7 @@ tws.Movement0VariableNames = list(
     GSS2 = quo(GSS2),
     GSS3 = quo(GSS3))
 
-tws.Movement1VariableNames = list(
+tws.Movement1VariableNames <- list(
     GSAnthro1 = quo(GSAnthro1.1),
     GSAnthro2 = quo(GSAnthro1.2),
     GSAnthro3 = quo(GSAnthro1.3),
@@ -71,7 +122,7 @@ tws.Movement1VariableNames = list(
     GSS2 = quo(GSS1.2),
     GSS3 = quo(GSS1.3))
 
-tws.Movement2VariableNames = list(
+tws.Movement2VariableNames <- list(
             GSAnthro1 = quo(GSAnthro2.1),
             GSAnthro2 = quo(GSAnthro2.2),
             GSAnthro3 = quo(GSAnthro2.3),
@@ -103,7 +154,7 @@ tws.Movement2VariableNames = list(
             GSS2 = quo(GSS2.2),
             GSS3 = quo(GSS2.3))
 
-tws.Movement3VariableNames = list(
+tws.Movement3VariableNames <- list(
             GSAnthro1 = quo(GSAnthro3.1),
             GSAnthro2 = quo(GSAnthro3.2),
             GSAnthro3 = quo(GSAnthro3.3),
@@ -136,7 +187,7 @@ tws.Movement3VariableNames = list(
             GSS3 = quo(GSS3.3))
 
 
-tws.Movement4VariableNames = list(
+tws.Movement4VariableNames <- list(
             GSAnthro1 = quo(GSAnthro4.1),
             GSAnthro2 = quo(GSAnthro4.2),
             GSAnthro3 = quo(GSAnthro4.3),
@@ -168,7 +219,7 @@ tws.Movement4VariableNames = list(
             GSS2 = quo(GSS4.2),
             GSS3 = quo(GSS4.3))
 
-tws.MovementVariableNames = list(tws.Movement1VariableNames, tws.Movement2VariableNames, tws.Movement3VariableNames, tws.Movement4VariableNames, tws.Movement0VariableNames)
+tws.MovementVariableNames <- list(tws.Movement1VariableNames, tws.Movement2VariableNames, tws.Movement3VariableNames, tws.Movement4VariableNames, tws.Movement0VariableNames)
 
 
 # Return a list of psych alpha results, one for each movement thing
@@ -726,12 +777,9 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSS2.3 + GSS4.3) / 2,
                                        Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSS3.3 + GSS4.3) / 2,
                                        TRUE ~ NA_real_)
-                         ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, Siso.GSAntro1, Siso.GSAntro2, Siso.GSAntro3, Siso.GSAntro4,
-                      Siso.GSAntro5, Siso.PM1, Siso.GSAnimacy1, Siso.GSAnimacy2, Siso.GSAnimacy3, Siso.GSAnimacy4,
-                      Siso.GSAnimacy5, Siso.GSL1, Siso.GSL2, Siso.GSL3, Siso.GSL4, Siso.GSL5, Siso.GSI1, Siso.GSI2,
-                      Siso.GSI3, Siso.GSI4, Siso.GSI5, Siso.GSI6, Siso.GSS1, Siso.GSS2, Siso.GSS3, Linear.GSAntro1,
-                      Linear.GSAntro2, Linear.GSAntro3, Linear.GSAntro4, Linear.GSAntro5, Linear.PM1,
-                      Linear.GSAnimacy1, Linear.GSAnimacy2, Linear.GSAnimacy3, Linear.GSAnimacy4, Linear.GSAnimacy5,
-                      Linear.GSL1, Linear.GSL2, Linear.GSL3, Linear.GSL4, Linear.GSL5, Linear.GSI1, Linear.GSI2,
-                      Linear.GSI3, Linear.GSI4, Linear.GSI5, Linear.GSI6, Linear.GSS1, Linear.GSS2, Linear.GSS3)
+                         ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, !!!tws.AverageVariableNames)
+}
+
+t.testForResults <- function(df) {
+
 }
