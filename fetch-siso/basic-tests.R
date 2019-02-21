@@ -782,6 +782,8 @@ calculateAverages <- function(df) {
                          ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, !!!tws.AverageVariableNames)
 }
 
-t.testForResults <- function(df) {
-
+testbyName <- function(df, myName, alternative = c("two.sided", "less", "greater")) {
+    var.name <- quo_name(enquo(myName))
+    vars <- dplyr::select(df, paste("Siso.", var.name, sep = ''),  paste("Linear.", var.name, sep = ''))
+    t.test(vars[[1]], vars[[2]], paired = TRUE, alternative)
 }
