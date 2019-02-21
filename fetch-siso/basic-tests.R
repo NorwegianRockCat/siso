@@ -7,11 +7,11 @@ readFetchSisoData <- function() {
 }
 
 tws.AverageVariableNames <- list(
-    Siso.GSAntro1 = quo(Siso.GSAntro1),
-    Siso.GSAntro2 = quo(Siso.GSAntro2),
-    Siso.GSAntro3 = quo(Siso.GSAntro3),
-    Siso.GSAntro4 = quo(Siso.GSAntro4),
-    Siso.GSAntro5 = quo(Siso.GSAntro5),
+    Siso.GSAnthro1 = quo(Siso.GSAnthro1),
+    Siso.GSAnthro2 = quo(Siso.GSAnthro2),
+    Siso.GSAnthro3 = quo(Siso.GSAnthro3),
+    Siso.GSAnthro4 = quo(Siso.GSAnthro4),
+    Siso.GSAnthro5 = quo(Siso.GSAnthro5),
     Siso.PM1 = quo(Siso.PM1),
     Siso.GSAnimacy1 = quo(Siso.GSAnimacy1),
     Siso.GSAnimacy2 = quo(Siso.GSAnimacy2),
@@ -32,11 +32,11 @@ tws.AverageVariableNames <- list(
     Siso.GSS1 = quo(Siso.GSS1),
     Siso.GSS2 = quo(Siso.GSS2),
     Siso.GSS3 = quo(Siso.GSS3),
-    Linear.GSAntro1 = quo(Linear.GSAntro1),
-    Linear.GSAntro2 = quo(Linear.GSAntro2),
-    Linear.GSAntro3 = quo(Linear.GSAntro3),
-    Linear.GSAntro4 = quo(Linear.GSAntro4),
-    Linear.GSAntro5 = quo(Linear.GSAntro5),
+    Linear.GSAnthro1 = quo(Linear.GSAnthro1),
+    Linear.GSAnthro2 = quo(Linear.GSAnthro2),
+    Linear.GSAnthro3 = quo(Linear.GSAnthro3),
+    Linear.GSAnthro4 = quo(Linear.GSAnthro4),
+    Linear.GSAnthro5 = quo(Linear.GSAnthro5),
     Linear.PM1 = quo(Linear.PM1),
     Linear.GSAnimacy1 = quo(Linear.GSAnimacy1),
     Linear.GSAnimacy2 = quo(Linear.GSAnimacy2),
@@ -379,7 +379,7 @@ allLinearEncounters <- function(resultsDataFrame) {
 }
 
 calculateAverages <- function(df) {
-    df %>% dplyr::mutate(Siso.GSAntro1 =
+    df %>% dplyr::mutate(Siso.GSAnthro1 =
                              case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.1 + GSAnthro2.1) / 2,
                                        Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.1 + GSAnthro3.1) / 2,
                                        Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.1 + GSAnthro4.1) / 2,
@@ -387,7 +387,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.1 + GSAnthro4.1) / 2,
                                        Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.1 + GSAnthro4.1) / 2,
                                        TRUE ~ NA_real_),
-                         Siso.GSAntro2 =
+                         Siso.GSAnthro2 =
                              case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.2 + GSAnthro2.2) / 2,
                                        Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.2 + GSAnthro3.2) / 2,
                                        Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.2 + GSAnthro4.2) / 2,
@@ -395,7 +395,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.2 + GSAnthro4.2) / 2,
                                        Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.2 + GSAnthro4.2) / 2,
                                        TRUE ~ NA_real_),
-                         Siso.GSAntro3 =
+                         Siso.GSAnthro3 =
                              case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.3 + GSAnthro2.3) / 2,
                                        Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.3 + GSAnthro3.3) / 2,
                                        Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.3 + GSAnthro4.3) / 2,
@@ -403,7 +403,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.3 + GSAnthro4.3) / 2,
                                        Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.3 + GSAnthro4.3) / 2,
                                        TRUE ~ NA_real_),
-                         Siso.GSAntro4 =
+                         Siso.GSAnthro4 =
                              case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.4 + GSAnthro2.4) / 2,
                                        Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.4 + GSAnthro3.4) / 2,
                                        Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.4 + GSAnthro4.4) / 2,
@@ -411,7 +411,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro2.4 + GSAnthro4.4) / 2,
                                        Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro3.4 + GSAnthro4.4) / 2,
                                        TRUE ~ NA_real_),
-                         Siso.GSAntro5 =
+                         Siso.GSAnthro5 =
                              case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.5 + GSAnthro2.5) / 2,
                                        Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.5 + GSAnthro3.5) / 2,
                                        Movement.1 == "Siso" & Movement.4 == "Siso" ~ (GSAnthro1.5 + GSAnthro4.5) / 2,
@@ -579,7 +579,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Siso" & Movement.4 == "Siso" ~ (GSS2.3 + GSS4.3) / 2,
                                        Movement.3 == "Siso" & Movement.4 == "Siso" ~ (GSS3.3 + GSS4.3) / 2,
                                        TRUE ~ NA_real_),
-                         Linear.GSAntro1 =
+                         Linear.GSAnthro1 =
                              case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.1 + GSAnthro2.1) / 2,
                                        Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.1 + GSAnthro3.1) / 2,
                                        Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.1 + GSAnthro4.1) / 2,
@@ -587,7 +587,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.1 + GSAnthro4.1) / 2,
                                        Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.1 + GSAnthro4.1) / 2,
                                        TRUE ~ NA_real_),
-                         Linear.GSAntro2 =
+                         Linear.GSAnthro2 =
                              case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.2 + GSAnthro2.2) / 2,
                                        Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.2 + GSAnthro3.2) / 2,
                                        Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.2 + GSAnthro4.2) / 2,
@@ -595,7 +595,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.2 + GSAnthro4.2) / 2,
                                        Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.2 + GSAnthro4.2) / 2,
                                        TRUE ~ NA_real_),
-                         Linear.GSAntro3 =
+                         Linear.GSAnthro3 =
                              case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.3 + GSAnthro2.3) / 2,
                                        Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.3 + GSAnthro3.3) / 2,
                                        Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.3 + GSAnthro4.3) / 2,
@@ -603,7 +603,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.3 + GSAnthro4.3) / 2,
                                        Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.3 + GSAnthro4.3) / 2,
                                        TRUE ~ NA_real_),
-                         Linear.GSAntro4 =
+                         Linear.GSAnthro4 =
                              case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.4 + GSAnthro2.4) / 2,
                                        Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.4 + GSAnthro3.4) / 2,
                                        Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.4 + GSAnthro4.4) / 2,
@@ -611,7 +611,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro2.4 + GSAnthro4.4) / 2,
                                        Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro3.4 + GSAnthro4.4) / 2,
                                        TRUE ~ NA_real_),
-                         Linear.GSAntro5 =
+                         Linear.GSAnthro5 =
                              case_when(Movement.1 == "Linear" & Movement.2 == "Linear" ~ (GSAnthro1.5 + GSAnthro2.5) / 2,
                                        Movement.1 == "Linear" & Movement.3 == "Linear" ~ (GSAnthro1.5 + GSAnthro3.5) / 2,
                                        Movement.1 == "Linear" & Movement.4 == "Linear" ~ (GSAnthro1.5 + GSAnthro4.5) / 2,
@@ -782,8 +782,20 @@ calculateAverages <- function(df) {
                          ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, !!!tws.AverageVariableNames)
 }
 
-nonparamTestByName <- function(df, myName, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
-    var.name <- quo_name(enquo(myName))
+nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
+    var.name <- quo_name(enquo(name))
     vars <- dplyr::select(df, paste("Siso.", var.name, sep = ''),  paste("Linear.", var.name, sep = ''))
-    func(vars[[1]], vars[[2]], paired = TRUE, alternative)
+    result <- func(vars[[1]], vars[[2]], paired = TRUE, alternative)
+    # Build a dataframe out of this.
+    data.frame(Name = var.name,
+               method = result$method,
+               alternative = result$alternative,
+               null.value = result$null.value,
+               statistic = result$statistic,
+               pvalue = round(result$p.value, digits = 4))
 }
+
+# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=t.test) %>% rbind_list 
+# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=t.test, alternative = "less") %>% rbind_list 
+# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=wilcox.test) %>% rbind_list 
+# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=wilcox.test, alternative = "less") %>% rbind_list 
