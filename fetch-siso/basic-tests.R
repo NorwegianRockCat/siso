@@ -262,14 +262,16 @@ alphaAllEncounters <- function(allencdf) {
     animacyFrame <- allencdf[7:11] # GSAnimacy1:GSAnimacy5
     likeabilityFrame <- allencdf[12:16] # GSL1:GSL5
     intelligenceFrame <- allencdf[17:22] # GSI1:GSI6
-    safetyFrame <- allencdf[23:26] # PM1:GSS3
+    safetyFrame <- allencdf[24:26] # GSS1:GSS3
+    safetyFrame.plus.prediction <- allencdf[23:26] # PM1:GSS3
 
     alphaAnthro <- psych::alpha(anthroFrame)
     alphaAnimacy <- psych::alpha(animacyFrame)
     alphaLikeability <- psych::alpha(likeabilityFrame)
     alphaInt <- psych::alpha(intelligenceFrame)
-    alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS1", "PM1"))
-    list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
+    alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS1"))
+    alphaSafety.plus.prediction <- psych::alpha(safetyFrame.plus.prediction, keys = c("GSS1", "PM1"))
+    list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
 }
 
 filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
