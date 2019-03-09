@@ -1,229 +1,228 @@
 require(psych)
 require(dplyr)
 
-readFetchSisoData <- function() {
+rawFetchSisoResults <- function() {
     results <- read.csv("results.csv", header = TRUE)
     rename(results,  Experience.Robots = Experience.with.Robots.Unedited)
 }
 
-tws.AverageVariableNames <- list(
-    Siso.GSAnthro1 = quo(Siso.GSAnthro1),
-    Siso.GSAnthro2 = quo(Siso.GSAnthro2),
-    Siso.GSAnthro3 = quo(Siso.GSAnthro3),
-    Siso.GSAnthro4 = quo(Siso.GSAnthro4),
-    Siso.GSAnthro5 = quo(Siso.GSAnthro5),
-    Siso.PM1 = quo(Siso.PM1),
-    Siso.GSAnimacy1 = quo(Siso.GSAnimacy1),
-    Siso.GSAnimacy2 = quo(Siso.GSAnimacy2),
-    Siso.GSAnimacy3 = quo(Siso.GSAnimacy3),
-    Siso.GSAnimacy4 = quo(Siso.GSAnimacy4),
-    Siso.GSAnimacy5 = quo(Siso.GSAnimacy5),
-    Siso.GSL1 = quo(Siso.GSL1),
-    Siso.GSL2 = quo(Siso.GSL2),
-    Siso.GSL3 = quo(Siso.GSL3),
-    Siso.GSL4 = quo(Siso.GSL4),
-    Siso.GSL5 = quo(Siso.GSL5),
-    Siso.GSI1 = quo(Siso.GSI1),
-    Siso.GSI2 = quo(Siso.GSI2),
-    Siso.GSI3 = quo(Siso.GSI3),
-    Siso.GSI4 = quo(Siso.GSI4),
-    Siso.GSI5 = quo(Siso.GSI5),
-    Siso.GSI6 = quo(Siso.GSI6),
-    Siso.GSS1 = quo(Siso.GSS1),
-    Siso.GSS2 = quo(Siso.GSS2),
-    Siso.GSS3 = quo(Siso.GSS3),
-    Linear.GSAnthro1 = quo(Linear.GSAnthro1),
-    Linear.GSAnthro2 = quo(Linear.GSAnthro2),
-    Linear.GSAnthro3 = quo(Linear.GSAnthro3),
-    Linear.GSAnthro4 = quo(Linear.GSAnthro4),
-    Linear.GSAnthro5 = quo(Linear.GSAnthro5),
-    Linear.PM1 = quo(Linear.PM1),
-    Linear.GSAnimacy1 = quo(Linear.GSAnimacy1),
-    Linear.GSAnimacy2 = quo(Linear.GSAnimacy2),
-    Linear.GSAnimacy3 = quo(Linear.GSAnimacy3),
-    Linear.GSAnimacy4 = quo(Linear.GSAnimacy4),
-    Linear.GSAnimacy5 = quo(Linear.GSAnimacy5),
-    Linear.GSL1 = quo(Linear.GSL1),
-    Linear.GSL2 = quo(Linear.GSL2),
-    Linear.GSL3 = quo(Linear.GSL3),
-    Linear.GSL4 = quo(Linear.GSL4),
-    Linear.GSL5 = quo(Linear.GSL5),
-    Linear.GSI1 = quo(Linear.GSI1),
-    Linear.GSI2 = quo(Linear.GSI2),
-    Linear.GSI3 = quo(Linear.GSI3),
-    Linear.GSI4 = quo(Linear.GSI4),
-    Linear.GSI5 = quo(Linear.GSI5),
-    Linear.GSI6 = quo(Linear.GSI6),
-    Linear.GSS1 = quo(Linear.GSS1),
-    Linear.GSS2 = quo(Linear.GSS2),
-    Linear.GSS3 = quo(Linear.GSS3))
+MovementVariableNames <- function() {
+    tws.AverageVariableNames <- list(
+        Siso.GSAnthro1 = quo(Siso.GSAnthro1),
+        Siso.GSAnthro2 = quo(Siso.GSAnthro2),
+        Siso.GSAnthro3 = quo(Siso.GSAnthro3),
+        Siso.GSAnthro4 = quo(Siso.GSAnthro4),
+        Siso.GSAnthro5 = quo(Siso.GSAnthro5),
+        Siso.PM1 = quo(Siso.PM1),
+        Siso.GSAnimacy1 = quo(Siso.GSAnimacy1),
+        Siso.GSAnimacy2 = quo(Siso.GSAnimacy2),
+        Siso.GSAnimacy3 = quo(Siso.GSAnimacy3),
+        Siso.GSAnimacy4 = quo(Siso.GSAnimacy4),
+        Siso.GSAnimacy5 = quo(Siso.GSAnimacy5),
+        Siso.GSL1 = quo(Siso.GSL1),
+        Siso.GSL2 = quo(Siso.GSL2),
+        Siso.GSL3 = quo(Siso.GSL3),
+        Siso.GSL4 = quo(Siso.GSL4),
+        Siso.GSL5 = quo(Siso.GSL5),
+        Siso.GSI1 = quo(Siso.GSI1),
+        Siso.GSI2 = quo(Siso.GSI2),
+        Siso.GSI3 = quo(Siso.GSI3),
+        Siso.GSI4 = quo(Siso.GSI4),
+        Siso.GSI5 = quo(Siso.GSI5),
+        Siso.GSI6 = quo(Siso.GSI6),
+        Siso.GSS1 = quo(Siso.GSS1),
+        Siso.GSS2 = quo(Siso.GSS2),
+        Siso.GSS3 = quo(Siso.GSS3),
+        Linear.GSAnthro1 = quo(Linear.GSAnthro1),
+        Linear.GSAnthro2 = quo(Linear.GSAnthro2),
+        Linear.GSAnthro3 = quo(Linear.GSAnthro3),
+        Linear.GSAnthro4 = quo(Linear.GSAnthro4),
+        Linear.GSAnthro5 = quo(Linear.GSAnthro5),
+        Linear.PM1 = quo(Linear.PM1),
+        Linear.GSAnimacy1 = quo(Linear.GSAnimacy1),
+        Linear.GSAnimacy2 = quo(Linear.GSAnimacy2),
+        Linear.GSAnimacy3 = quo(Linear.GSAnimacy3),
+        Linear.GSAnimacy4 = quo(Linear.GSAnimacy4),
+        Linear.GSAnimacy5 = quo(Linear.GSAnimacy5),
+        Linear.GSL1 = quo(Linear.GSL1),
+        Linear.GSL2 = quo(Linear.GSL2),
+        Linear.GSL3 = quo(Linear.GSL3),
+        Linear.GSL4 = quo(Linear.GSL4),
+        Linear.GSL5 = quo(Linear.GSL5),
+        Linear.GSI1 = quo(Linear.GSI1),
+        Linear.GSI2 = quo(Linear.GSI2),
+        Linear.GSI3 = quo(Linear.GSI3),
+        Linear.GSI4 = quo(Linear.GSI4),
+        Linear.GSI5 = quo(Linear.GSI5),
+        Linear.GSI6 = quo(Linear.GSI6),
+        Linear.GSS1 = quo(Linear.GSS1),
+        Linear.GSS2 = quo(Linear.GSS2),
+        Linear.GSS3 = quo(Linear.GSS3))
 
-tws.Movement0VariableNames <- list(
-    GSAnthro1 = quo(GSAnthro1),
-    GSAnthro2 = quo(GSAnthro2),
-    GSAnthro3 = quo(GSAnthro3),
-    GSAnthro4 = quo(GSAnthro4),
-    GSAnthro5 = quo(GSAnthro5),
+    tws.Movement0VariableNames <- list(
+        GSAnthro1 = quo(GSAnthro1),
+        GSAnthro2 = quo(GSAnthro2),
+        GSAnthro3 = quo(GSAnthro3),
+        GSAnthro4 = quo(GSAnthro4),
+        GSAnthro5 = quo(GSAnthro5),
 
-    GSAnimacy1 = quo(GSAnimacy1),
-    GSAnimacy2 = quo(GSAnimacy2),
-    GSAnimacy3 = quo(GSAnimacy3),
-    GSAnimacy4 = quo(GSAnimacy4),
-    GSAnimacy5 = quo(GSAnimacy5),
+        GSAnimacy1 = quo(GSAnimacy1),
+        GSAnimacy2 = quo(GSAnimacy2),
+        GSAnimacy3 = quo(GSAnimacy3),
+        GSAnimacy4 = quo(GSAnimacy4),
+        GSAnimacy5 = quo(GSAnimacy5),
 
-    GSL1 = quo(GSL1),
-    GSL2 = quo(GSL2),
-    GSL3 = quo(GSL3),
-    GSL4 = quo(GSL4),
-    GSL5 = quo(GSL5),
+        GSL1 = quo(GSL1),
+        GSL2 = quo(GSL2),
+        GSL3 = quo(GSL3),
+        GSL4 = quo(GSL4),
+        GSL5 = quo(GSL5),
 
-    GSI1 = quo(GSI1),
-    GSI2 = quo(GSI2),
-    GSI3 = quo(GSI3),
-    GSI4 = quo(GSI4),
-    GSI5 = quo(GSI5),
-    GSI6 = quo(GSI6),
+        GSI1 = quo(GSI1),
+        GSI2 = quo(GSI2),
+        GSI3 = quo(GSI3),
+        GSI4 = quo(GSI4),
+        GSI5 = quo(GSI5),
+        GSI6 = quo(GSI6),
 
-    PM1 = quo(PM1),
+        PM1 = quo(PM1),
 
-    GSS1 = quo(GSS1),
-    GSS2 = quo(GSS2),
-    GSS3 = quo(GSS3))
+        GSS1 = quo(GSS1),
+        GSS2 = quo(GSS2),
+        GSS3 = quo(GSS3))
 
-tws.Movement1VariableNames <- list(
-    GSAnthro1 = quo(GSAnthro1.1),
-    GSAnthro2 = quo(GSAnthro1.2),
-    GSAnthro3 = quo(GSAnthro1.3),
-    GSAnthro4 = quo(GSAnthro1.4),
-    GSAnthro5 = quo(GSAnthro1.5),
+    tws.Movement1VariableNames <- list(
+        GSAnthro1 = quo(GSAnthro1.1),
+        GSAnthro2 = quo(GSAnthro1.2),
+        GSAnthro3 = quo(GSAnthro1.3),
+        GSAnthro4 = quo(GSAnthro1.4),
+        GSAnthro5 = quo(GSAnthro1.5),
 
-    GSAnimacy1 = quo(GSAnimacy1.1),
-    GSAnimacy2 = quo(GSAnimacy1.2),
-    GSAnimacy3 = quo(GSAnimacy1.3),
-    GSAnimacy4 = quo(GSAnimacy1.4),
-    GSAnimacy5 = quo(GSAnimacy1.5),
+        GSAnimacy1 = quo(GSAnimacy1.1),
+        GSAnimacy2 = quo(GSAnimacy1.2),
+        GSAnimacy3 = quo(GSAnimacy1.3),
+        GSAnimacy4 = quo(GSAnimacy1.4),
+        GSAnimacy5 = quo(GSAnimacy1.5),
 
-    GSL1 = quo(GSL1.1),
-    GSL2 = quo(GSL1.2),
-    GSL3 = quo(GSL1.3),
-    GSL4 = quo(GSL1.4),
-    GSL5 = quo(GSL1.5),
+        GSL1 = quo(GSL1.1),
+        GSL2 = quo(GSL1.2),
+        GSL3 = quo(GSL1.3),
+        GSL4 = quo(GSL1.4),
+        GSL5 = quo(GSL1.5),
 
-    GSI1 = quo(GSI1.1),
-    GSI2 = quo(GSI1.2),
-    GSI3 = quo(GSI1.3),
-    GSI4 = quo(GSI1.4),
-    GSI5 = quo(GSI1.5),
-    GSI6 = quo(GSI1.6),
+        GSI1 = quo(GSI1.1),
+        GSI2 = quo(GSI1.2),
+        GSI3 = quo(GSI1.3),
+        GSI4 = quo(GSI1.4),
+        GSI5 = quo(GSI1.5),
+        GSI6 = quo(GSI1.6),
 
-    PM1 = quo(PM1.1),
+        PM1 = quo(PM1.1),
 
-    GSS1 = quo(GSS1.1),
-    GSS2 = quo(GSS1.2),
-    GSS3 = quo(GSS1.3))
+        GSS1 = quo(GSS1.1),
+        GSS2 = quo(GSS1.2),
+        GSS3 = quo(GSS1.3))
 
-tws.Movement2VariableNames <- list(
-            GSAnthro1 = quo(GSAnthro2.1),
-            GSAnthro2 = quo(GSAnthro2.2),
-            GSAnthro3 = quo(GSAnthro2.3),
-            GSAnthro4 = quo(GSAnthro2.4),
-            GSAnthro5 = quo(GSAnthro2.5),
+    tws.Movement2VariableNames <- list(
+        GSAnthro1 = quo(GSAnthro2.1),
+        GSAnthro2 = quo(GSAnthro2.2),
+        GSAnthro3 = quo(GSAnthro2.3),
+        GSAnthro4 = quo(GSAnthro2.4),
+        GSAnthro5 = quo(GSAnthro2.5),
 
-            GSAnimacy1 = quo(GSAnimacy2.1),
-            GSAnimacy2 = quo(GSAnimacy2.2),
-            GSAnimacy3 = quo(GSAnimacy2.3),
-            GSAnimacy4 = quo(GSAnimacy2.4),
-            GSAnimacy5 = quo(GSAnimacy2.5),
+        GSAnimacy1 = quo(GSAnimacy2.1),
+        GSAnimacy2 = quo(GSAnimacy2.2),
+        GSAnimacy3 = quo(GSAnimacy2.3),
+        GSAnimacy4 = quo(GSAnimacy2.4),
+        GSAnimacy5 = quo(GSAnimacy2.5),
 
-            GSL1 = quo(GSL2.1),
-            GSL2 = quo(GSL2.2),
-            GSL3 = quo(GSL2.3),
-            GSL4 = quo(GSL2.4),
-            GSL5 = quo(GSL2.5),
+        GSL1 = quo(GSL2.1),
+        GSL2 = quo(GSL2.2),
+        GSL3 = quo(GSL2.3),
+        GSL4 = quo(GSL2.4),
+        GSL5 = quo(GSL2.5),
 
-            GSI1 = quo(GSI2.1),
-            GSI2 = quo(GSI2.2),
-            GSI3 = quo(GSI2.3),
-            GSI4 = quo(GSI2.4),
-            GSI5 = quo(GSI2.5),
-            GSI6 = quo(GSI2.6),
+        GSI1 = quo(GSI2.1),
+        GSI2 = quo(GSI2.2),
+        GSI3 = quo(GSI2.3),
+        GSI4 = quo(GSI2.4),
+        GSI5 = quo(GSI2.5),
+        GSI6 = quo(GSI2.6),
 
-            PM1 = quo(PM2.1),
+        PM1 = quo(PM2.1),
 
-            GSS1 = quo(GSS2.1),
-            GSS2 = quo(GSS2.2),
-            GSS3 = quo(GSS2.3))
+        GSS1 = quo(GSS2.1),
+        GSS2 = quo(GSS2.2),
+        GSS3 = quo(GSS2.3))
 
-tws.Movement3VariableNames <- list(
-            GSAnthro1 = quo(GSAnthro3.1),
-            GSAnthro2 = quo(GSAnthro3.2),
-            GSAnthro3 = quo(GSAnthro3.3),
-            GSAnthro4 = quo(GSAnthro3.4),
-            GSAnthro5 = quo(GSAnthro3.5),
+    tws.Movement3VariableNames <- list(
+        GSAnthro1 = quo(GSAnthro3.1),
+        GSAnthro2 = quo(GSAnthro3.2),
+        GSAnthro3 = quo(GSAnthro3.3),
+        GSAnthro4 = quo(GSAnthro3.4),
+        GSAnthro5 = quo(GSAnthro3.5),
 
-            GSAnimacy1 = quo(GSAnimacy3.1),
-            GSAnimacy2 = quo(GSAnimacy3.2),
-            GSAnimacy3 = quo(GSAnimacy3.3),
-            GSAnimacy4 = quo(GSAnimacy3.4),
-            GSAnimacy5 = quo(GSAnimacy3.5),
+        GSAnimacy1 = quo(GSAnimacy3.1),
+        GSAnimacy2 = quo(GSAnimacy3.2),
+        GSAnimacy3 = quo(GSAnimacy3.3),
+        GSAnimacy4 = quo(GSAnimacy3.4),
+        GSAnimacy5 = quo(GSAnimacy3.5),
 
-            GSL1 = quo(GSL3.1),
-            GSL2 = quo(GSL3.2),
-            GSL3 = quo(GSL3.3),
-            GSL4 = quo(GSL3.4),
-            GSL5 = quo(GSL3.5),
+        GSL1 = quo(GSL3.1),
+        GSL2 = quo(GSL3.2),
+        GSL3 = quo(GSL3.3),
+        GSL4 = quo(GSL3.4),
+        GSL5 = quo(GSL3.5),
 
-            GSI1 = quo(GSI3.1),
-            GSI2 = quo(GSI3.2),
-            GSI3 = quo(GSI3.3),
-            GSI4 = quo(GSI3.4),
-            GSI5 = quo(GSI3.5),
-            GSI6 = quo(GSI3.6),
+        GSI1 = quo(GSI3.1),
+        GSI2 = quo(GSI3.2),
+        GSI3 = quo(GSI3.3),
+        GSI4 = quo(GSI3.4),
+        GSI5 = quo(GSI3.5),
+        GSI6 = quo(GSI3.6),
 
-            PM1 = quo(PM3.1),
+        PM1 = quo(PM3.1),
 
-            GSS1 = quo(GSS3.1),
-            GSS2 = quo(GSS3.2),
-            GSS3 = quo(GSS3.3))
+        GSS1 = quo(GSS3.1),
+        GSS2 = quo(GSS3.2),
+        GSS3 = quo(GSS3.3))
 
+    tws.Movement4VariableNames <- list(
+        GSAnthro1 = quo(GSAnthro4.1),
+        GSAnthro2 = quo(GSAnthro4.2),
+        GSAnthro3 = quo(GSAnthro4.3),
+        GSAnthro4 = quo(GSAnthro4.4),
+        GSAnthro5 = quo(GSAnthro4.5),
 
-tws.Movement4VariableNames <- list(
-            GSAnthro1 = quo(GSAnthro4.1),
-            GSAnthro2 = quo(GSAnthro4.2),
-            GSAnthro3 = quo(GSAnthro4.3),
-            GSAnthro4 = quo(GSAnthro4.4),
-            GSAnthro5 = quo(GSAnthro4.5),
+        GSAnimacy1 = quo(GSAnimacy4.1),
+        GSAnimacy2 = quo(GSAnimacy4.2),
+        GSAnimacy3 = quo(GSAnimacy4.3),
+        GSAnimacy4 = quo(GSAnimacy4.4),
+        GSAnimacy5 = quo(GSAnimacy4.5),
 
-            GSAnimacy1 = quo(GSAnimacy4.1),
-            GSAnimacy2 = quo(GSAnimacy4.2),
-            GSAnimacy3 = quo(GSAnimacy4.3),
-            GSAnimacy4 = quo(GSAnimacy4.4),
-            GSAnimacy5 = quo(GSAnimacy4.5),
+        GSL1 = quo(GSL4.1),
+        GSL2 = quo(GSL4.2),
+        GSL3 = quo(GSL4.3),
+        GSL4 = quo(GSL4.4),
+        GSL5 = quo(GSL4.5),
 
-            GSL1 = quo(GSL4.1),
-            GSL2 = quo(GSL4.2),
-            GSL3 = quo(GSL4.3),
-            GSL4 = quo(GSL4.4),
-            GSL5 = quo(GSL4.5),
+        GSI1 = quo(GSI4.1),
+        GSI2 = quo(GSI4.2),
+        GSI3 = quo(GSI4.3),
+        GSI4 = quo(GSI4.4),
+        GSI5 = quo(GSI4.5),
+        GSI6 = quo(GSI4.6),
 
-            GSI1 = quo(GSI4.1),
-            GSI2 = quo(GSI4.2),
-            GSI3 = quo(GSI4.3),
-            GSI4 = quo(GSI4.4),
-            GSI5 = quo(GSI4.5),
-            GSI6 = quo(GSI4.6),
+        PM1 = quo(PM4.1),
 
-            PM1 = quo(PM4.1),
-
-            GSS1 = quo(GSS4.1),
-            GSS2 = quo(GSS4.2),
-            GSS3 = quo(GSS4.3))
-
-tws.MovementVariableNames <- list(tws.Movement1VariableNames, tws.Movement2VariableNames, tws.Movement3VariableNames, tws.Movement4VariableNames, tws.Movement0VariableNames)
-
+        GSS1 = quo(GSS4.1),
+        GSS2 = quo(GSS4.2),
+        GSS3 = quo(GSS4.3))
+    list(movement.1 = tws.Movement1VariableNames, movement.2 = tws.Movement2VariableNames, movement.3 = tws.Movement3VariableNames, movement.4 = tws.Movement4VariableNames, movement.none = tws.Movement0VariableNames, movement.average = tws.AverageVariableNames)
+}
 
 # Return a list of psych alpha results, one for each movement thing
-listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
+alphaOneEncounter <- function(resultsDataFrame = rawFetchSisoResults(), iteration = 1) {
 
     # Pull the frames out, put calculate the index
     anthroIndex <- 6 + (iteration - 1) * 26
@@ -257,13 +256,13 @@ listOfAlphasForSisoData <- function(resultsDataFrame, iteration = 1) {
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
 }
 
-alphaAllEncounters <- function(allencdf) {
-    anthroFrame <- allencdf[2:6] # GSAnthro1:GSAnthro6
-    animacyFrame <- allencdf[7:11] # GSAnimacy1:GSAnimacy5
-    likeabilityFrame <- allencdf[12:16] # GSL1:GSL5
-    intelligenceFrame <- allencdf[17:22] # GSI1:GSI6
-    safetyFrame <- allencdf[24:26] # GSS1:GSS3
-    safetyFrame.plus.prediction <- allencdf[23:26] # PM1:GSS3
+alphaAllEncounters <- function(all.encounters.df = allEncounters()) {
+    anthroFrame <- all.encounters.df[2:6] # GSAnthro1:GSAnthro6
+    animacyFrame <- all.encounters.df[7:11] # GSAnimacy1:GSAnimacy5
+    likeabilityFrame <- all.encounters.df[12:16] # GSL1:GSL5
+    intelligenceFrame <- all.encounters.df[17:22] # GSI1:GSI6
+    safetyFrame <- all.encounters.df[24:26] # GSS1:GSS3
+    safetyFrame.plus.prediction <- all.encounters.df[23:26] # PM1:GSS3
 
     alphaAnthro <- psych::alpha(anthroFrame)
     alphaAnimacy <- psych::alpha(animacyFrame)
@@ -283,24 +282,13 @@ tws.is_movement <- function(x) { grepl("Movement.", x, fixed = TRUE) }
 
 tws.find_variable_names_for_movement <- function(group_var) {
     movement_list <- Filter(f = tws.is_movement, Map(f = quo_name, group_var))
-    variable_list <- list()
+    variable_names = MovementVariableNames()
 
     if (length(movement_list) > 0) {
-        movement <- movement_list[[1]]
-        if (movement == "Movement.1") {
-            variable_list <- tws.MovementVariableNames[[1]]
-        } else if (movement == "Movement.2") {
-            variable_list <- tws.MovementVariableNames[[2]]
-        } else if (movement == "Movement.3") {
-            variable_list <- tws.MovementVariableNames[[3]]
-        } else if (movement == "Movement.2") {
-            variable_list <- tws.MovementVariableNames[[4]]
-        }
-
+         variable_names[[tolower(movement_list[[1]])]]
     } else {
-        variable_list <- tws.MovementVariableNames[[5]]
+         variable_names[[5]]
     }
-    variable_list
 }
 
 summary_averages_for_movement <- function(resultsDataFrame, ...) {
@@ -359,13 +347,14 @@ tws.summary <- function(resultsDataFrame, func, variable_list) {
 }
 
 # Select each variables and put them together.
-allEncounters <- function(resultsDataFrame) {
-   move1 <- dplyr::select(resultsDataFrame, movement = Movement.1, !!!tws.Movement1VariableNames)
-   move2 <- dplyr::select(resultsDataFrame, movement = Movement.2, !!!tws.Movement2VariableNames)
-   move3 <- dplyr::select(resultsDataFrame, movement = Movement.3, !!!tws.Movement3VariableNames)
-   move4 <- dplyr::select(resultsDataFrame, movement = Movement.4, !!!tws.Movement4VariableNames)
+allEncounters <- function(resultsDataFrame = rawFetchSisoResults()) {
+    variable.names <- MovementVariableNames()
+    move1 <- dplyr::select(resultsDataFrame, movement = Movement.1, !!!variable.names$movement.1)
+    move2 <- dplyr::select(resultsDataFrame, movement = Movement.2, !!!variable.names$movement.2)
+    move3 <- dplyr::select(resultsDataFrame, movement = Movement.3, !!!variable.names$movement.3)
+    move4 <- dplyr::select(resultsDataFrame, movement = Movement.4, !!!variable.names$movement.4)
 
-   bind_rows(move1, move2, move3, move4)
+    bind_rows(move1, move2, move3, move4)
 }
 
 allSisoEncounters <- function(resultsDataFrame) {
@@ -799,3 +788,4 @@ nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternat
 # lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=t.test, alternative = "less") %>% rbind_list 
 # lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=wilcox.test) %>% rbind_list 
 # lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=wilcox.test, alternative = "less") %>% rbind_list 
+
