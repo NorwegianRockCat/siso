@@ -769,7 +769,7 @@ siso.and.linear.godspeed.compenent.averages <- function(df = rawFetchSisoResults
                          ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, !!!MovementVariableNames()$movement.average)
 }
 
-nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
+godspeed.nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
     var.name <- quo_name(enquo(name))
     vars <- dplyr::select(df, paste("Siso.", var.name, sep = ''),  paste("Linear.", var.name, sep = ''))
     result <- func(vars[[1]], vars[[2]], paired = TRUE, alternative)
@@ -782,8 +782,10 @@ nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternat
                pvalue = round(result$p.value, digits = 4))
 }
 
-# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=t.test) %>% rbind_list 
-# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=t.test, alternative = "less") %>% rbind_list 
-# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=wilcox.test) %>% rbind_list 
-# lapply(tws.Movement0VariableNames, nonparamTestByName, df = siso.and.linear.avg, func=wilcox.test, alternative = "less") %>% rbind_list 
-
+godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.compenent.averages()) {
+    movement.0.variable_names <- MovementVariableNames()$movement.none
+    twosided <- lapply(movement.0.variable_names, godspeed.nonparamTestByName, df = df, func = wilcox.test, alternative = "two.sided")
+    greater <- lapply(movement.0.variable_names, godspeed.nonparamTestByName, df = df, func = wilcox.test, alternative = "greater")
+    less <- lapply(movement.0.variable_names, godspeed.nonparamTestByName, df = df, func = wilcox.test, alternative = "less")
+    list(two.sided = twosided, greater = greater, less = less)
+}
