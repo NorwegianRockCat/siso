@@ -771,8 +771,7 @@ siso.and.linear.godspeed.compenent.averages <- function(df = rawFetchSisoResults
 
 godspeed.nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
     var.name <- quo_name(enquo(name))
-    vars <- dplyr::select(df, paste("Siso.", var.name, sep = ''),  paste("Linear.", var.name, sep = ''))
-    result <- func(vars[[1]], vars[[2]], paired = TRUE, alternative)
+    result <- func(df[[paste("Siso.", var.name, sep = '')]], df[[paste("Linear.", var.name, sep = '')]], paired = TRUE, alternative)
     # Build a dataframe out of this.
     data.frame(Name = var.name,
                method = result$method,
@@ -788,4 +787,13 @@ godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.c
     greater <- lapply(movement.0.variable_names, godspeed.nonparamTestByName, df = df, func = wilcox.test, alternative = "greater")
     less <- lapply(movement.0.variable_names, godspeed.nonparamTestByName, df = df, func = wilcox.test, alternative = "less")
     list(two.sided = twosided, greater = greater, less = less)
+}
+
+shapiro.for.name <- function(name, df) {
+    var.name <- quo_name(enquo(name))
+    shapiro.test(df[[var.name]])
+}
+
+results.shapiro <- function(df, variable.names) {
+    lapply(variable.names, shapiro.for.name, df)
 }
