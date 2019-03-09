@@ -357,17 +357,15 @@ allEncounters <- function(resultsDataFrame = rawFetchSisoResults()) {
     bind_rows(move1, move2, move3, move4)
 }
 
-allSisoEncounters <- function(resultsDataFrame) {
-    allmoves <- allEncounters(resultsDataFrame)
-    dplyr::filter(allmoves, movement == "Siso")
+allSisoEncounters <- function(df = allEncounters()) {
+    df %>% dplyr::filter(movement == "Siso")
 }
 
-allLinearEncounters <- function(resultsDataFrame) {
-    allmoves <- allEncounters(resultsDataFrame)
-    dplyr::filter(allmoves, movement == "Linear")
+allLinearEncounters <- function(df = allEncounters()) {
+    df %>% dplyr::filter(movement == "Linear")
 }
 
-calculateAverages <- function(df) {
+siso.and.linear.godspeed.compenent.averages <- function(df = rawFetchSisoResults()) {
     df %>% dplyr::mutate(Siso.GSAnthro1 =
                              case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ (GSAnthro1.1 + GSAnthro2.1) / 2,
                                        Movement.1 == "Siso" & Movement.3 == "Siso" ~ (GSAnthro1.1 + GSAnthro3.1) / 2,
@@ -768,7 +766,7 @@ calculateAverages <- function(df) {
                                        Movement.2 == "Linear" & Movement.4 == "Linear" ~ (GSS2.3 + GSS4.3) / 2,
                                        Movement.3 == "Linear" & Movement.4 == "Linear" ~ (GSS3.3 + GSS4.3) / 2,
                                        TRUE ~ NA_real_)
-                         ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, !!!tws.AverageVariableNames)
+                         ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, !!!MovementVariableNames()$movement.average)
 }
 
 nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
