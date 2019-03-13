@@ -831,3 +831,29 @@ godspeed.average.for.series <- function(df = siso.and.linear.godspeed.compenent.
                          Linear.GSS.avg = 
                              rowMeans(data.frame(Linear.GSS1, Linear.GSS2, Linear.GSS3), na.rm = TRUE))
 }
+
+godspeed.average.for.iteration <- function(df = rawFetchSisoResults(), ...) {
+    movement_var <- quos(...)
+    variable_names <- tws.find_variable_names_for_movement(movement_var)
+    anthro.avg.name <- paste("GSAnthro", quo_name(movement_var[[1]]), "avg", sep=".")
+    animacy.avg.name <- paste("GSAnimacy", quo_name(movement_var[[1]]), "avg", sep=".")
+    likeability.avg.name <- paste("GSL", quo_name(movement_var[[1]]), "avg", sep=".")
+    intelligence.avg.name <- paste("GSI", quo_name(movement_var[[1]]), "avg", sep=".")
+    safety.avg.name <- paste("GSS", quo_name(movement_var[[1]]), "avg", sep=".")
+
+    df %>% dplyr::transmute(!!anthro.avg.name :=
+                             rowMeans(data.frame(!!variable_names$GSAnthro1, !!variable_names$GSAnthro2, !!variable_names$GSAnthro3,
+                                                 !!variable_names$GSAnthro4, !!variable_names$GSAnthro5), na.rm = TRUE),
+                         !!animacy.avg.name :=
+                             rowMeans(data.frame(!!variable_names$GSAnimacy1, !!variable_names$GSAnimacy2, !!variable_names$GSAnimacy3,
+                                                 !!variable_names$GSAnimacy4, !!variable_names$GSAnimacy5), na.rm = TRUE),
+                         !!likeability.avg.name :=
+                             rowMeans(data.frame(!!variable_names$GSL1, !!variable_names$GSL2, !!variable_names$GSL3,
+                                                 !!variable_names$GSL4, !!variable_names$GSL5), na.rm = TRUE),
+                         !!intelligence.avg.name := 
+                             rowMeans(data.frame(!!variable_names$GSI1, !!variable_names$GSI2, !!variable_names$GSI3,
+                                                 !!variable_names$GSI4, !!variable_names$GSI5, !!variable_names$GSI6), na.rm = TRUE),
+                         !!safety.avg.name := 
+                             rowMeans(data.frame(!!variable_names$GSS1, !!variable_names$GSS2, !!variable_names$GSS3), na.rm = TRUE))
+
+}
