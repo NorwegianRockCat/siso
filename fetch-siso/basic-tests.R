@@ -861,9 +861,9 @@ godspeed.average.for.iteration <- function(df = rawFetchSisoResults(), iteration
 }
 
 
-godspeed.wilcox.for.iterations <- function(df = rawFetchSisoResults()) {
+godspeed.wilcox.for.iterations <- function(df = rawFetchSisoResults(), alternative = c("two.sided", "less", "greater")) {
     averages.for.iterations <- lapply(X=c("Movement.1", "Movement.2", "Movement.3", "Movement.4"),
                                       FUN=function(x) godspeed.average.for.iteration(df, x))
     lapply(X=seq(1, length(averages.for.iterations)),
-           FUN=function(x) wilcox.test(averages.for.iterations[[1]][[x]], averages.for.iterations[[4]][[x]], paired = TRUE))
+           FUN=function(x) wilcox.test(averages.for.iterations[[1]][[x]], averages.for.iterations[[4]][[x]], paired = TRUE, alternative))
 }
