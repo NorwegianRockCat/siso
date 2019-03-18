@@ -832,14 +832,16 @@ godspeed.average.for.series <- function(df = siso.and.linear.godspeed.compenent.
                              rowMeans(data.frame(Linear.GSS1, Linear.GSS2, Linear.GSS3), na.rm = TRUE))
 }
 
-godspeed.average.for.iteration <- function(df = rawFetchSisoResults(), ...) {
-    movement_var <- quos(...)
-    variable_names <- tws.find_variable_names_for_movement(movement_var)
-    anthro.avg.name <- paste("GSAnthro", quo_name(movement_var[[1]]), "avg", sep=".")
-    animacy.avg.name <- paste("GSAnimacy", quo_name(movement_var[[1]]), "avg", sep=".")
-    likeability.avg.name <- paste("GSL", quo_name(movement_var[[1]]), "avg", sep=".")
-    intelligence.avg.name <- paste("GSI", quo_name(movement_var[[1]]), "avg", sep=".")
-    safety.avg.name <- paste("GSS", quo_name(movement_var[[1]]), "avg", sep=".")
+# Calculate the godspeed average for iteration 
+godspeed.average.for.iteration <- function(df = rawFetchSisoResults(), iteration = c("Movement.1", "Movement.2", "Movement.3", "Movement.4")) {
+    match.arg(iteration)
+    movement_var <- iteration
+    variable_names <- tws.find_variable_names_for_movement(syms(movement_var))
+    anthro.avg.name <- paste("GSAnthro", quo_name(movement_var), "avg", sep=".")
+    animacy.avg.name <- paste("GSAnimacy", quo_name(movement_var), "avg", sep=".")
+    likeability.avg.name <- paste("GSL", quo_name(movement_var), "avg", sep=".")
+    intelligence.avg.name <- paste("GSI", quo_name(movement_var), "avg", sep=".")
+    safety.avg.name <- paste("GSS", quo_name(movement_var), "avg", sep=".")
 
     df %>% dplyr::transmute(!!anthro.avg.name :=
                              rowMeans(data.frame(!!variable_names$GSAnthro1, !!variable_names$GSAnthro2, !!variable_names$GSAnthro3,
@@ -856,4 +858,12 @@ godspeed.average.for.iteration <- function(df = rawFetchSisoResults(), ...) {
                          !!safety.avg.name := 
                              rowMeans(data.frame(!!variable_names$GSS1, !!variable_names$GSS2, !!variable_names$GSS3), na.rm = TRUE))
 
+}
+
+
+godspeed.wilcox.for.iterations <- function(df = rawFetchSisoResults()) {
+    averages.for.iterations <- lapply(X=c("Movement.1", "Movement.2", "Movement.3", "Movement.4"),
+                                      FUN=function(x) godspeed.average.for.iteration(df, x))
+    lapply(X=seq(1, length(averages.for.iterations)),
+           FUN=function(x) wilcox.test(averages.for.iterations[[1]][[x]], averages.for.iterations[[4]][[x]], paired = TRUE))
 }
