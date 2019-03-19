@@ -1,9 +1,182 @@
 require(psych)
-require(dplyr)
+require(tidyverse)
+
+tidyFetchSisoResults <- function() {
+    movement <- c("Siso", "Linear")
+    results <- read_csv("results.csv", col_types = cols(
+                                           ID = col_integer(),
+                                           Age = col_integer(),
+                                           Gender = col_factor(levels = c("M", "F")),
+                                           Experience.Robots = col_factor(levels = c("Yes", "No")),
+
+                                           Movement.1 = col_factor(movement),
+                                           Movement.2 = col_factor(movement),
+                                           Movement.3 = col_factor(movement),
+                                           Movement.4 = col_factor(movement),
+
+                                           GSAnthro1.1 = col_integer(),
+                                           GSAnthro1.2 = col_integer(),
+                                           GSAnthro1.3 = col_integer(),
+                                           GSAnthro1.4 = col_integer(),
+                                           GSAnthro1.5 = col_integer(),
+                                           PM1.1 = col_integer(),
+                                           GSAnimacy1.1 = col_integer(),
+                                           GSAnimacy1.2 = col_integer(),
+                                           GSAnimacy1.3 = col_integer(),
+                                           GSAnimacy1.4 = col_integer(),
+                                           GSAnimacy1.5 = col_integer(),
+                                           GSL1.1 = col_integer(),
+                                           GSL1.2 = col_integer(),
+                                           GSL1.3 = col_integer(),
+                                           GSL1.4 = col_integer(),
+                                           GSL1.5 = col_integer(),
+                                           GSI1.1 = col_integer(),
+                                           GSI1.2 = col_integer(),
+                                           GSI1.3 = col_integer(),
+                                           GSI1.4 = col_integer(),
+                                           GSI1.5 = col_integer(),
+                                           GSI1.6 = col_integer(),
+                                           GSS1.1 = col_integer(),
+                                           GSS1.2 = col_integer(),
+                                           GSS1.3 = col_integer(),
+
+                                           GSAnthro2.1 = col_integer(),
+                                           GSAnthro2.2 = col_integer(),
+                                           GSAnthro2.3 = col_integer(),
+                                           GSAnthro2.4 = col_integer(),
+                                           GSAnthro2.5 = col_integer(),
+                                           PM2.1 = col_integer(),
+                                           GSAnimacy2.1 = col_integer(),
+                                           GSAnimacy2.2 = col_integer(),
+                                           GSAnimacy2.3 = col_integer(),
+                                           GSAnimacy2.4 = col_integer(),
+                                           GSAnimacy2.5 = col_integer(),
+                                           GSL2.1 = col_integer(),
+                                           GSL2.2 = col_integer(),
+                                           GSL2.3 = col_integer(),
+                                           GSL2.4 = col_integer(),
+                                           GSL2.5 = col_integer(),
+                                           GSI2.1 = col_integer(),
+                                           GSI2.2 = col_integer(),
+                                           GSI2.3 = col_integer(),
+                                           GSI2.4 = col_integer(),
+                                           GSI2.5 = col_integer(),
+                                           GSI2.6 = col_integer(),
+                                           GSS2.1 = col_integer(),
+                                           GSS2.2 = col_integer(),
+                                           GSS2.3 = col_integer(),
+
+                                           GSAnthro3.1 = col_integer(),
+                                           GSAnthro3.2 = col_integer(),
+                                           GSAnthro3.3 = col_integer(),
+                                           GSAnthro3.4 = col_integer(),
+                                           GSAnthro3.5 = col_integer(),
+                                           PM3.1 = col_integer(),
+                                           GSAnimacy3.1 = col_integer(),
+                                           GSAnimacy3.2 = col_integer(),
+                                           GSAnimacy3.3 = col_integer(),
+                                           GSAnimacy3.4 = col_integer(),
+                                           GSAnimacy3.5 = col_integer(),
+                                           GSL3.1 = col_integer(),
+                                           GSL3.2 = col_integer(),
+                                           GSL3.3 = col_integer(),
+                                           GSL3.4 = col_integer(),
+                                           GSL3.5 = col_integer(),
+                                           GSI3.1 = col_integer(),
+                                           GSI3.2 = col_integer(),
+                                           GSI3.3 = col_integer(),
+                                           GSI3.4 = col_integer(),
+                                           GSI3.5 = col_integer(),
+                                           GSI3.6 = col_integer(),
+                                           GSS3.1 = col_integer(),
+                                           GSS3.2 = col_integer(),
+                                           GSS3.3 = col_integer(),
+
+                                           GSAnthro4.1 = col_integer(),
+                                           GSAnthro4.2 = col_integer(),
+                                           GSAnthro4.3 = col_integer(),
+                                           GSAnthro4.4 = col_integer(),
+                                           GSAnthro4.5 = col_integer(),
+                                           PM4.1 = col_integer(),
+                                           GSAnimacy4.1 = col_integer(),
+                                           GSAnimacy4.2 = col_integer(),
+                                           GSAnimacy4.3 = col_integer(),
+                                           GSAnimacy4.4 = col_integer(),
+                                           GSAnimacy4.5 = col_integer(),
+                                           GSL4.1 = col_integer(),
+                                           GSL4.2 = col_integer(),
+                                           GSL4.3 = col_integer(),
+                                           GSL4.4 = col_integer(),
+                                           GSL4.5 = col_integer(),
+                                           GSI4.1 = col_integer(),
+                                           GSI4.2 = col_integer(),
+                                           GSI4.3 = col_integer(),
+                                           GSI4.4 = col_integer(),
+                                           GSI4.5 = col_integer(),
+                                           GSI4.6 = col_integer(),
+                                           GSS4.1 = col_integer(),
+                                           GSS4.2 = col_integer(),
+                                           GSS4.3 = col_integer()))
+    # Now gather the different movements together
+    results <- reshape(as.data.frame(results), idvar="ID", direction = "long",
+            varying = list(Movement = c(5,31,57,83),
+                           GSAnthro1 = c(6,32,58,84),
+                           GSAnthro2 = c(7,33,59,85),
+                           GSAnthro3 = c(8,34,60,86),
+                           GSAnthro4 = c(9,35,61,87),
+                           GSAnthro5 = c(10,36,62,88),
+                           PM1 = c(11,37,63,89),
+                           GSAnimacy1 = c(12,38,64,90),
+                           GSAnimacy2 = c(13,39,65,91),
+                           GSAnimacy3 = c(14,40,66,92),
+                           GSAnimacy4 = c(15,41,67,93),
+                           GSAnimacy5 = c(16,42,68,94),
+                           GSL1 = c(17,43,69,95),
+                           GSL2 = c(18,44,70,96),
+                           GSL3 = c(19,45,71,97),
+                           GSL4 = c(20,46,72,98),
+                           GSL5 = c(21,47,73,99),
+                           GSI1 = c(22,48,74,100),
+                           GSI2 = c(23,49,75,101),
+                           GSI3 = c(24,50,76,102),
+                           GSI4 = c(25,51,77,103),
+                           GSI5 = c(26,52,78,104),
+                           GSI6 = c(27,53,79,105),
+                           GSS1 = c(28,54,80,106),
+                           GSS2 = c(29,55,81,107),
+                           GSS3 = c(30,56,82,108)),
+            v.names = c("Movement",
+                        "GSAnthro1",
+                        "GSAnthro2",
+                        "GSAnthro3",
+                        "GSAnthro4",
+                        "GSAnthro5",
+                        "PM1",
+                        "GSAnimacy1",
+                        "GSAnimacy2",
+                        "GSAnimacy3",
+                        "GSAnimacy4",
+                        "GSAnimacy5",
+                        "GSL1",
+                        "GSL2",
+                        "GSL3",
+                        "GSL4",
+                        "GSL5",
+                        "GSI1",
+                        "GSI2",
+                        "GSI3",
+                        "GSI4",
+                        "GSI5",
+                        "GSI6",
+                        "GSS1",
+                        "GSS2",
+                        "GSS3"))
+    
+    as_tibble(results)
+}
 
 rawFetchSisoResults <- function() {
-    results <- read.csv("results.csv", header = TRUE)
-    rename(results,  Experience.Robots = Experience.with.Robots.Unedited)
+    read.csv("results.csv", header = TRUE)
 }
 
 MovementVariableNames <- function() {
@@ -789,7 +962,7 @@ godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.c
     list(two.sided = twosided, greater = greater, less = less)
 }
 
-shapiro.for.name <- function(name, df) {
+shapiro.for.name <- function(df, name) {
     var.name <- quo_name(enquo(name))
     shapiro.test(df[[var.name]])
 }
@@ -798,7 +971,7 @@ shapiro.for.name <- function(name, df) {
                                         # results.shapiro(rawFetchSisoResults, unlist(MovementVariableNames()[1:4]))
 
 results.shapiro <- function(df, variable.names) {
-    lapply(variable.names, shapiro.for.name, df)
+    lapply(X=variable.names, FUN=function(x) shapiro.for.name(df, x))
 }
 
 godspeed.average.for.series <- function(df = siso.and.linear.godspeed.compenent.averages()) {
