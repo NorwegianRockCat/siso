@@ -433,14 +433,7 @@ alphaOneEncounter <- function(resultsDataFrame = rawFetchSisoResults(), iteratio
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
 }
 
-alphaAllEncounters <- function(all.encounters.df = allEncounters()) {
-    anthroFrame <- all.encounters.df[2:6] # GSAnthro1:GSAnthro6
-    animacyFrame <- all.encounters.df[7:11] # GSAnimacy1:GSAnimacy5
-    likeabilityFrame <- all.encounters.df[12:16] # GSL1:GSL5
-    intelligenceFrame <- all.encounters.df[17:22] # GSI1:GSI6
-    safetyFrame <- all.encounters.df[24:26] # GSS1:GSS3
-    safetyFrame.plus.prediction <- all.encounters.df[23:26] # PM1:GSS3
-
+tws.alphaForFrames <- function(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction) {
     alphaAnthro <- psych::alpha(anthroFrame)
     alphaAnimacy <- psych::alpha(animacyFrame)
     alphaLikeability <- psych::alpha(likeabilityFrame)
@@ -448,6 +441,28 @@ alphaAllEncounters <- function(all.encounters.df = allEncounters()) {
     alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS1"))
     alphaSafety.plus.prediction <- psych::alpha(safetyFrame.plus.prediction, keys = c("GSS1", "PM1"))
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
+}
+
+tidyAlphaAllEncounters <- function(df = tidyFetchSisoResults()) {
+    anthroFrame <- df %>% dplyr::select(GSAnthro1:GSAnthro5)
+    animacyFrame <- df %>% dplyr::select(GSAnimacy1:GSAnimacy5)
+    likeabilityFrame <- df %>% dplyr::select(GSL1:GSL5)
+    intelligenceFrame <- df %>% dplyr::select(GSI1:GSI6)
+    safetyFrame <- df %>% dplyr::select(GSS1:GSS3)
+    safetyFrame.plus.prediction <- df %>% dplyr::select(PM1, GSS1:GSS3)
+
+    tws.alphaForFrames(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction)
+}
+
+alphaAllEncounters <- function(all.encounters.df = allEncounters()) {
+    anthroFrame <- all.encounters.df[2:6] # GSAnthro1:GSAnthro5
+    animacyFrame <- all.encounters.df[7:11] # GSAnimacy1:GSAnimacy5
+    likeabilityFrame <- all.encounters.df[12:16] # GSL1:GSL5
+    intelligenceFrame <- all.encounters.df[17:22] # GSI1:GSI6
+    safetyFrame <- all.encounters.df[24:26] # GSS1:GSS3
+    safetyFrame.plus.prediction <- all.encounters.df[23:26] # PM1:GSS3
+
+    tws.alphaForFrames(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction)
 }
 
 filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
