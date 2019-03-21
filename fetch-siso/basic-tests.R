@@ -172,11 +172,14 @@ tidyFetchSisoResults <- function() {
                                    "GSS2",
                                    "GSS3"))
     results <- as_tibble(results)
-    dplyr::mutate(results, GSAnthro.avg = rowMeans(data.frame(GSAnthro1, GSAnthro2, GSAnthro3, GSAnthro4, GSAnthro5)),
+    flippy <- function(x) abs(x - 6)
+    results <- results %>% dplyr::mutate(GSS1.reversed = flippy(GSS1))
+    results %>% dplyr::mutate(GSAnthro.avg = rowMeans(data.frame(GSAnthro1, GSAnthro2, GSAnthro3, GSAnthro4, GSAnthro5)),
                               GSAnimacy.avg = rowMeans(data.frame(GSAnimacy1, GSAnimacy2, GSAnimacy3, GSAnimacy4, GSAnimacy5)),
                               GSL.avg = rowMeans(data.frame(GSL1, GSL2, GSL3, GSL4, GSL5)),
                               GSI.avg = rowMeans(data.frame(GSI1, GSI2, GSI3, GSI4, GSI5, GSI6)),
-                              GSS.avg = rowMeans(data.frame(GSS1, GSS2, GSS3)))
+                              GSS.avg = rowMeans(data.frame(GSS1, GSS2, GSS3)),
+                              GSS.reversed.avg = rowMeans(data.frame(GSS1.reversed, GSS2, GSS3)))
 }
 
 rawFetchSisoResults <- function() {
