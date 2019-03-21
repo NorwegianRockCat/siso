@@ -898,6 +898,12 @@ siso.and.linear.godspeed.compenent.averages <- function(df = results) {
                          ) %>% dplyr::select(ID, Age, Gender, Experience.Robots, !!!MovementVariableNames()$movement.average)
 }
 
+tidy.godspeed.nonparamTestByName <- function(df, name, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
+    df.siso <- df %>% dplyr::filter(Movement == "Siso")
+    df.linear <- df %>% dplyr::filter(Movement == "Linear")
+    func(df.siso[[name]], df.linear[[name]], paired = TRUE, alternative)
+}
+
 godspeed.nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
     var.name <- quo_name(enquo(name))
     result <- func(df[[paste("Siso.", var.name, sep = '')]], df[[paste("Linear.", var.name, sep = '')]], paired = TRUE, alternative)
@@ -908,6 +914,17 @@ godspeed.nonparamTestByName <- function(name, df, func = c(t.test, wilcox.test),
                null.value = result$null.value,
                statistic = result$statistic,
                pvalue = round(result$p.value, digits = 4))
+}
+
+
+tidy.godspeed.wilcox.tests.for.components <- function(df = tidy.siso.and.linear.godspeed.compenent.averages()) {
+    variable.names <- names(df)[3:length(names(df))]
+    alternatives <- c("two.sided", "greater", "less")
+    sapply(alternatives,
+           FUN = function(x) sapply(variable.names,
+                                    FUN = function(y) tidy.godspeed.nonparamTestByName(df, y, func = wilcox.test, x),
+                                    simplify = FALSE, USE.NAMES = TRUE),
+           simplify = FALSE, USE.NAMES = TRUE)
 }
 
 godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.compenent.averages()) {
