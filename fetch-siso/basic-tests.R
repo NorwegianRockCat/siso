@@ -182,6 +182,8 @@ tidyFetchSisoResults <- function() {
                               GSS.reversed.avg = rowMeans(data.frame(GSS1.reversed, GSS2, GSS3)))
 }
 
+
+# This is the old function that just loads items in.
 rawFetchSisoResults <- function() {
     read.csv("results.csv", header = TRUE)
 }
@@ -401,16 +403,6 @@ MovementVariableNames <- function() {
     list(movement.1 = tws.Movement1VariableNames, movement.2 = tws.Movement2VariableNames, movement.3 = tws.Movement3VariableNames, movement.4 = tws.Movement4VariableNames, movement.none = tws.Movement0VariableNames, movement.average = tws.AverageVariableNames)
 }
 
-tws.alphaForFrames <- function(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction) {
-    alphaAnthro <- psych::alpha(anthroFrame)
-    alphaAnimacy <- psych::alpha(animacyFrame)
-    alphaLikeability <- psych::alpha(likeabilityFrame)
-    alphaInt <- psych::alpha(intelligenceFrame)
-    alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS1"))
-    alphaSafety.plus.prediction <- psych::alpha(safetyFrame.plus.prediction, keys = c("GSS1", "PM1"))
-    list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
-}
-
 alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
     anthroFrame <- df %>% dplyr::select(GSAnthro1:GSAnthro5)
     animacyFrame <- df %>% dplyr::select(GSAnimacy1:GSAnimacy5)
@@ -419,7 +411,13 @@ alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
     safetyFrame <- df %>% dplyr::select(GSS1:GSS3)
     safetyFrame.plus.prediction <- df %>% dplyr::select(PM1, GSS1:GSS3)
 
-    tws.alphaForFrames(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction)
+    alphaAnthro <- psych::alpha(anthroFrame)
+    alphaAnimacy <- psych::alpha(animacyFrame)
+    alphaLikeability <- psych::alpha(likeabilityFrame)
+    alphaInt <- psych::alpha(intelligenceFrame)
+    alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS1"))
+    alphaSafety.plus.prediction <- psych::alpha(safetyFrame.plus.prediction, keys = c("GSS1", "PM1"))
+    list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
 }
 
 filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
@@ -495,26 +493,37 @@ tws.summary <- function(resultsDataFrame, func, variable_list) {
             safe3 = func(!!variable_list$GSS3, na.rm = TRUE))
 }
 
-# Select each variables and put them together.
-allEncounters <- function(resultsDataFrame = rawFetchSisoResults()) {
-    variable.names <- MovementVariableNames()
-    move1 <- dplyr::select(resultsDataFrame, movement = Movement.1, !!!variable.names$movement.1)
-    move2 <- dplyr::select(resultsDataFrame, movement = Movement.2, !!!variable.names$movement.2)
-    move3 <- dplyr::select(resultsDataFrame, movement = Movement.3, !!!variable.names$movement.3)
-    move4 <- dplyr::select(resultsDataFrame, movement = Movement.4, !!!variable.names$movement.4)
-
-    bind_rows(move1, move2, move3, move4)
+tidy.siso.and.linear.godspeed.compenent.averages <- function(df = results.tidy) {
+    df %>% dplyr::group_by(Movement, ID) %>%
+        dplyr::summarize(
+                   GSAnthro1.avg = dplyr::mean(GSAnthro1),
+                   GSAnthro2.avg = dplyr::mean(GSAnthro2),
+                   GSAnthro3.avg = dplyr::mean(GSAnthro3),
+                   GSAnthro4.avg = dplyr::mean(GSAnthro4),
+                   GSAnthro5.avg = dplyr::mean(GSAnthro5),
+                   PM1.avg = dplyr::mean(PM1),
+                   GSAnimacy1.avg = dplyr::mean(GSAnimacy1),
+                   GSAnimacy2.avg = dplyr::mean(GSAnimacy2),
+                   GSAnimacy3.avg = dplyr::mean(GSAnimacy3),
+                   GSAnimacy4.avg = dplyr::mean(GSAnimacy4),
+                   GSAnimacy5.avg = dplyr::mean(GSAnimacy5),
+                   GSL1.avg = dplyr::mean(GSL1),
+                   GSL2.avg = dplyr::mean(GSL2),
+                   GSL3.avg = dplyr::mean(GSL3),
+                   GSL4.avg = dplyr::mean(GSL4),
+                   GSL5.avg = dplyr::mean(GSL5),
+                   GSI1.avg = dplyr::mean(GSI1),
+                   GSI2.avg = dplyr::mean(GSI2),
+                   GSI3.avg = dplyr::mean(GSI3),
+                   GSI4.avg = dplyr::mean(GSI4),
+                   GSI5.avg = dplyr::mean(GSI5),
+                   GSI6.avg = dplyr::mean(GSI6),
+                   GSS1.avg = dplyr::mean(GSS1),
+                   GSS2.avg = dplyr::mean(GSS2),
+                   GSS3.avg = dplyr::mean(GSS3))
 }
 
-allSisoEncounters <- function(df = allEncounters()) {
-    df %>% dplyr::filter(movement == "Siso")
-}
-
-allLinearEncounters <- function(df = allEncounters()) {
-    df %>% dplyr::filter(movement == "Linear")
-}
-
-siso.and.linear.godspeed.compenent.averages <- function(df = rawFetchSisoResults()) {
+siso.and.linear.godspeed.compenent.averages <- function(df = results) {
     df %>% dplyr::mutate(Siso.GSAnthro1 =
                              case_when(Movement.1 == "Siso" & Movement.2 == "Siso" ~ rowMeans(data.frame(GSAnthro1.1, GSAnthro2.1), na.rm = TRUE),
                                        Movement.1 == "Siso" & Movement.3 == "Siso" ~ rowMeans(data.frame(GSAnthro1.1, GSAnthro3.1), na.rm = TRUE),
@@ -1016,3 +1025,8 @@ godspeed.wilcox.for.iterations <- function(df = rawFetchSisoResults(), alternati
     lapply(X=seq(1, length(averages.for.iterations)),
            FUN=function(x) wilcox.test(averages.for.iterations[[1]][[x]], averages.for.iterations[[4]][[x]], paired = TRUE, alternative))
 }
+
+# Objects that we are using.
+
+results.tidy <- tidyFetchSisoResults()
+results <- rawFetchSisoResults()
