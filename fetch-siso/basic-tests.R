@@ -398,41 +398,6 @@ MovementVariableNames <- function() {
     list(movement.1 = tws.Movement1VariableNames, movement.2 = tws.Movement2VariableNames, movement.3 = tws.Movement3VariableNames, movement.4 = tws.Movement4VariableNames, movement.none = tws.Movement0VariableNames, movement.average = tws.AverageVariableNames)
 }
 
-# Return a list of psych alpha results, one for each movement thing
-alphaOneEncounter <- function(resultsDataFrame = rawFetchSisoResults(), iteration = 1) {
-
-    # Pull the frames out, put calculate the index
-    anthroIndex <- 6 + (iteration - 1) * 26
-
-    # The numbers on the side are calculated based on the first iteration
-    anthroEndIndex <- anthroIndex + 4 # 10
-
-    animacyIndex <- anthroEndIndex + 2 # 12
-    animacyEndIndex <- animacyIndex + 4 # 16
-
-    likeabilityIndex <- animacyEndIndex + 1 # 17
-    likeabilityEndIndex <- likeabilityIndex + 4 # 21
-
-    intelligenceIndex <- likeabilityEndIndex + 1 # 22
-    intelligenceEndIndex <- intelligenceIndex + 5 # 27
-
-    safetyIndex <- intelligenceEndIndex + 1 # 28
-    safetyEndIndex <- safetyIndex + 2 # 30
-
-    anthroFrame <- resultsDataFrame[anthroIndex:anthroEndIndex]
-    animacyFrame <- resultsDataFrame[animacyIndex:animacyEndIndex]
-    likeabilityFrame <- resultsDataFrame[likeabilityIndex:likeabilityEndIndex]
-    intelligenceFrame <- resultsDataFrame[intelligenceIndex:intelligenceEndIndex]
-    safetyFrame <- resultsDataFrame[safetyIndex:safetyEndIndex]
-
-    alphaAnthro <- pysch::alpha(anthroFrame)
-    alphaAnimacy <- pysch::alpha(animacyFrame)
-    alphaLikeability <- pysch::alpha(likeabilityFrame)
-    alphaInt <- pysch::alpha(intelligenceFrame)
-    alphaSafety <- pysch::alpha(safetyFrame, keys = c(paste("GSS", iteration, ".1", sep = '')))
-    list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety)
-}
-
 tws.alphaForFrames <- function(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction) {
     alphaAnthro <- psych::alpha(anthroFrame)
     alphaAnimacy <- psych::alpha(animacyFrame)
@@ -443,24 +408,13 @@ tws.alphaForFrames <- function(anthroFrame, animacyFrame, likeabilityFrame, inte
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
 }
 
-tidyAlphaAllEncounters <- function(df = tidyFetchSisoResults()) {
+alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
     anthroFrame <- df %>% dplyr::select(GSAnthro1:GSAnthro5)
     animacyFrame <- df %>% dplyr::select(GSAnimacy1:GSAnimacy5)
     likeabilityFrame <- df %>% dplyr::select(GSL1:GSL5)
     intelligenceFrame <- df %>% dplyr::select(GSI1:GSI6)
     safetyFrame <- df %>% dplyr::select(GSS1:GSS3)
     safetyFrame.plus.prediction <- df %>% dplyr::select(PM1, GSS1:GSS3)
-
-    tws.alphaForFrames(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction)
-}
-
-alphaAllEncounters <- function(all.encounters.df = allEncounters()) {
-    anthroFrame <- all.encounters.df[2:6] # GSAnthro1:GSAnthro5
-    animacyFrame <- all.encounters.df[7:11] # GSAnimacy1:GSAnimacy5
-    likeabilityFrame <- all.encounters.df[12:16] # GSL1:GSL5
-    intelligenceFrame <- all.encounters.df[17:22] # GSI1:GSI6
-    safetyFrame <- all.encounters.df[24:26] # GSS1:GSS3
-    safetyFrame.plus.prediction <- all.encounters.df[23:26] # PM1:GSS3
 
     tws.alphaForFrames(anthroFrame, animacyFrame, likeabilityFrame, intelligenceFrame, safetyFrame, safetyFrame.plus.prediction)
 }
