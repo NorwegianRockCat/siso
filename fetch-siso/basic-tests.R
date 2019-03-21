@@ -420,11 +420,6 @@ alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
 }
 
-filter_movement_for_instance <- function(resultsDataFrame, instance, movementType = 'Siso') {
-    quo_instance_var <- enquo(instance)
-    dplyr::filter(resultsDataFrame, !!quo_instance_var == movementType)
-}
-
 tws.is_movement <- function(x) { grepl("Movement.", x, fixed = TRUE) }
 
 tws.find_variable_names_for_movement <- function(group_var) {
@@ -436,30 +431,6 @@ tws.find_variable_names_for_movement <- function(group_var) {
     } else {
          variable_names[[5]]
     }
-}
-
-summary_averages_for_movement <- function(resultsDataFrame, ...) {
-    # All the variables are hard coded for the moment, but this will change.
-    group_var <- quos(...)
-
-    variable_list <- tws.find_variable_names_for_movement(group_var)
-    
-    resultsDataFrame %>%
-        dplyr::group_by(!!!group_var) %>%
-        tws.summary(mean, variable_list)
-}
-
-summary_medians_for_movement <- function(resultsDataFrame, ...) {
-    # All the variables are hard coded for the moment, but this will change.
-    group_var <- quos(...)
-
-    movement_list <- Filter(f = is_movement, Map(f = quo_name, group_var))
-
-    variable_list <- tws.find_variable_names_for_movement(group_var)
-
-    resultsDataFrame %>%
-        group_by(!!!group_var) %>%
-        tws.summary(median, variable_list)
 }
 
 tws.summary <- function(resultsDataFrame, func, variable_list) {
