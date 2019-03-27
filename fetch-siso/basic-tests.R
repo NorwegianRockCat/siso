@@ -243,7 +243,15 @@ siso.and.linear.godspeed.compenent.averages <- function(df = results.tidy) {
                    GSI6.avg = dplyr::mean(GSI6),
                    GSS1.avg = dplyr::mean(GSS1),
                    GSS2.avg = dplyr::mean(GSS2),
-                   GSS3.avg = dplyr::mean(GSS3))
+                   GSS2.reversed.avg = dplyr::mean(GSS2.reversed),
+                   GSS3.avg = dplyr::mean(GSS3),
+                   GSS3.reversed.avg = dplyr::mean(GSS3.reversed)) %>%
+        dplyr::mutate(GSAnthro.avg = rowMeans(data.frame(GSAnthro1.avg, GSAnthro2.avg, GSAnthro3.avg, GSAnthro4.avg, GSAnthro5.avg)),
+                      GSAnimacy.avg = rowMeans(data.frame(GSAnimacy1.avg, GSAnimacy2.avg, GSAnimacy3.avg, GSAnimacy4.avg, GSAnimacy5.avg)),
+                      GSL.avg = rowMeans(data.frame(GSL1.avg, GSL2.avg, GSL3.avg, GSL4.avg, GSL5.avg)),
+                      GSI.avg = rowMeans(data.frame(GSI1.avg, GSI2.avg, GSI3.avg, GSI4.avg, GSI5.avg, GSI6.avg)),
+                      GSS.avg = rowMeans(data.frame(GSS1.avg, GSS2.avg, GSS3.avg)),
+                      GSS.reversed.avg = rowMeans(data.frame(GSS1.avg, GSS2.reversed.avg, GSS3.reversed.avg)))
 }
 
 godspeed.nonparamTestByName <- function(df1, df2, name, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
@@ -297,7 +305,7 @@ godspeed.wilcox.for.iterations <- function(df = results.tidy, alternative = c("t
 
 results.tidy <- tidyFetchSisoResults()
 results.raw <- rawFetchSisoResults()
-
+results.split.averages <- siso.and.linear.godspeed.compenent.averages(results.tidy)
 godspeed.alpha <- alphaAllEncounters(results.tidy)
 godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
 godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
