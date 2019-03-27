@@ -254,6 +254,13 @@ siso.and.linear.godspeed.compenent.averages <- function(df = results.tidy) {
                       GSS.reversed.avg = rowMeans(data.frame(GSS1.avg, GSS2.reversed.avg, GSS3.reversed.avg)))
 }
 
+                                        # Some extra things that need to be done for the graphs
+# Gather variables up.
+#results.split.averages %>% gather(GSAnthro.avg, GSAnimacy.avg, GSL.avg, GSI.avg, GSS.avg, GSS.reversed.avg, key=GS.avg, value = GS.avg.Value) -> table2
+                                        # A box plot for it
+# ggplot(table2, aes(GS.avg, GS.avg.Value)) + geom_boxplot() + facet_wrap(~Movement)
+
+
 godspeed.nonparamTestByName <- function(df1, df2, name, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
     func(df1[[name]], df2[[name]], paired = TRUE, alternative)
 }
