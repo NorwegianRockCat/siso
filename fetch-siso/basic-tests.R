@@ -173,13 +173,24 @@ tidyFetchSisoResults <- function() {
                                    "GSS3"))
     results <- as_tibble(results)
     flippy <- function(x) abs(x - 6)
-    results <- results %>% dplyr::mutate(GSS1.reversed = flippy(GSS1))
+    results <- results %>% dplyr::mutate(GSS2.reversed = flippy(GSS2),
+                                         GSS3.reversed = flippy(GSS3),
+                                         time.ordered = as.ordered(time))
     results %>% dplyr::mutate(GSAnthro.avg = rowMeans(data.frame(GSAnthro1, GSAnthro2, GSAnthro3, GSAnthro4, GSAnthro5)),
                               GSAnimacy.avg = rowMeans(data.frame(GSAnimacy1, GSAnimacy2, GSAnimacy3, GSAnimacy4, GSAnimacy5)),
                               GSL.avg = rowMeans(data.frame(GSL1, GSL2, GSL3, GSL4, GSL5)),
                               GSI.avg = rowMeans(data.frame(GSI1, GSI2, GSI3, GSI4, GSI5, GSI6)),
                               GSS.avg = rowMeans(data.frame(GSS1, GSS2, GSS3)),
-                              GSS.reversed.avg = rowMeans(data.frame(GSS1.reversed, GSS2, GSS3)))
+                              GSS.reversed.avg = rowMeans(data.frame(GSS1, GSS2.reversed, GSS3.reversed)))
+}
+
+
+tidy.variable.names <- function(df = tidyFetchSisoResults()) {
+    # We make an assumption it's the tidyFetchSisoResults
+    all.names <- names(df)
+    component.names <- all.names[7:33]
+    avg.names <- all.names[35:length(all.names)]
+    return (c(component.names, avg.names))
 }
 
 
@@ -200,8 +211,8 @@ alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
     alphaAnimacy <- psych::alpha(animacyFrame)
     alphaLikeability <- psych::alpha(likeabilityFrame)
     alphaInt <- psych::alpha(intelligenceFrame)
-    alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS1"))
-    alphaSafety.plus.prediction <- psych::alpha(safetyFrame.plus.prediction, keys = c("GSS1", "PM1"))
+    alphaSafety <- psych::alpha(safetyFrame, keys = c("GSS2", "GSS3"))
+    alphaSafety.plus.prediction <- psych::alpha(safetyFrame.plus.prediction, keys = c("GSS2", "GSS3"))
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
 }
 
@@ -257,14 +268,34 @@ results.shapiro <- function(df, variable.names) {
     sapply(X=variable.names, FUN=function(x) shapiro.test(df[[x]]), simplify = FALSE, USE.NAMES = TRUE)
 }
 
-godspeed.wilcox.for.iterations <- function(df = results.raw, alternative = c("two.sided", "less", "greater")) {
-    averages.for.iterations <- lapply(X=c("Movement.1", "Movement.2", "Movement.3", "Movement.4"),
-                                      FUN=function(x) godspeed.average.for.iteration(df, x))
-    lapply(X=seq(1, length(averages.for.iterations)),
-           FUN=function(x) wilcox.test(averages.for.iterations[[1]][[x]], averages.for.iterations[[4]][[x]], paired = TRUE, alternative))
+godspeed.wilcox.for.iterations <- function(df = results.tidy, alternative = c("two.sided", "less", "greater")) {
+    df.first <- df %>% dplyr::filter(time.ordered == 1)
+    df.second <- df %>% dplyr::filter(time.ordered == 2)
+    df.third <- df %>% dplyr::filter(time.ordered == 3)
+    df.fourth <- df %>% dplyr::filter(time.ordered == 4)
+
+    comparisons <- list(first.and.second = list(df.first, df.second),
+                        first.and.third = list(df.first, df.third),
+                        first.and.fourth = list(df.first, df.fourth),
+                        second.and.third = list(df.second, df.third),
+                        seond.and.fourth = list(df.second, df.fourth),
+                        third.and.fourth = list(df.third, df.fourth))
+
+    variable.names <- tidy.variable.names(df)[28:33] # Only look at the averages to maintain sanity.
+
+    sapply(comparisons,
+           FUN = function(x) sapply(variable.names,
+                                    FUN = function(y) godspeed.nonparamTestByName(x[[1]], x[[2]], name = y,
+                                                                                  func = wilcox.test, alternative = alternative),
+                                    simplify = FALSE, USE.NAMES = TRUE),
+           simplify = FALSE, USE.NAMES = TRUE)
 }
 
 # Objects that we are using.
 
 results.tidy <- tidyFetchSisoResults()
 results.raw <- rawFetchSisoResults()
+
+godspeed.alpha <- alphaAllEncounters(results.tidy)
+godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
+godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
