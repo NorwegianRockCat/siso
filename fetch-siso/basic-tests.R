@@ -216,7 +216,7 @@ alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
     list(anthro=alphaAnthro, animacy=alphaAnimacy, likeability=alphaLikeability, int=alphaInt, safety=alphaSafety, safetyPlus=alphaSafety.plus.prediction)
 }
 
-siso.and.linear.godspeed.compenent.averages <- function(df = results.tidy) {
+siso.and.linear.godspeed.component.averages <- function(df = results.tidy) {
     df %>% dplyr::group_by(Movement, ID) %>%
         dplyr::summarize(
                    GSAnthro1.avg = dplyr::mean(GSAnthro1),
@@ -254,18 +254,20 @@ siso.and.linear.godspeed.compenent.averages <- function(df = results.tidy) {
                       GSS.reversed.avg = rowMeans(data.frame(GSS1.avg, GSS2.reversed.avg, GSS3.reversed.avg)))
 }
 
-                                        # Some extra things that need to be done for the graphs
-# Gather variables up.
-#results.split.averages %>% gather(GSAnthro.avg, GSAnimacy.avg, GSL.avg, GSI.avg, GSS.avg, GSS.reversed.avg, key=GS.avg, value = GS.avg.Value) -> table2
-                                        # A box plot for it
-# ggplot(table2, aes(GS.avg, GS.avg.Value)) + geom_boxplot() + facet_wrap(~Movement)
-
+siso.and.linear.godspeed.component.averages.gathered <- function(df = siso.and.linear.godspeed.compenent.averages()) {
+    df %>% gather(GSAnthro.avg, GSAnimacy.avg, GSL.avg, GSI.avg, GSS.avg, GSS.reversed.avg, key=GS.avg, value = GS.avg.Value) %>%
+        gather(GSAnthro1.avg, GSAnthro2.avg, GSAnthro3.avg, GSAnthro4.avg, GSAnthro5.avg, key=GSAnthro, value = GSAnthro.Value) %>%
+        gather(GSAnimacy1.avg, GSAnimacy2.avg, GSAnimacy3.avg, GSAnimacy4.avg, GSAnimacy5.avg, key=GSAnimacy, value = GSAnimacy.Value) %>%
+        gather(GSL1.avg, GSL2.avg, GSL3.avg, GSL4.avg, GSL5.avg, key=GSL, value = GSL.Value) %>%
+        gather(GSI1.avg, GSI2.avg, GSI3.avg, GSI4.avg, GSI5.avg, GSI6.avg, key=GSI, value = GSI.Value) %>%
+        gather(GSS1.avg, GSS2.reversed.avg, GSS3.reversed.avg, key=GSS.reversed, value = GSS.reversed.Value)
+}
 
 godspeed.nonparamTestByName <- function(df1, df2, name, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
     func(df1[[name]], df2[[name]], paired = TRUE, alternative)
 }
 
-godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.compenent.averages()) {
+godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.component.averages()) {
     df.siso <- df %>% dplyr::filter(Movement == "Siso")
     df.linear <- df %>% dplyr::filter(Movement == "Linear")
     alternatives <- c("two.sided", "greater", "less")
@@ -312,7 +314,7 @@ godspeed.wilcox.for.iterations <- function(df = results.tidy, alternative = c("t
 
 results.tidy <- tidyFetchSisoResults()
 results.raw <- rawFetchSisoResults()
-results.split.averages <- siso.and.linear.godspeed.compenent.averages(results.tidy)
+results.split.averages <- siso.and.linear.godspeed.component.averages(results.tidy)
 godspeed.alpha <- alphaAllEncounters(results.tidy)
 godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
 godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
