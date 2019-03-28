@@ -1,5 +1,6 @@
 require(psych)
 require(tidyverse)
+require(extrafont)
 
 tidyFetchSisoResults <- function() {
     movement <- c("Siso", "Linear")
@@ -255,13 +256,116 @@ siso.and.linear.godspeed.component.averages <- function(df = results.tidy) {
 }
 
 siso.and.linear.godspeed.component.averages.gathered <- function(df = siso.and.linear.godspeed.compenent.averages()) {
-    df %>% gather(GSAnthro.avg, GSAnimacy.avg, GSL.avg, GSI.avg, GSS.avg, GSS.reversed.avg, key=GS.avg, value = GS.avg.Value) %>%
+    df %>% gather(GSAnthro.avg, GSAnimacy.avg, GSL.avg, GSI.avg, GSS.reversed.avg, key=GS.avg, value = GS.avg.Value) %>%
         gather(GSAnthro1.avg, GSAnthro2.avg, GSAnthro3.avg, GSAnthro4.avg, GSAnthro5.avg, key=GSAnthro, value = GSAnthro.Value) %>%
         gather(GSAnimacy1.avg, GSAnimacy2.avg, GSAnimacy3.avg, GSAnimacy4.avg, GSAnimacy5.avg, key=GSAnimacy, value = GSAnimacy.Value) %>%
         gather(GSL1.avg, GSL2.avg, GSL3.avg, GSL4.avg, GSL5.avg, key=GSL, value = GSL.Value) %>%
         gather(GSI1.avg, GSI2.avg, GSI3.avg, GSI4.avg, GSI5.avg, GSI6.avg, key=GSI, value = GSI.Value) %>%
         gather(GSS1.avg, GSS2.reversed.avg, GSS3.reversed.avg, key=GSS.reversed, value = GSS.reversed.Value)
 }
+
+tws.make.gs.avg.plot <- function(df) {
+    plot <- ggplot(df, aes(GS.avg, GS.avg.Value)) + geom_boxplot() +
+        facet_wrap(~Movement) +
+        labs(x = "Godspeed Series", y = NULL, title = "Godspeed Averages for Slow in, Slow out and Linear Velocity Curves") +
+        theme_classic() +
+        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence", "Perceived Safety"))
+
+    ggsave(plot = plot, "gs-avg_unembedded.pdf")
+    embed_fonts("gs-avg_unembedded.pdf", outfile="gs-avg.pdf")
+}
+
+tws.make.gs.anthro.plot <- function(df) {
+    plot <- ggplot(df, aes(GSAnthro, GSAnthro.Value)) + geom_boxplot() +
+        facet_wrap(~Movement) +
+        labs(x = "Godspeed Anthropomorphism Items", y = NULL,
+             title = "Godspeed Anthropomorphism Series for Slow in, Slow out and Linear Velocity Curves") +
+        theme_classic() +
+        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        scale_x_discrete(labels=c("Fake—Natural", "Machinelike—Humanlike", "Unconscious—Conscious", "Artificial—Lifelike", "Moving Rigidly—Elegantly"))
+
+    ggsave(plot = plot, "gs-anthro_unembedded.pdf")
+    embed_fonts("gs-anthro_unembedded.pdf", outfile="gs-anthro.pdf")
+}
+
+tws.make.gs.animacy.plot <- function(df) {
+    plot <- ggplot(df, aes(GSAnimacy, GSAnimacy.Value)) + geom_boxplot() +
+        facet_wrap(~Movement) +
+        labs(x = "Godspeed Animacy Items", y = NULL,
+             title = "Godspeed Animacy Series for Slow in, Slow out and Linear Velocity Curves") +
+        theme_classic() +
+        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        scale_x_discrete(labels=c("Dead—Alive", "Stagnant—Lively", "Mechanical—Organic", "Artificial—Lifelike", "Inert—Interactive"))
+
+    ggsave(plot = plot, "gs-animacy_unembedded.pdf")
+    embed_fonts("gs-animacy_unembedded.pdf", outfile="gs-animacy.pdf")
+}
+
+tws.make.gs.likeability.plot <- function(df) {
+    plot <- ggplot(df, aes(GSL, GSL.Value)) + geom_boxplot() +
+        facet_wrap(~Movement) +
+        labs(x = "Godspeed Likeability Items", y = NULL,
+             title = "Godspeed Likeability Series for Slow in, Slow out and Linear Velocity Curves") +
+        theme_classic() +
+        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        scale_x_discrete(labels=c("Dislike—Like", "Unfriendly—Friendly", "Unkind—Kind", "Unpleasant—Pleasant", "Awful—Nice"))
+
+    ggsave(plot = plot, "gs-likeability_unembedded.pdf")
+    embed_fonts("gs-likeability_unembedded.pdf", outfile="gs-likeability.pdf")
+}
+tws.make.gs.intelligence.plot <- function(df) {
+    plot <- ggplot(df, aes(GSI, GSI.Value)) + geom_boxplot() +
+        facet_wrap(~Movement) +
+        labs(x = "Godspeed Perceived Intelligence Items", y = NULL,
+             title = "Godspeed Perceived Intelligence Series for Slow in, Slow out and Linear Velocity Curves") +
+        theme_classic() +
+        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        scale_x_discrete(labels=c("Incompetent—Competent", "Ignorant—Knowledgeable", "Irresponsible—Responsible",
+                                  "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable"))
+
+    ggsave(plot = plot, "gs-intelligence_unembedded.pdf")
+    embed_fonts("gs-intelligence_unembedded.pdf", outfile="gs-intelligence.pdf")
+}
+
+tws.make.gs.safety.plot <- function(df) {
+    plot <- ggplot(df, aes(GSS.reversed, GSS.reversed.Value)) + geom_boxplot() +
+        facet_wrap(~Movement) +
+        labs(x = "Godspeed Perceived Safety Items", y = NULL,
+             title = "Godspeed Perceived Safety Series for Slow in, Slow out and Linear Velocity Curves",
+             subtitle = "*Items 2 and 3 have been reversed") +
+        theme_classic() +
+        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        scale_x_discrete(labels=c("Anxious—Relaxed", "*Agitated—Calm", "*Surprised—Quiescent"))
+
+    ggsave(plot = plot, "gs-safety_unembedded.pdf")
+    embed_fonts("gs-safety_unembedded.pdf", outfile="gs-safety.pdf")
+}
+
+make.godspeed.graphs <- function() {
+    # Make a lot of graphs and then save them.
+    # Assumption that extrafonts have been loaded and that you have Aktiv Grotesk installed (likely not).
+    df <- siso.and.linear.godspeed.component.averages.gathered()
+
+    # Overall Averages
+    tws.make.gs.avg.plot(df)
+
+    # Anthropomorphism
+    tws.make.gs.anthro.plot(df)
+
+    # Animacy
+    tws.make.gs.animacy.plot(df)
+
+    # Likeability
+    tws.make.gs.likeability.plot(df)
+
+    # Perceived Intelligence
+    tws.make.gs.intelligence.plot(df)
+
+    # Perceived Safety
+    tws.make.gs.safety.plot(df)
+}
+
 
 godspeed.nonparamTestByName <- function(df1, df2, name, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
     func(df1[[name]], df2[[name]], paired = TRUE, alternative)
@@ -318,3 +422,6 @@ results.split.averages <- siso.and.linear.godspeed.component.averages(results.ti
 godspeed.alpha <- alphaAllEncounters(results.tidy)
 godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
 godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
+
+
+
