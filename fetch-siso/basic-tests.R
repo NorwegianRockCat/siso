@@ -264,106 +264,111 @@ siso.and.linear.godspeed.component.averages.gathered <- function(df = siso.and.l
         gather(GSS1.avg, GSS2.reversed.avg, GSS3.reversed.avg, key=GSS.reversed, value = GSS.reversed.Value)
 }
 
-tws.make.gs.avg.plot <- function(df) {
+tws.save.plot <- function(plot, filename.without.suffix, suffix = "pdf") {
+    filename.unembedded <- paste(filename.without.suffix, "unembedded", suffix, sep = ".")
+    filename.embedded <- paste(filename.without.suffix, suffix, sep = ".")
+    ggsave(plot = plot, filename.unembedded, device = cairo_pdf)
+    embed_fonts(filename.unembedded, outfile=filename.embedded)
+    file.remove(filename.unembedded)
+}
+
+tws.make.gs.avg.plot <- function(df, xformat, font) {
     plot <- ggplot(df, aes(GS.avg, GS.avg.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Series", y = NULL, title = "Godspeed Averages for Slow in, Slow out and Linear Velocity Curves") +
         theme_classic() +
-        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence", "Perceived Safety"))
 
-    ggsave(plot = plot, "gs-avg_unembedded.pdf")
-    embed_fonts("gs-avg_unembedded.pdf", outfile="gs-avg.pdf")
+    tws.save.plot(plot, "gs-avg")
 }
 
-tws.make.gs.anthro.plot <- function(df) {
+tws.make.gs.anthro.plot <- function(df, xformat, font) {
     plot <- ggplot(df, aes(GSAnthro, GSAnthro.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Anthropomorphism Items", y = NULL,
              title = "Godspeed Anthropomorphism Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_classic() +
-        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Fake—Natural", "Machinelike—Humanlike", "Unconscious—Conscious", "Artificial—Lifelike", "Moving Rigidly—Elegantly"))
 
-    ggsave(plot = plot, "gs-anthro_unembedded.pdf")
-    embed_fonts("gs-anthro_unembedded.pdf", outfile="gs-anthro.pdf")
+    tws.save.plot(plot, "gs-anthro")
 }
 
-tws.make.gs.animacy.plot <- function(df) {
+tws.make.gs.animacy.plot <- function(df, xformat, font) {
     plot <- ggplot(df, aes(GSAnimacy, GSAnimacy.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Animacy Items", y = NULL,
              title = "Godspeed Animacy Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_classic() +
-        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Dead—Alive", "Stagnant—Lively", "Mechanical—Organic", "Artificial—Lifelike", "Inert—Interactive"))
 
-    ggsave(plot = plot, "gs-animacy_unembedded.pdf")
-    embed_fonts("gs-animacy_unembedded.pdf", outfile="gs-animacy.pdf")
+    tws.save.plot(plot, "gs-animacy")
 }
 
-tws.make.gs.likeability.plot <- function(df) {
+tws.make.gs.likeability.plot <- function(df, xformat, font) {
     plot <- ggplot(df, aes(GSL, GSL.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Likeability Items", y = NULL,
              title = "Godspeed Likeability Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_classic() +
-        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Dislike—Like", "Unfriendly—Friendly", "Unkind—Kind", "Unpleasant—Pleasant", "Awful—Nice"))
 
-    ggsave(plot = plot, "gs-likeability_unembedded.pdf")
-    embed_fonts("gs-likeability_unembedded.pdf", outfile="gs-likeability.pdf")
+    tws.save.plot(plot, "gs-likeability")
 }
-tws.make.gs.intelligence.plot <- function(df) {
+
+tws.make.gs.intelligence.plot <- function(df, xformat, font) {
     plot <- ggplot(df, aes(GSI, GSI.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Perceived Intelligence Items", y = NULL,
              title = "Godspeed Perceived Intelligence Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_classic() +
-        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
+        theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Incompetent—Competent", "Ignorant—Knowledgeable", "Irresponsible—Responsible",
                                   "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable"))
 
-    ggsave(plot = plot, "gs-intelligence_unembedded.pdf")
-    embed_fonts("gs-intelligence_unembedded.pdf", outfile="gs-intelligence.pdf")
+    tws.save.plot(plot, "gs-intelligence")
 }
 
-tws.make.gs.safety.plot <- function(df) {
+tws.make.gs.safety.plot <- function(df, xformat, font) {
     plot <- ggplot(df, aes(GSS.reversed, GSS.reversed.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Perceived Safety Items", y = NULL,
              title = "Godspeed Perceived Safety Series for Slow in, Slow out and Linear Velocity Curves",
              subtitle = "*Items 2 and 3 have been reversed") +
         theme_classic() +
-        theme(text = element_text(family = "Aktiv Grotesk"), axis.text.x=element_text(color = "black", angle=30, vjust=.8, hjust=0.8)) +
-        scale_x_discrete(labels=c("Anxious—Relaxed", "*Agitated—Calm", "*Surprised—Quiescent"))
+        theme(text = font, axis.text.x=xformat) +
+        scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm", "*Surprised - Quiescent"))
 
-    ggsave(plot = plot, "gs-safety_unembedded.pdf")
-    embed_fonts("gs-safety_unembedded.pdf", outfile="gs-safety.pdf")
+    tws.save.plot(plot, "gs-safety")
 }
 
 make.godspeed.graphs <- function() {
     # Make a lot of graphs and then save them.
     # Assumption that extrafonts have been loaded and that you have Aktiv Grotesk installed (likely not).
     df <- siso.and.linear.godspeed.component.averages.gathered()
+    x.axis.text.format <- element_text(color = "black", angle=30, vjust=.8, hjust=0.8)
+    font <- element_text(family = "Aktiv Grotesk")
 
     # Overall Averages
-    tws.make.gs.avg.plot(df)
+    tws.make.gs.avg.plot(df, x.axis.text.format, font)
 
     # Anthropomorphism
-    tws.make.gs.anthro.plot(df)
+    tws.make.gs.anthro.plot(df, x.axis.text.format, font)
 
     # Animacy
-    tws.make.gs.animacy.plot(df)
+    tws.make.gs.animacy.plot(df, x.axis.text.format, font)
 
     # Likeability
-    tws.make.gs.likeability.plot(df)
+    tws.make.gs.likeability.plot(df, x.axis.text.format, font)
 
     # Perceived Intelligence
-    tws.make.gs.intelligence.plot(df)
+    tws.make.gs.intelligence.plot(df, x.axis.text.format, font)
 
     # Perceived Safety
-    tws.make.gs.safety.plot(df)
+    tws.make.gs.safety.plot(df, x.axis.text.format, font)
 }
 
 
