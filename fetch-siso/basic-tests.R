@@ -255,7 +255,7 @@ siso.and.linear.godspeed.component.averages <- function(df = results.tidy) {
                       GSS.reversed.avg = rowMeans(data.frame(GSS1.avg, GSS2.reversed.avg, GSS3.reversed.avg)))
 }
 
-siso.and.linear.godspeed.component.averages.gathered <- function(df = siso.and.linear.godspeed.compenent.averages()) {
+siso.and.linear.godspeed.component.averages.gathered <- function(df = siso.and.linear.godspeed.component.averages()) {
     df %>% gather(GSAnthro.avg, GSAnimacy.avg, GSL.avg, GSI.avg, GSS.reversed.avg, key=GS.avg, value = GS.avg.Value) %>%
         gather(GSAnthro1.avg, GSAnthro2.avg, GSAnthro3.avg, GSAnthro4.avg, GSAnthro5.avg, key=GSAnthro, value = GSAnthro.Value) %>%
         gather(GSAnimacy1.avg, GSAnimacy2.avg, GSAnimacy3.avg, GSAnimacy4.avg, GSAnimacy5.avg, key=GSAnimacy, value = GSAnimacy.Value) %>%
