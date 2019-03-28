@@ -1,3 +1,2 @@
 # We are dependent on the pysch package
-library(psych)
-library(dplyr)
+source("basic-tests.R")

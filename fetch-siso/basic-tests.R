@@ -1,6 +1,7 @@
+require(stats)
+require(extrafont)
 require(psych)
 require(tidyverse)
-require(extrafont)
 
 tidyFetchSisoResults <- function() {
     movement <- c("Siso", "Linear")
@@ -119,59 +120,59 @@ tidyFetchSisoResults <- function() {
                                            GSS4.2 = col_integer(),
                                            GSS4.3 = col_integer()))
                                         # Now gather the different movements together
-    results <- reshape(as.data.frame(results), idvar="ID", direction = "long",
-                       varying = list(Movement = c(5,31,57,83),
-                                      GSAnthro1 = c(6,32,58,84),
-                                      GSAnthro2 = c(7,33,59,85),
-                                      GSAnthro3 = c(8,34,60,86),
-                                      GSAnthro4 = c(9,35,61,87),
-                                      GSAnthro5 = c(10,36,62,88),
-                                      PM1 = c(11,37,63,89),
-                                      GSAnimacy1 = c(12,38,64,90),
-                                      GSAnimacy2 = c(13,39,65,91),
-                                      GSAnimacy3 = c(14,40,66,92),
-                                      GSAnimacy4 = c(15,41,67,93),
-                                      GSAnimacy5 = c(16,42,68,94),
-                                      GSL1 = c(17,43,69,95),
-                                      GSL2 = c(18,44,70,96),
-                                      GSL3 = c(19,45,71,97),
-                                      GSL4 = c(20,46,72,98),
-                                      GSL5 = c(21,47,73,99),
-                                      GSI1 = c(22,48,74,100),
-                                      GSI2 = c(23,49,75,101),
-                                      GSI3 = c(24,50,76,102),
-                                      GSI4 = c(25,51,77,103),
-                                      GSI5 = c(26,52,78,104),
-                                      GSI6 = c(27,53,79,105),
-                                      GSS1 = c(28,54,80,106),
-                                      GSS2 = c(29,55,81,107),
-                                      GSS3 = c(30,56,82,108)),
-                       v.names = c("Movement",
-                                   "GSAnthro1",
-                                   "GSAnthro2",
-                                   "GSAnthro3",
-                                   "GSAnthro4",
-                                   "GSAnthro5",
-                                   "PM1",
-                                   "GSAnimacy1",
-                                   "GSAnimacy2",
-                                   "GSAnimacy3",
-                                   "GSAnimacy4",
-                                   "GSAnimacy5",
-                                   "GSL1",
-                                   "GSL2",
-                                   "GSL3",
-                                   "GSL4",
-                                   "GSL5",
-                                   "GSI1",
-                                   "GSI2",
-                                   "GSI3",
-                                   "GSI4",
-                                   "GSI5",
-                                   "GSI6",
-                                   "GSS1",
-                                   "GSS2",
-                                   "GSS3"))
+    results <- stats::reshape(as.data.frame(results), idvar="ID", direction = "long",
+                              varying = list(Movement = c(5,31,57,83),
+                                             GSAnthro1 = c(6,32,58,84),
+                                             GSAnthro2 = c(7,33,59,85),
+                                             GSAnthro3 = c(8,34,60,86),
+                                             GSAnthro4 = c(9,35,61,87),
+                                             GSAnthro5 = c(10,36,62,88),
+                                             PM1 = c(11,37,63,89),
+                                             GSAnimacy1 = c(12,38,64,90),
+                                             GSAnimacy2 = c(13,39,65,91),
+                                             GSAnimacy3 = c(14,40,66,92),
+                                             GSAnimacy4 = c(15,41,67,93),
+                                             GSAnimacy5 = c(16,42,68,94),
+                                             GSL1 = c(17,43,69,95),
+                                             GSL2 = c(18,44,70,96),
+                                             GSL3 = c(19,45,71,97),
+                                             GSL4 = c(20,46,72,98),
+                                             GSL5 = c(21,47,73,99),
+                                             GSI1 = c(22,48,74,100),
+                                             GSI2 = c(23,49,75,101),
+                                             GSI3 = c(24,50,76,102),
+                                             GSI4 = c(25,51,77,103),
+                                             GSI5 = c(26,52,78,104),
+                                             GSI6 = c(27,53,79,105),
+                                             GSS1 = c(28,54,80,106),
+                                             GSS2 = c(29,55,81,107),
+                                             GSS3 = c(30,56,82,108)),
+                              v.names = c("Movement",
+                                          "GSAnthro1",
+                                          "GSAnthro2",
+                                          "GSAnthro3",
+                                          "GSAnthro4",
+                                          "GSAnthro5",
+                                          "PM1",
+                                          "GSAnimacy1",
+                                          "GSAnimacy2",
+                                          "GSAnimacy3",
+                                          "GSAnimacy4",
+                                          "GSAnimacy5",
+                                          "GSL1",
+                                          "GSL2",
+                                          "GSL3",
+                                          "GSL4",
+                                          "GSL5",
+                                          "GSI1",
+                                          "GSI2",
+                                          "GSI3",
+                                          "GSI4",
+                                          "GSI5",
+                                          "GSI6",
+                                          "GSS1",
+                                          "GSS2",
+                                          "GSS3"))
     results <- as_tibble(results)
     flippy <- function(x) abs(x - 6)
     results <- results %>% dplyr::mutate(GSS2.reversed = flippy(GSS2),
@@ -197,7 +198,7 @@ tidy.variable.names <- function(df = tidyFetchSisoResults()) {
 
 # This is the old function that just loads items in.
 rawFetchSisoResults <- function() {
-    read.csv("results.csv", header = TRUE)
+    utils::read.csv("results.csv", header = TRUE)
 }
 
 alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
@@ -276,7 +277,7 @@ tws.make.gs.avg.plot <- function(df, xformat, font) {
     plot <- ggplot(df, aes(GS.avg, GS.avg.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Series", y = NULL, title = "Godspeed Averages for Slow in, Slow out and Linear Velocity Curves") +
-        theme_classic() +
+        theme_gray() +
         theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence", "Perceived Safety"))
 
@@ -288,7 +289,7 @@ tws.make.gs.anthro.plot <- function(df, xformat, font) {
         facet_wrap(~Movement) +
         labs(x = "Godspeed Anthropomorphism Items", y = NULL,
              title = "Godspeed Anthropomorphism Series for Slow in, Slow out and Linear Velocity Curves") +
-        theme_classic() +
+        theme_gray() +
         theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Fake—Natural", "Machinelike—Humanlike", "Unconscious—Conscious", "Artificial—Lifelike", "Moving Rigidly—Elegantly"))
 
@@ -300,7 +301,7 @@ tws.make.gs.animacy.plot <- function(df, xformat, font) {
         facet_wrap(~Movement) +
         labs(x = "Godspeed Animacy Items", y = NULL,
              title = "Godspeed Animacy Series for Slow in, Slow out and Linear Velocity Curves") +
-        theme_classic() +
+        theme_gray() +
         theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Dead—Alive", "Stagnant—Lively", "Mechanical—Organic", "Artificial—Lifelike", "Inert—Interactive"))
 
@@ -312,7 +313,7 @@ tws.make.gs.likeability.plot <- function(df, xformat, font) {
         facet_wrap(~Movement) +
         labs(x = "Godspeed Likeability Items", y = NULL,
              title = "Godspeed Likeability Series for Slow in, Slow out and Linear Velocity Curves") +
-        theme_classic() +
+        theme_gray() +
         theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Dislike—Like", "Unfriendly—Friendly", "Unkind—Kind", "Unpleasant—Pleasant", "Awful—Nice"))
 
@@ -324,7 +325,7 @@ tws.make.gs.intelligence.plot <- function(df, xformat, font) {
         facet_wrap(~Movement) +
         labs(x = "Godspeed Perceived Intelligence Items", y = NULL,
              title = "Godspeed Perceived Intelligence Series for Slow in, Slow out and Linear Velocity Curves") +
-        theme_classic() +
+        theme_gray() +
         theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Incompetent—Competent", "Ignorant—Knowledgeable", "Irresponsible—Responsible",
                                   "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable"))
@@ -338,7 +339,7 @@ tws.make.gs.safety.plot <- function(df, xformat, font) {
         labs(x = "Godspeed Perceived Safety Items", y = NULL,
              title = "Godspeed Perceived Safety Series for Slow in, Slow out and Linear Velocity Curves",
              subtitle = "*Items 2 and 3 have been reversed") +
-        theme_classic() +
+        theme_gray() +
         theme(text = font, axis.text.x=xformat) +
         scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm", "*Surprised - Quiescent"))
 
@@ -349,6 +350,7 @@ make.godspeed.graphs <- function() {
     # Make a lot of graphs and then save them.
     # Assumption that extrafonts have been loaded and that you have Aktiv Grotesk installed (likely not).
     df <- siso.and.linear.godspeed.component.averages.gathered()
+    levels(df$Movement) <- c("Slow in, Slow out", "Linear")
     x.axis.text.format <- element_text(color = "black", angle=30, vjust=.8, hjust=0.8)
     font <- element_text(family = "Aktiv Grotesk")
 
