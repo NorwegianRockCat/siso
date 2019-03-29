@@ -429,6 +429,11 @@ godspeed.test.animacy.fixed <- function(df = results.split.averages) {
     godspeed.wilcox.tests.for.components(df.from.1007)
 }
 
+pm1.wilcox.test <- function(df = results.tidy) {
+    df.pm1 <- df %>% dplyr::filter(time.ordered == 1) %>% dplyr::select(ID, Movement, PM1)
+    godspeed.wilcox.tests.for.components(df.pm1)
+}
+
 # Objects that we are using.
 
 results.tidy <- tidyFetchSisoResults()
