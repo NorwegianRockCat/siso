@@ -421,6 +421,14 @@ godspeed.wilcox.for.iterations <- function(df = results.tidy, alternative = c("t
            simplify = FALSE, USE.NAMES = TRUE)
 }
 
+godspeed.test.animacy.fixed <- function(df = results.split.averages) {
+    df.from.1007 <- df %>%
+                       dplyr::filter(ID > 1006) %>%
+        dplyr::select(Movement, ID, GSAnimacy1.avg, GSAnimacy2.avg,
+                      GSAnimacy3.avg, GSAnimacy4.avg, GSAnimacy5.avg)
+    godspeed.wilcox.tests.for.components(df.from.1007)
+}
+
 # Objects that we are using.
 
 results.tidy <- tidyFetchSisoResults()
