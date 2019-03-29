@@ -374,11 +374,11 @@ make.godspeed.graphs <- function() {
 }
 
 
-godspeed.nonparamTestByName <- function(df1, df2, name, func = c(t.test, wilcox.test), alternative = c("two.sided", "less", "greater")) {
-    func(df1[[name]], df2[[name]], paired = TRUE, alternative)
+godspeed.nonparamTestByName <- function(df1, df2, name, func = c(t.test, wilcox.test), paired = TRUE, alternative = c("two.sided", "less", "greater")) {
+    func(df1[[name]], df2[[name]], paired = paired, alternative)
 }
 
-godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.component.averages()) {
+godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.component.averages(), paired = TRUE) {
     df.siso <- df %>% dplyr::filter(Movement == "Siso")
     df.linear <- df %>% dplyr::filter(Movement == "Linear")
     alternatives <- c("two.sided", "greater", "less")
@@ -387,7 +387,7 @@ godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.c
     sapply(X = alternatives,
            FUN = function(x) sapply(X = variable.names,
                                     FUN = function(y) godspeed.nonparamTestByName(df1 = df.siso, df2 = df.linear, name = y,
-                                                                                  func = wilcox.test, alternative = x),
+                                                                                  func = wilcox.test, paired = paired, alternative = x),
                                     simplify = FALSE, USE.NAMES = TRUE),
            simplify = FALSE, USE.NAMES = TRUE)
 }
@@ -430,8 +430,8 @@ godspeed.test.animacy.fixed <- function(df = results.split.averages) {
 }
 
 pm1.wilcox.test <- function(df = results.tidy) {
-    df.pm1 <- df %>% dplyr::filter(time.ordered == 1) %>% dplyr::select(ID, Movement, PM1)
-    godspeed.wilcox.tests.for.components(df.pm1)
+    df.pm1.only <- df %>% dplyr::filter(time.ordered == 1) %>% dplyr::select(ID, Movement, PM1)
+    godspeed.wilcox.tests.for.components(df.pm1.only, paired = FALSE)
 }
 
 # Objects that we are using.
