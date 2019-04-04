@@ -276,12 +276,12 @@ tws.save.plot <- function(plot, filename.without.suffix, suffix = "pdf") {
 tws.make.gs.avg.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GS.avg, GS.avg.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
-        labs(x = "Godspeed Series", y = NULL, title = "Godspeed Averages for Slow in, Slow out and Linear Velocity Curves") +
+        labs(x = "Godspeed Series", y = NULL, title = "Godspeed Averages for Linear and Slow in, Slow out Velocity Profiles") +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
               strip.text.x = element_text(face = "bold"),
               strip.background = facet.background) +
-        scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence", "Perceived Safety"))
+        scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence★ ", "Perceived Safety"))
 
     tws.save.plot(plot, "gs-avg")
 }
@@ -290,7 +290,7 @@ tws.make.gs.anthro.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSAnthro, GSAnthro.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Anthropomorphism Items", y = NULL,
-             title = "Godspeed Anthropomorphism Series for Slow in, Slow out and Linear Velocity Curves") +
+             title = "Godspeed Anthropomorphism Series") +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
               strip.text.x = element_text(face = "bold"),
@@ -304,7 +304,7 @@ tws.make.gs.animacy.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSAnimacy, GSAnimacy.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Animacy Items", y = NULL,
-             title = "Godspeed Animacy Series for Slow in, Slow out and Linear Velocity Curves") +
+             title = "Godspeed Animacy Series") +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
               strip.text.x = element_text(face = "bold"),
@@ -318,7 +318,7 @@ tws.make.gs.likeability.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSL, GSL.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Likeability Items", y = NULL,
-             title = "Godspeed Likeability Series for Slow in, Slow out and Linear Velocity Curves") +
+             title = "Godspeed Likeability Series") +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
               strip.text.x = element_text(face = "bold"),
@@ -332,13 +332,14 @@ tws.make.gs.intelligence.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSI, GSI.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Perceived Intelligence Items", y = NULL,
-             title = "Godspeed Perceived Intelligence Series for Slow in, Slow out and Linear Velocity Curves") +
+             title = "Godspeed Perceived Intelligence Series") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat,
+        theme(text = font,
+              axis.text.x=element_text(color = "black", angle=65, vjust=.8, hjust=0.8),
               strip.text.x = element_text(face = "bold"),
               strip.background = facet.background) +
         scale_x_discrete(labels=c("Incompetent—Competent", "Ignorant—Knowledgeable", "Irresponsible—Responsible",
-                                  "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable"))
+                                  "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable★"))
 
     tws.save.plot(plot, "gs-intelligence")
 }
@@ -347,13 +348,14 @@ tws.make.gs.safety.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSS.reversed, GSS.reversed.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Perceived Safety Items", y = NULL,
-             title = "Godspeed Perceived Safety Series for Slow in, Slow out and Linear Velocity Curves",
+             title = "Godspeed Perceived Safety Series",
              subtitle = "*Items 2 and 3 have been reversed") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat,
+        theme(text = font,
+              axis.text.x=xformat,
               strip.text.x = element_text(face = "bold"),
               strip.background = facet.background) +
-        scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm", "*Surprised - Quiescent"))
+        scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm★", "*Surprised - Quiescent"))
 
     tws.save.plot(plot, "gs-safety")
 }
