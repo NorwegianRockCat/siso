@@ -273,74 +273,86 @@ tws.save.plot <- function(plot, filename.without.suffix, suffix = "pdf") {
     file.remove(filename.unembedded)
 }
 
-tws.make.gs.avg.plot <- function(df, xformat, font) {
+tws.make.gs.avg.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GS.avg, GS.avg.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Series", y = NULL, title = "Godspeed Averages for Slow in, Slow out and Linear Velocity Curves") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat) +
+        theme(text = font, axis.text.x=xformat,
+              strip.text.x = element_text(face = "bold"),
+              strip.background = facet.background) +
         scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence", "Perceived Safety"))
 
     tws.save.plot(plot, "gs-avg")
 }
 
-tws.make.gs.anthro.plot <- function(df, xformat, font) {
+tws.make.gs.anthro.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSAnthro, GSAnthro.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Anthropomorphism Items", y = NULL,
              title = "Godspeed Anthropomorphism Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat) +
+        theme(text = font, axis.text.x=xformat,
+              strip.text.x = element_text(face = "bold"),
+              strip.background = facet.background) +
         scale_x_discrete(labels=c("Fake—Natural", "Machinelike—Humanlike", "Unconscious—Conscious", "Artificial—Lifelike", "Moving Rigidly—Elegantly"))
 
     tws.save.plot(plot, "gs-anthro")
 }
 
-tws.make.gs.animacy.plot <- function(df, xformat, font) {
+tws.make.gs.animacy.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSAnimacy, GSAnimacy.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Animacy Items", y = NULL,
              title = "Godspeed Animacy Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat) +
+        theme(text = font, axis.text.x=xformat,
+              strip.text.x = element_text(face = "bold"),
+              strip.background = facet.background) +
         scale_x_discrete(labels=c("Dead—Alive", "Stagnant—Lively", "Mechanical—Organic", "Artificial—Lifelike", "Inert—Interactive"))
 
     tws.save.plot(plot, "gs-animacy")
 }
 
-tws.make.gs.likeability.plot <- function(df, xformat, font) {
+tws.make.gs.likeability.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSL, GSL.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Likeability Items", y = NULL,
              title = "Godspeed Likeability Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat) +
+        theme(text = font, axis.text.x=xformat,
+              strip.text.x = element_text(face = "bold"),
+              strip.background = facet.background) +
         scale_x_discrete(labels=c("Dislike—Like", "Unfriendly—Friendly", "Unkind—Kind", "Unpleasant—Pleasant", "Awful—Nice"))
 
     tws.save.plot(plot, "gs-likeability")
 }
 
-tws.make.gs.intelligence.plot <- function(df, xformat, font) {
+tws.make.gs.intelligence.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSI, GSI.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Perceived Intelligence Items", y = NULL,
              title = "Godspeed Perceived Intelligence Series for Slow in, Slow out and Linear Velocity Curves") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat) +
+        theme(text = font, axis.text.x=xformat,
+              strip.text.x = element_text(face = "bold"),
+              strip.background = facet.background) +
         scale_x_discrete(labels=c("Incompetent—Competent", "Ignorant—Knowledgeable", "Irresponsible—Responsible",
                                   "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable"))
 
     tws.save.plot(plot, "gs-intelligence")
 }
 
-tws.make.gs.safety.plot <- function(df, xformat, font) {
+tws.make.gs.safety.plot <- function(df, xformat, facet.background, font) {
     plot <- ggplot(df, aes(GSS.reversed, GSS.reversed.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Perceived Safety Items", y = NULL,
              title = "Godspeed Perceived Safety Series for Slow in, Slow out and Linear Velocity Curves",
              subtitle = "*Items 2 and 3 have been reversed") +
         theme_gray() +
-        theme(text = font, axis.text.x=xformat) +
+        theme(text = font, axis.text.x=xformat,
+              strip.text.x = element_text(face = "bold"),
+              strip.background = facet.background) +
         scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm", "*Surprised - Quiescent"))
 
     tws.save.plot(plot, "gs-safety")
@@ -351,26 +363,28 @@ make.godspeed.graphs <- function() {
     # Assumption that extrafonts have been loaded and that you have Aktiv Grotesk installed (likely not).
     df <- siso.and.linear.godspeed.component.averages.gathered()
     levels(df$Movement) <- c("Slow in, Slow out", "Linear")
+    df$Movement <- factor(df$Movement, sort(levels(df$Movement)))
     x.axis.text.format <- element_text(color = "black", angle=30, vjust=.8, hjust=0.8)
+    facet.background <- element_rect(color = NULL, fill = "white")
     font <- element_text(family = "Aktiv Grotesk")
 
     # Overall Averages
-    tws.make.gs.avg.plot(df, x.axis.text.format, font)
+    tws.make.gs.avg.plot(df, x.axis.text.format, facet.background, font)
 
     # Anthropomorphism
-    tws.make.gs.anthro.plot(df, x.axis.text.format, font)
+    tws.make.gs.anthro.plot(df, x.axis.text.format, facet.background, font)
 
     # Animacy
-    tws.make.gs.animacy.plot(df, x.axis.text.format, font)
+    tws.make.gs.animacy.plot(df, x.axis.text.format, facet.background, font)
 
     # Likeability
-    tws.make.gs.likeability.plot(df, x.axis.text.format, font)
+    tws.make.gs.likeability.plot(df, x.axis.text.format, facet.background, font)
 
     # Perceived Intelligence
-    tws.make.gs.intelligence.plot(df, x.axis.text.format, font)
+    tws.make.gs.intelligence.plot(df, x.axis.text.format, facet.background, font)
 
     # Perceived Safety
-    tws.make.gs.safety.plot(df, x.axis.text.format, font)
+    tws.make.gs.safety.plot(df, x.axis.text.format, facet.background, font)
 }
 
 
