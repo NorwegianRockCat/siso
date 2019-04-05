@@ -414,29 +414,6 @@ results.shapiro <- function(df, variable.names) {
     sapply(X=variable.names, FUN=function(x) shapiro.test(df[[x]]), simplify = FALSE, USE.NAMES = TRUE)
 }
 
-godspeed.wilcox.for.iterations <- function(df = results.tidy, alternative = c("two.sided", "less", "greater")) {
-    df.first <- df %>% dplyr::filter(time.ordered == 1)
-    df.second <- df %>% dplyr::filter(time.ordered == 2)
-    df.third <- df %>% dplyr::filter(time.ordered == 3)
-    df.fourth <- df %>% dplyr::filter(time.ordered == 4)
-
-    comparisons <- list(first.and.second = list(df.first, df.second),
-                        first.and.third = list(df.first, df.third),
-                        first.and.fourth = list(df.first, df.fourth),
-                        second.and.third = list(df.second, df.third),
-                        seond.and.fourth = list(df.second, df.fourth),
-                        third.and.fourth = list(df.third, df.fourth))
-
-    variable.names <- tidy.variable.names(df)[28:33] # Only look at the averages to maintain sanity.
-
-    sapply(comparisons,
-           FUN = function(x) sapply(variable.names,
-                                    FUN = function(y) godspeed.nonparamTestByName(x[[1]], x[[2]], name = y,
-                                                                                  func = wilcox.test, alternative = alternative),
-                                    simplify = FALSE, USE.NAMES = TRUE),
-           simplify = FALSE, USE.NAMES = TRUE)
-}
-
 godspeed.test.animacy.fixed <- function(df = results.split.averages) {
     df.from.1007 <- df %>%
                        dplyr::filter(ID > 1006) %>%
