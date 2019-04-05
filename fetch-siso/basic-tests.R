@@ -427,6 +427,17 @@ pm1.wilcox.test <- function(df = results.tidy) {
     godspeed.wilcox.tests.for.components(df.pm1.only, paired = FALSE)
 }
 
+godspeed.bonferroni.p <- function(df = godspeed.wilcox.tests.for.components()) {
+    # First get the p.values that we want.
+    lst <- lapply(godspeed.all.wilcox, FUN=function(x) lapply(x, FUN=function(y) y$p.value))
+    # Then run the adjust value test
+    lapply(lst, FUN = function(x) {
+        tmp <- x[28:31]
+        tmp["GSS.reversed.avg"] <- x[33]
+        p.adjust(tmp, method = "bonferroni")
+        })
+}
+
 # Objects that we are using.
 
 results.tidy <- tidyFetchSisoResults()
@@ -435,6 +446,7 @@ results.split.averages <- siso.and.linear.godspeed.component.averages(results.ti
 godspeed.alpha <- alphaAllEncounters(results.tidy)
 godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
 godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
-
+godspeed.all.wilcox <- godspeed.wilcox.tests.for.components(results.split.averages)
+godspeed.avg.bonferroni <- godspeed.bonferroni.p(godspeed.all.wilcox)
 
 
