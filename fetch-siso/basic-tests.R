@@ -441,15 +441,15 @@ pm1.wilcox.test <- function(df = results.tidy) {
     godspeed.wilcox.tests.for.components(df.pm1.only, paired = FALSE)
 }
 
-godspeed.bonferroni.p <- function(df = godspeed.wilcox.tests.for.components()) {
+godspeed.adjust.p <- function(df = godspeed.wilcox.tests.for.components()) {
     # First get the p.values that we want.
     lst <- lapply(godspeed.all.wilcox, FUN=function(x) lapply(x, FUN=function(y) y$p.value))
     # Then run the adjust value test
-    lapply(lst, FUN = function(x) {
-        tmp <- x[28:31]
-        tmp["GSS.reversed.avg"] <- x[33]
-        p.adjust(tmp, method = "bonferroni")
-        })
+    sapply(X=p.adjust.methods, FUN=function(x) sapply(lst, FUN = function(y) {
+        tmp <- y[28:31]
+        tmp["GSS.reversed.avg"] <- y[33]
+        p.adjust(tmp, method = x)
+        }, simplify = FALSE, USE.NAMES = TRUE), simplify = FALSE, USE.NAMES = TRUE)
 }
 
 t.test.for.timings <- function(df = tidyFetchTimings()) {
@@ -468,7 +468,7 @@ godspeed.alpha <- alphaAllEncounters(results.tidy)
 godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
 godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
 godspeed.all.wilcox <- godspeed.wilcox.tests.for.components(results.split.averages)
-godspeed.avg.bonferroni <- godspeed.bonferroni.p(godspeed.all.wilcox)
+godspeed.avg.wilcox.adjusted <- godspeed.adjust.p(godspeed.all.wilcox)
 timings.t.results <- t.test.for.timings(timings)
 
 
