@@ -455,7 +455,8 @@ godspeed.bonferroni.p <- function(df = godspeed.wilcox.tests.for.components()) {
 t.test.for.timings <- function(df = tidyFetchTimings()) {
     timings.siso <- df %>% dplyr::filter(type == "Siso")
     timings.linear <- df %>% dplyr::filter(type == "Linear")
-    lapply(names(df)[4:9], FUN = function(x) t.test(timings.siso[[x]], timings.linear[[x]]))
+    sapply(names(df)[4:9], FUN = function(x) t.test(timings.siso[[x]], timings.linear[[x]]),
+           simplify = FALSE, USE.NAMES = TRUE)
 }
 
 # Objects that we are using.
