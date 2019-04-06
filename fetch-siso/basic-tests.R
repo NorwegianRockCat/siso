@@ -452,15 +452,22 @@ godspeed.bonferroni.p <- function(df = godspeed.wilcox.tests.for.components()) {
         })
 }
 
+t.test.for.timings <- function(df = tidyFetchTimings()) {
+    timings.siso <- df %>% dplyr::filter(type == "Siso")
+    timings.linear <- df %>% dplyr::filter(type == "Linear")
+    lapply(names(df)[4:9], FUN = function(x) t.test(timings.siso[[x]], timings.linear[[x]]))
+}
+
 # Objects that we are using.
 
 results.tidy <- tidyFetchSisoResults()
-results.raw <- rawFetchSisoResults()
+timings <- tidyFetchTimings()
 results.split.averages <- siso.and.linear.godspeed.component.averages(results.tidy)
 godspeed.alpha <- alphaAllEncounters(results.tidy)
 godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
 godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
 godspeed.all.wilcox <- godspeed.wilcox.tests.for.components(results.split.averages)
 godspeed.avg.bonferroni <- godspeed.bonferroni.p(godspeed.all.wilcox)
+timings.t.results <- t.test.for.timings(timings)
 
 
