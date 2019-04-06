@@ -1,0 +1,987 @@
+1001.log:[0m[ INFO] [1544431306.553786210]: ID 1001 now using Slow in, Slow out curve (index 0)[0m
+1001.log:[0m[ INFO] [1544432485.955613971]: Move finished time to complete: 2374 ms[0m
+1001.log:[0m[ INFO] [1544432542.018334709]: Move finished time to complete: 16768 ms[0m
+1001.log:[0m[ INFO] [1544432565.893011518]: Move finished time to complete: 14956 ms[0m
+1001.log:[0m[ INFO] [1544432592.547263110]: Move finished time to complete: 18601 ms[0m
+1001.log:[0m[ INFO] [1544432625.980445916]: Move finished time to complete: 18939 ms[0m
+1001.log:[0m[ INFO] [1544432828.936594406]: Move finished time to complete: 17052 ms[0m
+1001.log:[0m[ INFO] [1544432839.226485911]: ID 1001 now using Slow in, Slow out curve (index 1)[0m
+1001.log:[0m[ INFO] [1544432848.259062042]: Move finished time to complete: 6135 ms[0m
+1001.log:[0m[ INFO] [1544432866.179605028]: Move finished time to complete: 11745 ms[0m
+1001.log:[0m[ INFO] [1544432888.589303201]: Move finished time to complete: 13761 ms[0m
+1001.log:[0m[ INFO] [1544432925.126471601]: Move finished time to complete: 29053 ms[0m
+1001.log:[0m[ INFO] [1544432959.663800906]: Move finished time to complete: 18815 ms[0m
+1001.log:[0m[ INFO] [1544433133.528406776]: Move finished time to complete: 17611 ms[0m
+1001.log:[0m[ INFO] [1544433147.917069787]: ID 1001 now using Linear curve (index 2)[0m
+1001.log:[0m[ INFO] [1544433152.901595738]: Move finished time to complete: 7438 ms[0m
+1001.log:[0m[ INFO] [1544433172.064134332]: Move finished time to complete: 12314 ms[0m
+1001.log:[0m[ INFO] [1544433193.822456376]: Move finished time to complete: 12866 ms[0m
+1001.log:[0m[ INFO] [1544433219.089103171]: Move finished time to complete: 17259 ms[0m
+1001.log:[0m[ INFO] [1544433256.261863463]: Move finished time to complete: 19847 ms[0m
+1001.log:[0m[ INFO] [1544433423.502693522]: Move finished time to complete: 15769 ms[0m
+1001.log:[0m[ INFO] [1544433434.889622454]: ID 1001 now using Linear curve (index 3)[0m
+1001.log:[0m[ INFO] [1544433451.214898011]: Move finished time to complete: 12178 ms[0m
+1001.log:[0m[ INFO] [1544433473.380983192]: Move finished time to complete: 16614 ms[0m
+1001.log:[0m[ INFO] [1544433500.475181012]: Move finished time to complete: 18580 ms[0m
+1001.log:[0m[ INFO] [1544433553.219216664]: Move finished time to complete: 44892 ms[0m
+1001.log:[0m[ INFO] [1544433585.070804864]: Move finished time to complete: 19020 ms[0m
+1001.log:[0m[ INFO] [1544433752.567250171]: Move finished time to complete: 21788 ms[0m
+1002.log:[0m[ INFO] [1544451659.508024723]: ID 1002 now using Slow in, Slow out curve (index 0)[0m
+1002.log:[0m[ INFO] [1544451714.709046777]: Move finished time to complete: 34668 ms[0m
+1002.log:[0m[ INFO] [1544455397.705360496]: Move finished time to complete: 36379 ms[0m
+1002.log:[0m[ INFO] [1544455420.982088879]: Move finished time to complete: 13417 ms[0m
+1002.log:[0m[ INFO] [1544455449.082124752]: Move finished time to complete: 19878 ms[0m
+1002.log:[0m[ INFO] [1544455481.997998681]: Move finished time to complete: 18824 ms[0m
+1002.log:[0m[ INFO] [1544455750.526282220]: Move finished time to complete: 18339 ms[0m
+1002.log:[0m[ INFO] [1544455758.794903201]: ID 1002 now using Linear curve (index 1)[0m
+1002.log:[0m[ INFO] [1544455769.561959905]: Move finished time to complete: 7987 ms[0m
+1002.log:[0m[ INFO] [1544455787.929253904]: Move finished time to complete: 12009 ms[0m
+1002.log:[0m[ INFO] [1544455860.849275340]: Move finished time to complete: 66559 ms[0m
+1002.log:[0m[ INFO] [1544455948.821858259]: Move finished time to complete: 74155 ms[0m
+1002.log:[0m[ INFO] [1544456000.310352337]: Move finished time to complete: 25059 ms[0m
+1002.log:[0m[ INFO] [1544456167.021352951]: Move finished time to complete: 17164 ms[0m
+1002.log:[0m[ INFO] [1544456175.905954486]: ID 1002 now using Linear curve (index 2)[0m
+1002.log:[0m[ INFO] [1544456184.757244811]: Move finished time to complete: 6490 ms[0m
+1002.log:[0m[ INFO] [1544456202.789415562]: Move finished time to complete: 12139 ms[0m
+1002.log:[0m[ INFO] [1544456229.311833845]: Move finished time to complete: 13912 ms[0m
+1002.log:[0m[ INFO] [1544456265.931120788]: Move finished time to complete: 23772 ms[0m
+1002.log:[0m[ INFO] [1544456310.617596125]: Move finished time to complete: 19747 ms[0m
+1002.log:[0m[ INFO] [1544456532.153868409]: Move finished time to complete: 18000 ms[0m
+1002.log:[0m[ INFO] [1544456544.414067390]: ID 1002 now using Slow in, Slow out curve (index 3)[0m
+1002.log:[0m[ INFO] [1544456559.872355441]: Move finished time to complete: 12152 ms[0m
+1002.log:[0m[ INFO] [1544456584.482732741]: Move finished time to complete: 13148 ms[0m
+1002.log:[0m[ INFO] [1544456610.893506130]: Move finished time to complete: 13838 ms[0m
+1002.log:[0m[ INFO] [1544456649.293836235]: Move finished time to complete: 29572 ms[0m
+1002.log:[0m[ INFO] [1544456687.749565698]: Move finished time to complete: 18157 ms[0m
+1002.log:[0m[ INFO] [1544456915.478301987]: Move finished time to complete: 44086 ms[0m
+1003.log:[0m[ INFO] [1544612624.697943919]: ID 1003 now using Slow in, Slow out curve (index 0)[0m
+1003.log:[0m[ INFO] [1544612647.463301260]: Move finished time to complete: NA ms[0m
+1003.log:[0m[ INFO] [1544612647.463301260]: Move finished time to complete: NA ms[0m
+1003.log:[0m[ INFO] [1544612647.463301260]: Move finished time to complete: 13795 ms[0m
+1003.log:[0m[ INFO] [1544612679.993131667]: Move finished time to complete: 23680 ms[0m
+1003.log:[0m[ INFO] [1544612725.679519037]: Move finished time to complete: 18774 ms[0m
+1003.log:[0m[ INFO] [1544613024.721579449]: Move finished time to complete: 23860 ms[0m
+1003.log:[0m[ INFO] [1544613034.353243985]: ID 1003 now using Slow in, Slow out curve (index 1)[0m
+1003.log:[0m[ INFO] [1544613045.194137032]: Move finished time to complete: 8533 ms[0m
+1003.log:[0m[ INFO] [1544613063.184606765]: Move finished time to complete: 12258 ms[0m
+1003.log:[0m[ INFO] [1544613088.507857088]: Move finished time to complete: 13856 ms[0m
+1003.log:[0m[ INFO] [1544613112.864411659]: Move finished time to complete: 17202 ms[0m
+1003.log:[0m[ INFO] [1544613153.018319883]: Move finished time to complete: 18730 ms[0m
+1003.log:[0m[ INFO] [1544613362.200127342]: Move finished time to complete: 20907 ms[0m
+1003.log:[0m[ INFO] [1544613372.194103139]: ID 1003 now using Linear curve (index 2)[0m
+1003.log:[0m[ INFO] [1544613382.062355369]: Move finished time to complete: 7704 ms[0m
+1003.log:[0m[ INFO] [1544613401.469945789]: Move finished time to complete: 11900 ms[0m
+1003.log:[0m[ INFO] [1544613423.770249445]: Move finished time to complete: 13780 ms[0m
+1003.log:[0m[ INFO] [1544613448.365815606]: Move finished time to complete: 16604 ms[0m
+1003.log:[0m[ INFO] [1544613490.258811997]: Move finished time to complete: 21787 ms[0m
+1003.log:[0m[ INFO] [1544613606.879014136]: Move finished time to complete: 15139 ms[0m
+1003.log:[0m[ INFO] [1544613615.592440283]: ID 1003 now using Linear curve (index 3)[0m
+1003.log:[0m[ INFO] [1544613625.193039527]: Move finished time to complete: 6565 ms[0m
+1003.log:[0m[ INFO] [1544613644.168485673]: Move finished time to complete: 12535 ms[0m
+1003.log:[0m[ INFO] [1544613667.447029617]: Move finished time to complete: 13479 ms[0m
+1003.log:[0m[ INFO] [1544613692.966691055]: Move finished time to complete: 17299 ms[0m
+1003.log:[0m[ INFO] [1544613726.084659796]: Move finished time to complete: 18956 ms[0m
+1003.log:[0m[ INFO] [1544613847.724222409]: Move finished time to complete: 17076 ms[0m
+1005.log:[0m[ INFO] [1544620778.689224727]: ID 1005 now using Slow in, Slow out curve (index 0)[0m
+1005.log:[0m[ INFO] [1544621986.769732379]: Move finished time to complete: 35578 ms[0m
+1005.log:[0m[ INFO] [1544622032.168432528]: Move finished time to complete: 36585 ms[0m
+1005.log:[0m[ INFO] [1544622051.370875822]: Move finished time to complete: 13240 ms[0m
+1005.log:[0m[ INFO] [1544622076.309448314]: Move finished time to complete: 18065 ms[0m
+1005.log:[0m[ INFO] [1544622113.370930350]: Move finished time to complete: 17752 ms[0m
+1005.log:[0m[ INFO] [1544622384.651539590]: Move finished time to complete: 16099 ms[0m
+1005.log:[0m[ INFO] [1544622394.135322718]: ID 1005 now using Linear curve (index 1)[0m
+1005.log:[0m[ INFO] [1544622436.546331657]: Move finished time to complete: 39615 ms[0m
+1005.log:[0m[ INFO] [1544622459.586290602]: Move finished time to complete: 16732 ms[0m
+1005.log:[0m[ INFO] [1544622480.500425673]: Move finished time to complete: 13154 ms[0m
+1005.log:[0m[ INFO] [1544622508.839693833]: Move finished time to complete: 20684 ms[0m
+1005.log:[0m[ INFO] [1544622541.620085261]: Move finished time to complete: 18106 ms[0m
+1005.log:[0m[ INFO] [1544622754.810641378]: Move finished time to complete: 17256 ms[0m
+1005.log:[0m[ INFO] [1544622764.276155267]: ID 1005 now using Slow in, Slow out curve (index 2)[0m
+1005.log:[0m[ INFO] [1544622777.863950545]: Move finished time to complete: 10523 ms[0m
+1005.log:[0m[ INFO] [1544622795.710138466]: Move finished time to complete: 11911 ms[0m
+1005.log:[0m[ INFO] [1544622823.851198296]: Move finished time to complete: 13870 ms[0m
+1005.log:[0m[ INFO] [1544622852.086985013]: Move finished time to complete: 20182 ms[0m
+1005.log:[0m[ INFO] [1544622888.734940265]: Move finished time to complete: 22762 ms[0m
+1005.log:[0m[ INFO] [1544623049.109303838]: Move finished time to complete: 15842 ms[0m
+1005.log:[0m[ INFO] [1544623057.407582675]: ID 1005 now using Linear curve (index 3)[0m
+1005.log:[0m[ INFO] [1544623068.711555160]: Move finished time to complete: 8313 ms[0m
+1005.log:[0m[ INFO] [1544623086.596116982]: Move finished time to complete: 11711 ms[0m
+1005.log:[0m[ INFO] [1544623108.930944879]: Move finished time to complete: 14313 ms[0m
+1005.log:[0m[ INFO] [1544623134.004095328]: Move finished time to complete: 17620 ms[0m
+1005.log:[0m[ INFO] [1544623170.842645759]: Move finished time to complete: 24330 ms[0m
+1005.log:[0m[ INFO] [1544623332.406087662]: Move finished time to complete: 38782 ms[0m
+1006.log:[0m[ INFO] [1544697351.313953386]: ID 1006 now using Linear curve (index 0)[0m
+1006.log:[0m[ INFO] [1544699506.100016764]: Move finished time to complete: 2376 ms[0m
+1006.log:[0m[ INFO] [1544699569.654829310]: Move finished time to complete: 57290 ms[0m
+1006.log:[0m[ INFO] [1544699595.827728131]: Move finished time to complete: 13977 ms[0m
+1006.log:[0m[ INFO] [1544699623.046280806]: Move finished time to complete: 18220 ms[0m
+1006.log:[0m[ INFO] [1544699654.757949946]: Move finished time to complete: 17683 ms[0m
+1006.log:[0m[ INFO] [1544699871.103668737]: Move finished time to complete: 17147 ms[0m
+1006.log:[0m[ INFO] [1544699879.640433220]: ID 1006 now using Slow in, Slow out curve (index 1)[0m
+1006.log:[0m[ INFO] [1544699889.216988228]: Move finished time to complete: 7058 ms[0m
+1006.log:[0m[ INFO] [1544699907.599561959]: Move finished time to complete: 11602 ms[0m
+1006.log:[0m[ INFO] [1544699941.351796821]: Move finished time to complete: 23399 ms[0m
+1006.log:[0m[ INFO] [1544699999.569226659]: Move finished time to complete: 44871 ms[0m
+1006.log:[0m[ INFO] [1544700044.367810259]: Move finished time to complete: 19604 ms[0m
+1006.log:[0m[ INFO] [1544700158.157192360]: Move finished time to complete: 16502 ms[0m
+1006.log:[0m[ INFO] [1544700167.671324698]: ID 1006 now using Linear curve (index 2)[0m
+1006.log:[0m[ INFO] [1544700177.453110811]: Move finished time to complete: 6580 ms[0m
+1006.log:[0m[ INFO] [1544700194.915453611]: Move finished time to complete: 11448 ms[0m
+1006.log:[0m[ INFO] [1544700218.093519111]: Move finished time to complete: 12498 ms[0m
+1006.log:[0m[ INFO] [1544700248.348452685]: Move finished time to complete: 18022 ms[0m
+1006.log:[0m[ INFO] [1544700283.824267220]: Move finished time to complete: 20346 ms[0m
+1006.log:[0m[ INFO] [1544700400.654349910]: Move finished time to complete: 15616 ms[0m
+1006.log:[0m[ INFO] [1544700411.582608630]: ID 1006 now using Slow in, Slow out curve (index 3)[0m
+1006.log:[0m[ INFO] [1544700423.708925569]: Move finished time to complete: 8231 ms[0m
+1006.log:[0m[ INFO] [1544700443.428335954]: Move finished time to complete: 13704 ms[0m
+1006.log:[0m[ INFO] [1544700466.345524252]: Move finished time to complete: 13898 ms[0m
+1006.log:[0m[ INFO] [1544700496.329908790]: Move finished time to complete: 22188 ms[0m
+1006.log:[0m[ INFO] [1544700538.533754932]: Move finished time to complete: 22540 ms[0m
+1006.log:[0m[ INFO] [1544700637.220525367]: Move finished time to complete: 17645 ms[0m
+1007.log:[0m[ INFO] [1544706925.534043223]: ID 1007 now using Slow in, Slow out curve (index 0)[0m
+1007.log:[0m[ INFO] [1544707990.792011542]: Move finished time to complete: 16650 ms[0m
+1007.log:[0m[ INFO] [1544708014.217931205]: Move finished time to complete: 12297 ms[0m
+1007.log:[0m[ INFO] [1544708040.125173966]: Move finished time to complete: 15207 ms[0m
+1007.log:[0m[ INFO] [1544708080.234164316]: Move finished time to complete: 32253 ms[0m
+1007.log:[0m[ INFO] [1544708118.720487532]: Move finished time to complete: 23652 ms[0m
+1007.log:[0m[ INFO] [1544708384.356457082]: Move finished time to complete: 16694 ms[0m
+1007.log:[0m[ INFO] [1544708396.740879500]: ID 1007 now using Linear curve (index 1)[0m
+1007.log:[0m[ INFO] [1544708411.492152811]: Move finished time to complete: 6664 ms[0m
+1007.log:[0m[ INFO] [1544708429.453428601]: Move finished time to complete: 11618 ms[0m
+1007.log:[0m[ INFO] [1544708452.814548006]: Move finished time to complete: 13946 ms[0m
+1007.log:[0m[ INFO] [1544708478.142224852]: Move finished time to complete: 18203 ms[0m
+1007.log:[0m[ INFO] [1544708519.255855025]: Move finished time to complete: 19367 ms[0m
+1007.log:[0m[ INFO] [1544708735.100566440]: Move finished time to complete: 15456 ms[0m
+1007.log:[0m[ INFO] [1544708743.500673927]: ID 1007 now using Slow in, Slow out curve (index 2)[0m
+1007.log:[0m[ INFO] [1544708755.351878195]: Move finished time to complete: 6322 ms[0m
+1007.log:[0m[ INFO] [1544708774.889523873]: Move finished time to complete: 12093 ms[0m
+1007.log:[0m[ INFO] [1544708799.486516015]: Move finished time to complete: 13985 ms[0m
+1007.log:[0m[ INFO] [1544708835.267904791]: Move finished time to complete: 28376 ms[0m
+1007.log:[0m[ INFO] [1544708875.239800983]: Move finished time to complete: 21173 ms[0m
+1007.log:[0m[ INFO] [1544709072.648292299]: Move finished time to complete: 16043 ms[0m
+1007.log:[0m[ INFO] [1544709082.083189553]: ID 1007 now using Linear curve (index 3)[0m
+1007.log:[0m[ INFO] [1544709093.452350760]: Move finished time to complete: 7741 ms[0m
+1007.log:[0m[ INFO] [1544709112.959872877]: Move finished time to complete: 11537 ms[0m
+1007.log:[0m[ INFO] [1544709136.755031047]: Move finished time to complete: 13124 ms[0m
+1007.log:[0m[ INFO] [1544709161.249133422]: Move finished time to complete: 17625 ms[0m
+1007.log:[0m[ INFO] [1544709194.812077148]: Move finished time to complete: 18869 ms[0m
+1007.log:[0m[ INFO] [1544709386.982627156]: Move finished time to complete: 15905 ms[0m
+1008.log:[0m[ INFO] [1544784991.387415128]: ID 1008 now using Linear curve (index 0)[0m
+1008.log:[0m[ INFO] [1544785432.926356228]: Move finished time to complete: 1432 ms[0m
+1008.log:[0m[ INFO] [1544785460.794233899]: Move finished time to complete: 11598 ms[0m
+1008.log:[0m[ INFO] [1544785490.467330818]: Move finished time to complete: 12250 ms[0m
+1008.log:[0m[ INFO] [1544785516.490040557]: Move finished time to complete: 17471 ms[0m
+1008.log:[0m[ INFO] [1544785575.546567708]: Move finished time to complete: 40757 ms[0m
+1008.log:[0m[ INFO] [1544785747.170197303]: Move finished time to complete: 17112 ms[0m
+1008.log:[0m[ INFO] [1544785756.505273877]: ID 1008 now using Linear curve (index 1)[0m
+1008.log:[0m[ INFO] [1544785768.791600493]: Move finished time to complete: 5396 ms[0m
+1008.log:[0m[ INFO] [1544785786.036963067]: Move finished time to complete: 11553 ms[0m
+1008.log:[0m[ INFO] [1544785816.686663915]: Move finished time to complete: 18807 ms[0m
+1008.log:[0m[ INFO] [1544785845.483333139]: Move finished time to complete: 21504 ms[0m
+1008.log:[0m[ INFO] [1544785880.215897957]: Move finished time to complete: 18811 ms[0m
+1008.log:[0m[ INFO] [1544786014.697846446]: Move finished time to complete: 16030 ms[0m
+1008.log:[0m[ INFO] [1544786025.115394117]: ID 1008 now using Slow in, Slow out curve (index 2)[0m
+1008.log:[0m[ INFO] [1544786043.535454693]: Move finished time to complete: 10710 ms[0m
+1008.log:[0m[ INFO] [1544786061.602414186]: Move finished time to complete: 11776 ms[0m
+1008.log:[0m[ INFO] [1544786085.175325538]: Move finished time to complete: 13851 ms[0m
+1008.log:[0m[ INFO] [1544786112.126958789]: Move finished time to complete: 18388 ms[0m
+1008.log:[0m[ INFO] [1544786153.969960576]: Move finished time to complete: 19335 ms[0m
+1008.log:[0m[ INFO] [1544786261.661894480]: Move finished time to complete: 20800 ms[0m
+1008.log:[0m[ INFO] [1544786270.943740390]: ID 1008 now using Slow in, Slow out curve (index 3)[0m
+1008.log:[0m[ INFO] [1544786280.742697373]: Move finished time to complete: 5800 ms[0m
+1008.log:[0m[ INFO] [1544786298.837341143]: Move finished time to complete: 12182 ms[0m
+1008.log:[0m[ INFO] [1544786327.707395744]: Move finished time to complete: 19532 ms[0m
+1008.log:[0m[ INFO] [1544786352.361111574]: Move finished time to complete: 17176 ms[0m
+1008.log:[0m[ INFO] [1544786390.466580684]: Move finished time to complete: 17656 ms[0m
+1008.log:[0m[ INFO] [1544786497.267810571]: Move finished time to complete: 17082 ms[0m
+1009.log:[0m[ INFO] [1544792352.945492545]: ID 1009 now using Slow in, Slow out curve (index 0)[0m
+1009.log:[0m[ INFO] [1544794933.940072743]: Move finished time to complete: 5321 ms[0m
+1009.log:[0m[ INFO] [1544794950.969402906]: Move finished time to complete: 10990 ms[0m
+1009.log:[0m[ INFO] [1544794976.412566841]: Move finished time to complete: 16274 ms[0m
+1009.log:[0m[ INFO] [1544795028.067379289]: Move finished time to complete: 44413 ms[0m
+1009.log:[0m[ INFO] [1544795070.137499334]: Move finished time to complete: 19255 ms[0m
+1009.log:[0m[ INFO] [1544795372.825084237]: Move finished time to complete: 16142 ms[0m
+1009.log:[0m[ INFO] [1544795382.089877007]: ID 1009 now using Slow in, Slow out curve (index 1)[0m
+1009.log:[0m[ INFO] [1544795391.505016002]: Move finished time to complete: 6583 ms[0m
+1009.log:[0m[ INFO] [1544795411.737920035]: Move finished time to complete: 13996 ms[0m
+1009.log:[0m[ INFO] [1544795433.707302969]: Move finished time to complete: 13028 ms[0m
+1009.log:[0m[ INFO] [1544795464.879293560]: Move finished time to complete: 24253 ms[0m
+1009.log:[0m[ INFO] [1544795502.598076516]: Move finished time to complete: 19028 ms[0m
+1009.log:[0m[ INFO] [1544795724.688186040]: Move finished time to complete: 17188 ms[0m
+1009.log:[0m[ INFO] [1544795732.617420869]: ID 1009 now using Linear curve (index 2)[0m
+1009.log:[0m[ INFO] [1544795741.872363181]: Move finished time to complete: 6706 ms[0m
+1009.log:[0m[ INFO] [1544795760.011408973]: Move finished time to complete: 11788 ms[0m
+1009.log:[0m[ INFO] [1544795783.006752330]: Move finished time to complete: 13240 ms[0m
+1009.log:[0m[ INFO] [1544795813.820125145]: Move finished time to complete: 23868 ms[0m
+1009.log:[0m[ INFO] [1544795856.771327441]: Move finished time to complete: 18910 ms[0m
+1009.log:[0m[ INFO] [1544796033.122361492]: Move finished time to complete: 15674 ms[0m
+1009.log:[0m[ INFO] [1544796040.514868376]: ID 1009 now using Linear curve (index 3)[0m
+1009.log:[0m[ INFO] [1544796077.986591286]: Move finished time to complete: 33391 ms[0m
+1009.log:[0m[ INFO] [1544796102.814399840]: Move finished time to complete: 12528 ms[0m
+1009.log:[0m[ INFO] [1544796126.997949432]: Move finished time to complete: 13733 ms[0m
+1009.log:[0m[ INFO] [1544796152.460826067]: Move finished time to complete: 17129 ms[0m
+1009.log:[0m[ INFO] [1544796198.395281170]: Move finished time to complete: 23714 ms[0m
+1009.log:[0m[ INFO] [1544796408.966235773]: Move finished time to complete: 17873 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545039869.746208673]: ID 1010 now using Linear curve (index 0)[0m
+1010-and-1011.log:[0m[ INFO] [1545041034.281944719]: Move finished time to complete: 19053 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041060.314354581]: Move finished time to complete: 16726 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041096.998129417]: Move finished time to complete: 12885 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041125.142796142]: Move finished time to complete: 20693 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041168.834290599]: Move finished time to complete: 20372 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041451.135437203]: Move finished time to complete: 20313 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041460.661742156]: ID 1010 now using Linear curve (index 1)[0m
+1010-and-1011.log:[0m[ INFO] [1545041470.978144381]: Move finished time to complete: 7488 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041493.072781279]: Move finished time to complete: 16622 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041517.509856102]: Move finished time to complete: 15237 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041552.149771587]: Move finished time to complete: 27975 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041591.201518486]: Move finished time to complete: 18827 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041824.286482640]: Move finished time to complete: 16325 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041831.087728795]: ID 1010 now using Slow in, Slow out curve (index 2)[0m
+1010-and-1011.log:[0m[ INFO] [1545041846.615433768]: Move finished time to complete: 7005 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041874.570232074]: Move finished time to complete: 11875 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041901.201932687]: Move finished time to complete: 14190 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041927.677670036]: Move finished time to complete: 20185 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545041971.855812499]: Move finished time to complete: 18154 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545042220.697367801]: Move finished time to complete: 21041 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545042224.570056414]: ID 1010 now using Slow in, Slow out curve (index 3)[0m
+1010-and-1011.log:[0m[ INFO] [1545042239.535556421]: Move finished time to complete: 6331 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545042258.569988750]: Move finished time to complete: 12292 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545042283.467746154]: Move finished time to complete: 14198 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545042307.482989655]: Move finished time to complete: 16969 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545042345.106565353]: Move finished time to complete: 19620 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545042521.361839093]: Move finished time to complete: 17652 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545043326.523364626]: ID 1011 now using Slow in, Slow out curve (index 0)[0m
+1010-and-1011.log:[0m[ INFO] [1545044796.744674293]: Move finished time to complete: 4908 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545044843.019229126]: Move finished time to complete: 29968 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545044868.102159988]: Move finished time to complete: 14530 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545044894.603260819]: Move finished time to complete: 18927 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545044932.365729228]: Move finished time to complete: 24214 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045139.544889349]: Move finished time to complete: 16447 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045151.190980241]: ID 1011 now using Linear curve (index 1)[0m
+1010-and-1011.log:[0m[ INFO] [1545045161.129248292]: Move finished time to complete: 7257 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045183.830347602]: Move finished time to complete: 10570 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045210.586390351]: Move finished time to complete: 13853 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045236.471254954]: Move finished time to complete: 17599 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045277.935454765]: Move finished time to complete: 22779 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045414.156635033]: Move finished time to complete: 15364 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045424.133092128]: ID 1011 now using Linear curve (index 2)[0m
+1010-and-1011.log:[0m[ INFO] [1545045435.268306925]: Move finished time to complete: 8463 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045453.681122691]: Move finished time to complete: 12098 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045475.986529172]: Move finished time to complete: 14695 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045500.230007847]: Move finished time to complete: 17347 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045541.774618093]: Move finished time to complete: 24179 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045650.830124403]: Move finished time to complete: 15051 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045659.455328227]: ID 1011 now using Slow in, Slow out curve (index 3)[0m
+1010-and-1011.log:[0m[ INFO] [1545045668.113101299]: Move finished time to complete: 6055 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045685.364638376]: Move finished time to complete: 11888 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045711.708132071]: Move finished time to complete: 12768 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045742.582224193]: Move finished time to complete: 18431 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045778.243912250]: Move finished time to complete: 21061 ms[0m
+1010-and-1011.log:[0m[ INFO] [1545045892.489729838]: Move finished time to complete: 15635 ms[0m
+1012.log:[0m[ INFO] [1545058031.344049877]: ID 1012 now using Slow in, Slow out curve (index 0)[0m
+1012.log:[0m[ INFO] [1545059438.034555334]: Move finished time to complete: 3716 ms[0m
+1012.log:[0m[ INFO] [1545059457.151754306]: Move finished time to complete: 12945 ms[0m
+1012.log:[0m[ INFO] [1545059494.752829593]: Move finished time to complete: 18116 ms[0m
+1012.log:[0m[ INFO] [1545059527.135180414]: Move finished time to complete: 20366 ms[0m
+1012.log:[0m[ INFO] [1545059564.947382380]: Move finished time to complete: 24227 ms[0m
+1012.log:[0m[ INFO] [1545059766.853174823]: Move finished time to complete: 46884 ms[0m
+1012.log:[0m[ INFO] [1545059774.939943463]: ID 1012 now using Slow in, Slow out curve (index 1)[0m
+1012.log:[0m[ INFO] [1545059787.678295769]: Move finished time to complete: 10203 ms[0m
+1012.log:[0m[ INFO] [1545059804.769913707]: Move finished time to complete: 11752 ms[0m
+1012.log:[0m[ INFO] [1545059829.774252655]: Move finished time to complete: 18171 ms[0m
+1012.log:[0m[ INFO] [1545059857.031047086]: Move finished time to complete: 20666 ms[0m
+1012.log:[0m[ INFO] [1545059896.380010096]: Move finished time to complete: 20780 ms[0m
+1012.log:[0m[ INFO] [1545060030.961408028]: Move finished time to complete: 19058 ms[0m
+1012.log:[0m[ INFO] [1545060038.748626494]: ID 1012 now using Linear curve (index 2)[0m
+1012.log:[0m[ INFO] [1545060053.525164488]: Move finished time to complete: 6899 ms[0m
+1012.log:[0m[ INFO] [1545060070.463484110]: Move finished time to complete: 11090 ms[0m
+1012.log:[0m[ INFO] [1545060096.317406008]: Move finished time to complete: 13949 ms[0m
+1012.log:[0m[ INFO] [1545060127.857059178]: Move finished time to complete: 23151 ms[0m
+1012.log:[0m[ INFO] [1545060164.925107801]: Move finished time to complete: 18437 ms[0m
+1012.log:[0m[ INFO] [1545060288.663344239]: Move finished time to complete: 28619 ms[0m
+1012.log:[0m[ INFO] [1545060294.798455461]: ID 1012 now using Linear curve (index 3)[0m
+1012.log:[0m[ INFO] [1545060304.957721870]: Move finished time to complete: 7565 ms[0m
+1012.log:[0m[ INFO] [1545060323.351731005]: Move finished time to complete: 12632 ms[0m
+1012.log:[0m[ INFO] [1545060347.098907257]: Move finished time to complete: 13593 ms[0m
+1012.log:[0m[ INFO] [1545060399.423341860]: Move finished time to complete: 45314 ms[0m
+1012.log:[0m[ INFO] [1545060463.022735699]: Move finished time to complete: 45635 ms[0m
+1012.log:[0m[ INFO] [1545060565.590832623]: Move finished time to complete: 17385 ms[0m
+1013.log:[0m[ INFO] [1545127824.719483247]: ID 1013 now using Slow in, Slow out curve (index 3)[0m
+1013.log:[0m[ INFO] [1545127837.792206862]: Move finished time to complete: 7278 ms[0m
+1013.log:[0m[ INFO] [1545127856.803097217]: Move finished time to complete: 12132 ms[0m
+1013.log:[0m[ INFO] [1545127883.348856352]: Move finished time to complete: 19809 ms[0m
+1013.log:[0m[ INFO] [1545127911.875831007]: Move finished time to complete: 22033 ms[0m
+1013.log:[0m[ INFO] [1545127945.322972719]: Move finished time to complete: 18369 ms[0m
+1013.log:[0m[ INFO] [1545128065.927907321]: Move finished time to complete: 15734 ms[0m
+1014.log:[0m[ INFO] [1546876822.870730009]: ID 1014 now using Slow in, Slow out curve (index 0)[0m
+1014.log:[0m[ INFO] [1546877192.547471774]: Move finished time to complete: 3736 ms[0m
+1014.log:[0m[ INFO] [1546877239.428395817]: Move finished time to complete: 18756 ms[0m
+1014.log:[0m[ INFO] [1546877263.897865706]: Move finished time to complete: 14493 ms[0m
+1014.log:[0m[ INFO] [1546877289.849351604]: Move finished time to complete: 19086 ms[0m
+1014.log:[0m[ INFO] [1546877320.454607381]: Move finished time to complete: 19361 ms[0m
+1014.log:[0m[ INFO] [1546877532.782850411]: Move finished time to complete: 16347 ms[0m
+1014.log:[0m[ INFO] [1546877541.146752108]: ID 1014 now using Linear curve (index 1)[0m
+1014.log:[0m[ INFO] [1546877549.969585350]: Move finished time to complete: 6544 ms[0m
+1014.log:[0m[ INFO] [1546877567.911843803]: Move finished time to complete: 11695 ms[0m
+1014.log:[0m[ INFO] [1546877591.569913995]: Move finished time to complete: 13736 ms[0m
+1014.log:[0m[ INFO] [1546877615.007016692]: Move finished time to complete: 17155 ms[0m
+1014.log:[0m[ INFO] [1546877645.137481012]: Move finished time to complete: 19280 ms[0m
+1014.log:[0m[ INFO] [1546877783.321923858]: Move finished time to complete: 16771 ms[0m
+1014.log:[0m[ INFO] [1546877797.098547529]: ID 1014 now using Linear curve (index 2)[0m
+1014.log:[0m[ INFO] [1546877807.176672232]: Move finished time to complete: 7698 ms[0m
+1014.log:[0m[ INFO] [1546877829.690197039]: Move finished time to complete: 11296 ms[0m
+1014.log:[0m[ INFO] [1546877851.973796205]: Move finished time to complete: 14303 ms[0m
+1014.log:[0m[ INFO] [1546877881.163748729]: Move finished time to complete: 22873 ms[0m
+1014.log:[0m[ INFO] [1546877913.410251263]: Move finished time to complete: 18698 ms[0m
+1014.log:[0m[ INFO] [1546878038.306940584]: Move finished time to complete: 15028 ms[0m
+1014.log:[0m[ INFO] [1546878046.800394619]: ID 1014 now using Slow in, Slow out curve (index 3)[0m
+1014.log:[0m[ INFO] [1546878056.859096675]: Move finished time to complete: 7567 ms[0m
+1014.log:[0m[ INFO] [1546878075.288317940]: Move finished time to complete: 11310 ms[0m
+1014.log:[0m[ INFO] [1546878125.109479310]: Move finished time to complete: 40575 ms[0m
+1014.log:[0m[ INFO] [1546878158.563144795]: Move finished time to complete: 22007 ms[0m
+1014.log:[0m[ INFO] [1546878196.898370213]: Move finished time to complete: 18623 ms[0m
+1014.log:[0m[ INFO] [1546878303.911341636]: Move finished time to complete: 15930 ms[0m
+1015.log:[0m[ INFO] [1546940106.480503212]: ID 1015 now using Linear curve (index 0)[0m
+1015.log:[0m[ INFO] [1546941230.604512109]: Move finished time to complete: 4172 ms[0m
+1015.log:[0m[ INFO] [1546941254.523339567]: Move finished time to complete: 17742 ms[0m
+1015.log:[0m[ INFO] [1546941274.501008620]: Move finished time to complete: 14178 ms[0m
+1015.log:[0m[ INFO] [1546941303.650313330]: Move finished time to complete: 17508 ms[0m
+1015.log:[0m[ INFO] [1546941337.736687042]: Move finished time to complete: 20776 ms[0m
+1015.log:[0m[ INFO] [1546941530.496637795]: Move finished time to complete: 16497 ms[0m
+1015.log:[0m[ INFO] [1546941539.105891539]: ID 1015 now using Linear curve (index 1)[0m
+1015.log:[0m[ INFO] [1546941548.878442159]: Move finished time to complete: 7405 ms[0m
+1015.log:[0m[ INFO] [1546941575.259927361]: Move finished time to complete: 15038 ms[0m
+1015.log:[0m[ INFO] [1546941598.313686408]: Move finished time to complete: 13689 ms[0m
+1015.log:[0m[ INFO] [1546941626.176036328]: Move finished time to complete: 21714 ms[0m
+1015.log:[0m[ INFO] [1546941664.562938873]: Move finished time to complete: 17756 ms[0m
+1015.log:[0m[ INFO] [1546941821.556664211]: Move finished time to complete: 21779 ms[0m
+1015.log:[0m[ INFO] [1546941830.535364439]: ID 1015 now using Slow in, Slow out curve (index 2)[0m
+1015.log:[0m[ INFO] [1546941838.341240909]: Move finished time to complete: 6171 ms[0m
+1015.log:[0m[ INFO] [1546941856.569132375]: Move finished time to complete: 12368 ms[0m
+1015.log:[0m[ INFO] [1546941884.444012004]: Move finished time to complete: 18338 ms[0m
+1015.log:[0m[ INFO] [1546941910.379158676]: Move finished time to complete: 19210 ms[0m
+1015.log:[0m[ INFO] [1546941944.584124139]: Move finished time to complete: 17844 ms[0m
+1015.log:[0m[ INFO] [1546942128.899264363]: Move finished time to complete: 18115 ms[0m
+1015.log:[0m[ INFO] [1546942143.895175971]: ID 1015 now using Slow in, Slow out curve (index 3)[0m
+1015.log:[0m[ INFO] [1546942155.658874606]: Move finished time to complete: 9554 ms[0m
+1015.log:[0m[ INFO] [1546942175.250975696]: Move finished time to complete: 11945 ms[0m
+1015.log:[0m[ INFO] [1546942197.105753327]: Move finished time to complete: 13681 ms[0m
+1015.log:[0m[ INFO] [1546942252.079569518]: Move finished time to complete: 43223 ms[0m
+1015.log:[0m[ INFO] [1546942290.465083111]: Move finished time to complete: 20066 ms[0m
+1015.log:[0m[ INFO] [1546942481.839848439]: Move finished time to complete: 43836 ms[0m
+1017.log:[0m[ INFO] [1547113290.122903394]: ID 1017 now using Linear curve (index 0)[0m
+1017.log:[0m[ INFO] [1547114796.766503437]: Move finished time to complete: 11985 ms[0m
+1017.log:[0m[ INFO] [1547114813.953357846]: Move finished time to complete: 11885 ms[0m
+1017.log:[0m[ INFO] [1547114837.003616927]: Move finished time to complete: 13466 ms[0m
+1017.log:[0m[ INFO] [1547114864.731185644]: Move finished time to complete: 21501 ms[0m
+1017.log:[0m[ INFO] [1547114896.661858041]: Move finished time to complete: 19609 ms[0m
+1017.log:[0m[ INFO] [1547115170.408964495]: Move finished time to complete: 20497 ms[0m
+1017.log:[0m[ INFO] [1547115179.317917745]: ID 1017 now using Slow in, Slow out curve (index 1)[0m
+1017.log:[0m[ INFO] [1547115189.560161303]: Move finished time to complete: 7277 ms[0m
+1017.log:[0m[ INFO] [1547115208.204667805]: Move finished time to complete: 12422 ms[0m
+1017.log:[0m[ INFO] [1547115263.890749400]: Move finished time to complete: 44674 ms[0m
+1017.log:[0m[ INFO] [1547115315.994744431]: Move finished time to complete: 45082 ms[0m
+1017.log:[0m[ INFO] [1547115351.364552114]: Move finished time to complete: 17638 ms[0m
+1017.log:[0m[ INFO] [1547115542.708698399]: Move finished time to complete: 16820 ms[0m
+1017.log:[0m[ INFO] [1547115550.983991551]: ID 1017 now using Slow in, Slow out curve (index 2)[0m
+1017.log:[0m[ INFO] [1547115564.872697762]: Move finished time to complete: 11043 ms[0m
+1017.log:[0m[ INFO] [1547115583.633098322]: Move finished time to complete: 12752 ms[0m
+1017.log:[0m[ INFO] [1547115612.385313364]: Move finished time to complete: 14793 ms[0m
+1017.log:[0m[ INFO] [1547115641.567699225]: Move finished time to complete: 17077 ms[0m
+1017.log:[0m[ INFO] [1547115678.219945267]: Move finished time to complete: 23795 ms[0m
+1017.log:[0m[ INFO] [1547115888.611596656]: Move finished time to complete: 15963 ms[0m
+1017.log:[0m[ INFO] [1547115892.931750554]: ID 1017 now using Linear curve (index 3)[0m
+1017.log:[0m[ INFO] [1547115906.771236545]: Move finished time to complete: 8190 ms[0m
+1017.log:[0m[ INFO] [1547115929.690706342]: Move finished time to complete: 11804 ms[0m
+1017.log:[0m[ INFO] [1547115952.819767765]: Move finished time to complete: 12860 ms[0m
+1017.log:[0m[ INFO] [1547115977.120517990]: Move finished time to complete: 17708 ms[0m
+1017.log:[0m[ INFO] [1547116014.800028038]: Move finished time to complete: 19711 ms[0m
+1017.log:[0m[ INFO] [1547116180.324207003]: Move finished time to complete: 15374 ms[0m
+1018.log:[0m[ INFO] [1547133941.072080328]: ID 1018 now using Slow in, Slow out curve (index 0)[0m
+1018.log:[0m[ INFO] [1547134764.530829170]: Move finished time to complete: 5503 ms[0m
+1018.log:[0m[ INFO] [1547134788.780430133]: Move finished time to complete: 18604 ms[0m
+1018.log:[0m[ INFO] [1547134812.064088009]: Move finished time to complete: 14007 ms[0m
+1018.log:[0m[ INFO] [1547134843.678815435]: Move finished time to complete: 25276 ms[0m
+1018.log:[0m[ INFO] [1547134888.755359487]: Move finished time to complete: 28118 ms[0m
+1018.log:[0m[ INFO] [1547135176.066785928]: Move finished time to complete: 17095 ms[0m
+1018.log:[0m[ INFO] [1547135187.012595181]: ID 1018 now using Linear curve (index 1)[0m
+1018.log:[0m[ INFO] [1547135200.521770974]: Move finished time to complete: 10749 ms[0m
+1018.log:[0m[ INFO] [1547135220.164749423]: Move finished time to complete: 12019 ms[0m
+1018.log:[0m[ INFO] [1547135251.699887737]: Move finished time to complete: 18808 ms[0m
+1018.log:[0m[ INFO] [1547135281.609095046]: Move finished time to complete: 21799 ms[0m
+1018.log:[0m[ INFO] [1547135319.857336904]: Move finished time to complete: 20367 ms[0m
+1018.log:[0m[ INFO] [1547135577.860813799]: Move finished time to complete: 43509 ms[0m
+1018.log:[0m[ INFO] [1547135595.646510117]: ID 1018 now using Slow in, Slow out curve (index 2)[0m
+1018.log:[0m[ INFO] [1547135604.688263727]: Move finished time to complete: 6436 ms[0m
+1018.log:[0m[ INFO] [1547135622.724296655]: Move finished time to complete: 12301 ms[0m
+1018.log:[0m[ INFO] [1547135653.141904164]: Move finished time to complete: 16534 ms[0m
+1018.log:[0m[ INFO] [1547135707.593493112]: Move finished time to complete: 46914 ms[0m
+1018.log:[0m[ INFO] [1547135737.339079807]: Move finished time to complete: 18406 ms[0m
+1018.log:[0m[ INFO] [1547136000.712239536]: Move finished time to complete: 17114 ms[0m
+1018.log:[0m[ INFO] [1547136010.919739932]: ID 1018 now using Linear curve (index 3)[0m
+1018.log:[0m[ INFO] [1547136022.755450520]: Move finished time to complete: 8988 ms[0m
+1018.log:[0m[ INFO] [1547136039.493894450]: Move finished time to complete: 11250 ms[0m
+1018.log:[0m[ INFO] [1547136064.474191648]: Move finished time to complete: 13545 ms[0m
+1018.log:[0m[ INFO] [1547136088.713931892]: Move finished time to complete: 17630 ms[0m
+1018.log:[0m[ INFO] [1547136130.054676677]: Move finished time to complete: 23425 ms[0m
+1018.log:[0m[ INFO] [1547136130.054676677]: Move finished time to complete: NA ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547459537.691397645]: ID 1019 now using Linear curve (index 0)[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461543.687291679]: Move finished time to complete: 4849 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461606.756942643]: Move finished time to complete: 56322 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461631.480023365]: Move finished time to complete: 13731 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461655.794215875]: Move finished time to complete: 16618 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461686.841568349]: Move finished time to complete: 18739 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461865.659364519]: Move finished time to complete: 15829 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461874.458906244]: ID 1019 now using Slow in, Slow out curve (index 1)[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461883.146646564]: Move finished time to complete: 5969 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461902.684422388]: Move finished time to complete: 13349 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461924.348514653]: Move finished time to complete: 13387 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547461969.165244814]: Move finished time to complete: 38248 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462003.757189772]: Move finished time to complete: 18682 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462172.433265681]: Move finished time to complete: 32997 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462181.670004751]: ID 1019 now using Linear curve (index 2)[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462190.573034423]: Move finished time to complete: 6125 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462210.137413787]: Move finished time to complete: 11950 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462237.636979269]: Move finished time to complete: 18748 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462263.912088546]: Move finished time to complete: 19492 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462301.115442234]: Move finished time to complete: 18432 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462502.713050811]: Move finished time to complete: 15858 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462512.225566673]: ID 1019 now using Slow in, Slow out curve (index 3)[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462522.444943632]: Move finished time to complete: 7764 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462540.430128335]: Move finished time to complete: 12075 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462570.713800919]: Move finished time to complete: 19957 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462609.603015232]: Move finished time to complete: 27115 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462641.432834747]: Move finished time to complete: 18642 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547462816.573695815]: Move finished time to complete: 15853 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547463825.743008381]: ID 1020 now using Slow in, Slow out curve (index 0)[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547464989.045444885]: Move finished time to complete: 11688 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465031.297835925]: Move finished time to complete: 26877 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465067.373748277]: Move finished time to complete: 19331 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465093.542635552]: Move finished time to complete: 19021 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465129.586965003]: Move finished time to complete: 18148 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465457.266144638]: Move finished time to complete: 15418 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465470.706645768]: ID 1020 now using Linear curve (index 1)[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465485.379854349]: Move finished time to complete: 12001 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465506.907099735]: Move finished time to complete: 11252 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465533.627546159]: Move finished time to complete: 13780 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465557.861648364]: Move finished time to complete: 18036 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465595.977093940]: Move finished time to complete: 20231 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465776.605876226]: Move finished time to complete: 15029 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465786.891008140]: ID 1020 now using Slow in, Slow out curve (index 2)[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465796.086730078]: Move finished time to complete: 6789 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465814.701906581]: Move finished time to complete: 12475 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465843.498722721]: Move finished time to complete: 13747 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465868.492571106]: Move finished time to complete: 19216 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547465934.730273599]: Move finished time to complete: 45445 ms[0m
+1019-and-1020-crash.log:[0m[ INFO] [1547466069.016976511]: Move finished time to complete: 17001 ms[0m
+1020.log:[0m[ INFO] [1547466158.251543626]: ID 1020 now using Linear curve (index 3)[0m
+1020.log:[0m[ INFO] [1547466168.007602329]: Move finished time to complete: 6185 ms[0m
+1020.log:[0m[ INFO] [1547466185.863814995]: Move finished time to complete: 12076 ms[0m
+1020.log:[0m[ INFO] [1547466209.341647726]: Move finished time to complete: 13044 ms[0m
+1020.log:[0m[ INFO] [1547466245.275595021]: Move finished time to complete: 28685 ms[0m
+1020.log:[0m[ INFO] [1547466286.731961248]: Move finished time to complete: 28408 ms[0m
+1020.log:[0m[ INFO] [1547466384.649595544]: Move finished time to complete: 15109 ms[0m
+1021.log:[0m[ INFO] [1547480869.700063281]: ID 1021 now using Slow in, Slow out curve (index 0)[0m
+1021.log:[0m[ INFO] [1547481872.778893190]: Move finished time to complete: 22042 ms[0m
+1021.log:[0m[ INFO] [1547481896.816948123]: Move finished time to complete: 11964 ms[0m
+1021.log:[0m[ INFO] [1547481934.913125726]: Move finished time to complete: 24864 ms[0m
+1021.log:[0m[ INFO] [1547481972.840218719]: Move finished time to complete: 26478 ms[0m
+1021.log:[0m[ INFO] [1547482006.704777635]: Move finished time to complete: 18654 ms[0m
+1021.log:[0m[ INFO] [1547482209.211378283]: Move finished time to complete: 20599 ms[0m
+1021.log:[0m[ INFO] [1547482218.718411719]: ID 1021 now using Slow in, Slow out curve (index 1)[0m
+1021.log:[0m[ INFO] [1547482227.303025171]: Move finished time to complete: 5647 ms[0m
+1021.log:[0m[ INFO] [1547482245.975979680]: Move finished time to complete: 12736 ms[0m
+1021.log:[0m[ INFO] [1547482276.972446087]: Move finished time to complete: 22515 ms[0m
+1021.log:[0m[ INFO] [1547482308.768176998]: Move finished time to complete: 24977 ms[0m
+1021.log:[0m[ INFO] [1547482356.550616729]: Move finished time to complete: 27641 ms[0m
+1021.log:[0m[ INFO] [1547482531.415086009]: Move finished time to complete: 16970 ms[0m
+1021.log:[0m[ INFO] [1547482539.998619592]: ID 1021 now using Linear curve (index 2)[0m
+1021.log:[0m[ INFO] [1547482548.919721538]: Move finished time to complete: 6444 ms[0m
+1021.log:[0m[ INFO] [1547482571.568095988]: Move finished time to complete: 11693 ms[0m
+1021.log:[0m[ INFO] [1547482600.119652800]: Move finished time to complete: 13093 ms[0m
+1021.log:[0m[ INFO] [1547482631.254139889]: Move finished time to complete: 18680 ms[0m
+1021.log:[0m[ INFO] [1547482670.212346907]: Move finished time to complete: 16781 ms[0m
+1021.log:[0m[ INFO] [1547482853.446052791]: Move finished time to complete: 15106 ms[0m
+1021.log:[0m[ INFO] [1547482858.333568704]: ID 1021 now using Linear curve (index 3)[0m
+1021.log:[0m[ INFO] [1547482874.496354185]: Move finished time to complete: 8686 ms[0m
+1021.log:[0m[ INFO] [1547482892.457421490]: Move finished time to complete: 12052 ms[0m
+1021.log:[0m[ INFO] [1547482913.938905975]: Move finished time to complete: 13355 ms[0m
+1021.log:[0m[ INFO] [1547482942.898154642]: Move finished time to complete: 17060 ms[0m
+1021.log:[0m[ INFO] [1547482976.146269137]: Move finished time to complete: 19793 ms[0m
+1021.log:[0m[ INFO] [1547483130.327774525]: Move finished time to complete: 15007 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547546891.873033634]: ID 1022 now using Linear curve (index 0)[0m
+1022-and-1023.log:[0m[ INFO] [1547546931.334955191]: Move finished time to complete: NA ms[0m
+1022-and-1023.log:[0m[ INFO] [1547546931.334955191]: Move finished time to complete: 35185 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547546957.253488741]: Move finished time to complete: 13621 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547546983.096442511]: Move finished time to complete: 17248 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547017.932520363]: Move finished time to complete: 21928 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547253.390547191]: Move finished time to complete: 15562 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547267.102850599]: ID 1022 now using Slow in, Slow out curve (index 1)[0m
+1022-and-1023.log:[0m[ INFO] [1547547275.831553684]: Move finished time to complete: 5883 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547294.159094941]: Move finished time to complete: 12432 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547319.141237436]: Move finished time to complete: 13569 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547365.071021546]: Move finished time to complete: 33564 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547406.847379891]: Move finished time to complete: 23767 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547572.857532911]: Move finished time to complete: 17355 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547580.121816849]: ID 1022 now using Slow in, Slow out curve (index 2)[0m
+1022-and-1023.log:[0m[ INFO] [1547547588.161189729]: Move finished time to complete: 5789 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547607.021439707]: Move finished time to complete: 12089 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547631.178138788]: Move finished time to complete: 14058 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547654.885570392]: Move finished time to complete: 17351 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547692.086754657]: Move finished time to complete: 20561 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547915.578632607]: Move finished time to complete: 15820 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547921.553112818]: ID 1022 now using Linear curve (index 3)[0m
+1022-and-1023.log:[0m[ INFO] [1547547935.517723571]: Move finished time to complete: 7442 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547959.313139466]: Move finished time to complete: 12688 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547547981.238138062]: Move finished time to complete: 13732 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547548004.724483296]: Move finished time to complete: 17074 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547548036.388742918]: Move finished time to complete: 18631 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547548268.518154076]: Move finished time to complete: 16714 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550011.328338206]: ID 1023 now using Linear curve (index 0)[0m
+1022-and-1023.log:[0m[ INFO] [1547550045.501094071]: Move finished time to complete: 4530 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550082.887036187]: Move finished time to complete: 31384 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550103.340537441]: Move finished time to complete: 13790 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550133.036583624]: Move finished time to complete: 18251 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550174.160805614]: Move finished time to complete: 17380 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550413.237397544]: Move finished time to complete: 17263 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550424.616914119]: ID 1023 now using Slow in, Slow out curve (index 1)[0m
+1022-and-1023.log:[0m[ INFO] [1547550433.050788201]: Move finished time to complete: 5585 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550453.135781582]: Move finished time to complete: 11784 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550476.695650717]: Move finished time to complete: 14398 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550503.489349280]: Move finished time to complete: 20549 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550541.983494385]: Move finished time to complete: 21859 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550712.091244519]: Move finished time to complete: 16303 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550716.036693140]: ID 1023 now using Linear curve (index 2)[0m
+1022-and-1023.log:[0m[ INFO] [1547550735.901011304]: Move finished time to complete: 7455 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550752.737134619]: Move finished time to complete: 11575 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550774.370913421]: Move finished time to complete: 12803 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550797.336931257]: Move finished time to complete: 16884 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550842.050445669]: Move finished time to complete: 23414 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550970.543699536]: Move finished time to complete: 15872 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547550974.361040016]: ID 1023 now using Slow in, Slow out curve (index 3)[0m
+1022-and-1023.log:[0m[ INFO] [1547550986.879116551]: Move finished time to complete: 6556 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547551004.604457756]: Move finished time to complete: 12256 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547551026.711849925]: Move finished time to complete: 14110 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547551082.410683381]: Move finished time to complete: 49620 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547551118.017028392]: Move finished time to complete: 22309 ms[0m
+1022-and-1023.log:[0m[ INFO] [1547551254.577045194]: Move finished time to complete: 21568 ms[0m
+1024.log:[0m[ INFO] [1547558802.349814360]: ID 1024 now using Linear curve (index 0)[0m
+1024.log:[0m[ INFO] [1547559489.515625189]: Move finished time to complete: 4910 ms[0m
+1024.log:[0m[ INFO] [1547559518.614194690]: Move finished time to complete: 23443 ms[0m
+1024.log:[0m[ INFO] [1547559542.915555534]: Move finished time to complete: 13512 ms[0m
+1024.log:[0m[ INFO] [1547559573.477053560]: Move finished time to complete: 18765 ms[0m
+1024.log:[0m[ INFO] [1547559611.354265536]: Move finished time to complete: 21600 ms[0m
+1024.log:[0m[ INFO] [1547559797.999052561]: Move finished time to complete: 46193 ms[0m
+1024.log:[0m[ INFO] [1547559806.303438614]: ID 1024 now using Slow in, Slow out curve (index 1)[0m
+1024.log:[0m[ INFO] [1547559820.643838595]: Move finished time to complete: 6348 ms[0m
+1024.log:[0m[ INFO] [1547559838.491137552]: Move finished time to complete: 12247 ms[0m
+1024.log:[0m[ INFO] [1547559863.127272165]: Move finished time to complete: 14699 ms[0m
+1024.log:[0m[ INFO] [1547559914.631045258]: Move finished time to complete: 45207 ms[0m
+1024.log:[0m[ INFO] [1547559949.288841471]: Move finished time to complete: 18442 ms[0m
+1024.log:[0m[ INFO] [1547560218.408082551]: Move finished time to complete: 45630 ms[0m
+1024.log:[0m[ INFO] [1547560229.873395891]: ID 1024 now using Linear curve (index 2)[0m
+1024.log:[0m[ INFO] [1547560240.322462696]: Move finished time to complete: 7713 ms[0m
+1024.log:[0m[ INFO] [1547560257.240719608]: Move finished time to complete: 11832 ms[0m
+1024.log:[0m[ INFO] [1547560280.250891978]: Move finished time to complete: 14796 ms[0m
+1024.log:[0m[ INFO] [1547560309.072303748]: Move finished time to complete: 21785 ms[0m
+1024.log:[0m[ INFO] [1547560344.822787452]: Move finished time to complete: 19389 ms[0m
+1024.log:[0m[ INFO] [1547560566.934243657]: Move finished time to complete: 16726 ms[0m
+1024.log:[0m[ INFO] [1547560575.061684851]: ID 1024 now using Slow in, Slow out curve (index 3)[0m
+1024.log:[0m[ INFO] [1547560584.405313435]: Move finished time to complete: 6083 ms[0m
+1024.log:[0m[ INFO] [1547560602.765018970]: Move finished time to complete: 12814 ms[0m
+1024.log:[0m[ INFO] [1547560625.356773244]: Move finished time to complete: 13485 ms[0m
+1024.log:[0m[ INFO] [1547560649.241897465]: Move finished time to complete: 17323 ms[0m
+1024.log:[0m[ INFO] [1547560686.072957819]: Move finished time to complete: 20470 ms[0m
+1024.log:[0m[ INFO] [1547560876.547151578]: Move finished time to complete: 21396 ms[0m
+1025-before-crash.log.log:[0m[ INFO] [1547629839.394923598]: ID 1025 now using Linear curve (index 0)[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632092.341334689]: Move finished time to complete: 22955 ms[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632109.833571961]: Move finished time to complete: 11412 ms[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632134.709104584]: Move finished time to complete: 14216 ms[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632160.166673315]: Move finished time to complete: 17516 ms[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632216.339813421]: Move finished time to complete: 44398 ms[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632351.818515580]: Move finished time to complete: 16009 ms[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632356.726488515]: ID 1025 now using Slow in, Slow out curve (index 1)[0m
+1025-before-crash.log.log:[0m[ INFO] [1547632372.970934883]: Move finished time to complete: 11057 ms[0m
+1025.log:[0m[ INFO] [1547632456.969762467]: Move finished time to complete: 13635 ms[0m
+1025.log:[0m[ INFO] [1547632480.569103974]: Move finished time to complete: 14183 ms[0m
+1025.log:[0m[ INFO] [1547632531.703146385]: Move finished time to complete: 45102 ms[0m
+1025.log:[0m[ INFO] [1547632565.614851965]: Move finished time to complete: 19634 ms[0m
+1025.log:[0m[ INFO] [1547632668.713271930]: Move finished time to complete: 17704 ms[0m
+1025.log:[0m[ INFO] [1547632679.580922974]: ID 1025 now using Slow in, Slow out curve (index 2)[0m
+1025.log:[0m[ INFO] [1547632688.374603070]: Move finished time to complete: 6303 ms[0m
+1025.log:[0m[ INFO] [1547632711.404321711]: Move finished time to complete: 12532 ms[0m
+1025.log:[0m[ INFO] [1547632732.517303173]: Move finished time to complete: 13737 ms[0m
+1025.log:[0m[ INFO] [1547632762.932078030]: Move finished time to complete: 23797 ms[0m
+1025.log:[0m[ INFO] [1547632793.203687112]: Move finished time to complete: 17019 ms[0m
+1025.log:[0m[ INFO] [1547632890.512024191]: Move finished time to complete: 16728 ms[0m
+1025.log:[0m[ INFO] [1547632899.160200536]: ID 1025 now using Linear curve (index 3)[0m
+1025.log:[0m[ INFO] [1547632908.323386671]: Move finished time to complete: 6853 ms[0m
+1025.log:[0m[ INFO] [1547632925.387086769]: Move finished time to complete: 10844 ms[0m
+1025.log:[0m[ INFO] [1547632948.920720647]: Move finished time to complete: 13603 ms[0m
+1025.log:[0m[ INFO] [1547632976.403087195]: Move finished time to complete: 20003 ms[0m
+1025.log:[0m[ INFO] [1547633009.867856740]: Move finished time to complete: 19948 ms[0m
+1025.log:[0m[ INFO] [1547633104.723333510]: Move finished time to complete: 16533 ms[0m
+1026.log:[0m[ INFO] [1547635075.650503059]: ID 1026 now using Linear curve (index 0)[0m
+1026.log:[0m[ INFO] [1547636949.665902222]: Move finished time to complete: 21786 ms[0m
+1026.log:[0m[ INFO] [1547636972.653498194]: Move finished time to complete: 12612 ms[0m
+1026.log:[0m[ INFO] [1547636992.206185306]: Move finished time to complete: 12921 ms[0m
+1026.log:[0m[ INFO] [1547637020.078293146]: Move finished time to complete: 21791 ms[0m
+1026.log:[0m[ INFO] [1547637058.343599940]: Move finished time to complete: 22945 ms[0m
+1026.log:[0m[ INFO] [1547637226.989931792]: Move finished time to complete: 17629 ms[0m
+1026.log:[0m[ INFO] [1547637231.267143193]: ID 1026 now using Linear curve (index 1)[0m
+1026.log:[0m[ INFO] [1547637245.358446784]: Move finished time to complete: 7011 ms[0m
+1026.log:[0m[ INFO] [1547637264.818080867]: Move finished time to complete: 12696 ms[0m
+1026.log:[0m[ INFO] [1547637285.862919816]: Move finished time to complete: 13160 ms[0m
+1026.log:[0m[ INFO] [1547637312.198418290]: Move finished time to complete: 20012 ms[0m
+1026.log:[0m[ INFO] [1547637354.808230240]: Move finished time to complete: 17915 ms[0m
+1026.log:[0m[ INFO] [1547637489.695599497]: Move finished time to complete: 15250 ms[0m
+1026.log:[0m[ INFO] [1547637499.845586528]: ID 1026 now using Slow in, Slow out curve (index 2)[0m
+1026.log:[0m[ INFO] [1547637509.069264896]: Move finished time to complete: 6579 ms[0m
+1026.log:[0m[ INFO] [1547637526.165864768]: Move finished time to complete: 11489 ms[0m
+1026.log:[0m[ INFO] [1547637555.325958018]: Move finished time to complete: 20776 ms[0m
+1026.log:[0m[ INFO] [1547637578.662891574]: Move finished time to complete: 17432 ms[0m
+1026.log:[0m[ INFO] [1547637614.584662595]: Move finished time to complete: 18574 ms[0m
+1026.log:[0m[ INFO] [1547637755.764387883]: Move finished time to complete: 15425 ms[0m
+1026.log:[0m[ INFO] [1547637764.181200461]: ID 1026 now using Slow in, Slow out curve (index 3)[0m
+1026.log:[0m[ INFO] [1547637773.614041520]: Move finished time to complete: 6868 ms[0m
+1026.log:[0m[ INFO] [1547637792.917324778]: Move finished time to complete: 12211 ms[0m
+1026.log:[0m[ INFO] [1547637824.712102912]: Move finished time to complete: 18904 ms[0m
+1026.log:[0m[ INFO] [1547637848.066440939]: Move finished time to complete: 17107 ms[0m
+1026.log:[0m[ INFO] [1547637881.109321511]: Move finished time to complete: 19485 ms[0m
+1026.log:[0m[ INFO] [1547637995.826496405]: Move finished time to complete: 20517 ms[0m
+1027.log:[0m[ INFO] [1547817480.941671036]: ID 1027 now using Linear curve (index 0)[0m
+1027.log:[0m[ INFO] [1547818905.911585133]: Move finished time to complete: 10417 ms[0m
+1027.log:[0m[ INFO] [1547818926.033071199]: Move finished time to complete: 12278 ms[0m
+1027.log:[0m[ INFO] [1547818954.987065108]: Move finished time to complete: 13828 ms[0m
+1027.log:[0m[ INFO] [1547818989.516308752]: Move finished time to complete: 19577 ms[0m
+1027.log:[0m[ INFO] [1547819025.108797293]: Move finished time to complete: 23925 ms[0m
+1027.log:[0m[ INFO] [1547819407.074223753]: Move finished time to complete: 16688 ms[0m
+1027.log:[0m[ INFO] [1547819413.551563357]: ID 1027 now using Slow in, Slow out curve (index 1)[0m
+1027.log:[0m[ INFO] [1547819423.139286814]: Move finished time to complete: 7312 ms[0m
+1027.log:[0m[ INFO] [1547819443.723329121]: Move finished time to complete: 12568 ms[0m
+1027.log:[0m[ INFO] [1547819468.548090100]: Move finished time to complete: 13829 ms[0m
+1027.log:[0m[ INFO] [1547819501.453809311]: Move finished time to complete: 20790 ms[0m
+1027.log:[0m[ INFO] [1547819536.765800415]: Move finished time to complete: 22535 ms[0m
+1027.log:[0m[ INFO] [1547819846.075628644]: Move finished time to complete: 15452 ms[0m
+1027.log:[0m[ INFO] [1547819849.568017603]: ID 1027 now using Linear curve (index 2)[0m
+1027.log:[0m[ INFO] [1547819867.218442012]: Move finished time to complete: 6085 ms[0m
+1027.log:[0m[ INFO] [1547819885.290317513]: Move finished time to complete: 11332 ms[0m
+1027.log:[0m[ INFO] [1547819917.028500233]: Move finished time to complete: 19326 ms[0m
+1027.log:[0m[ INFO] [1547819941.412155313]: Move finished time to complete: 18245 ms[0m
+1027.log:[0m[ INFO] [1547819975.441755825]: Move finished time to complete: 22278 ms[0m
+1027.log:[0m[ INFO] [1547820352.304638925]: Move finished time to complete: 21029 ms[0m
+1027.log:[0m[ INFO] [1547820359.060262591]: ID 1027 now using Slow in, Slow out curve (index 3)[0m
+1027.log:[0m[ INFO] [1547820369.435038389]: Move finished time to complete: 7780 ms[0m
+1027.log:[0m[ INFO] [1547820393.172998515]: Move finished time to complete: 12475 ms[0m
+1027.log:[0m[ INFO] [1547820418.117513216]: Move finished time to complete: 13415 ms[0m
+1027.log:[0m[ INFO] [1547820480.144993597]: Move finished time to complete: 44050 ms[0m
+1027.log:[0m[ INFO] [1547820480.144993597]: Move finished time to complete: NA ms[0m
+1027.log:[0m[ INFO] [1547820480.144993597]: Move finished time to complete: NA ms[0m
+1028.log:[0m[ INFO] [1547821270.858046188]: ID 1028 now using Linear curve (index 0)[0m
+1028.log:[0m[ INFO] [1547822512.353448574]: Move finished time to complete: 28418 ms[0m
+1028.log:[0m[ INFO] [1547822530.613427656]: Move finished time to complete: 12080 ms[0m
+1028.log:[0m[ INFO] [1547822557.210014832]: Move finished time to complete: 12991 ms[0m
+1028.log:[0m[ INFO] [1547822592.220204643]: Move finished time to complete: 23542 ms[0m
+1028.log:[0m[ INFO] [1547822622.928603832]: Move finished time to complete: 17965 ms[0m
+1028.log:[0m[ INFO] [1547822778.446822911]: Move finished time to complete: 16612 ms[0m
+1028.log:[0m[ INFO] [1547822785.798772783]: ID 1028 now using Slow in, Slow out curve (index 1)[0m
+1028.log:[0m[ INFO] [1547822795.349664601]: Move finished time to complete: 6850 ms[0m
+1028.log:[0m[ INFO] [1547822813.814349874]: Move finished time to complete: 11550 ms[0m
+1028.log:[0m[ INFO] [1547822840.816517727]: Move finished time to complete: 18356 ms[0m
+1028.log:[0m[ INFO] [1547822864.192603379]: Move finished time to complete: 17088 ms[0m
+1028.log:[0m[ INFO] [1547822894.370975594]: Move finished time to complete: 17521 ms[0m
+1028.log:[0m[ INFO] [1547823055.195702576]: Move finished time to complete: 20748 ms[0m
+1028.log:[0m[ INFO] [1547823063.208197357]: ID 1028 now using Slow in, Slow out curve (index 2)[0m
+1028.log:[0m[ INFO] [1547823077.019743764]: Move finished time to complete: 11493 ms[0m
+1028.log:[0m[ INFO] [1547823096.821627999]: Move finished time to complete: 12455 ms[0m
+1028.log:[0m[ INFO] [1547823120.105049606]: Move finished time to complete: 15158 ms[0m
+1028.log:[0m[ INFO] [1547823171.385563573]: Move finished time to complete: 44935 ms[0m
+1028.log:[0m[ INFO] [1547823204.839572039]: Move finished time to complete: 20091 ms[0m
+1028.log:[0m[ INFO] [1547823370.538546369]: Move finished time to complete: 15656 ms[0m
+1028.log:[0m[ INFO] [1547823374.016061797]: ID 1028 now using Linear curve (index 3)[0m
+1028.log:[0m[ INFO] [1547823393.097651299]: Move finished time to complete: 7571 ms[0m
+1028.log:[0m[ INFO] [1547823410.608116569]: Move finished time to complete: 11680 ms[0m
+1028.log:[0m[ INFO] [1547823436.785286326]: Move finished time to complete: 13652 ms[0m
+1028.log:[0m[ INFO] [1547823463.238610607]: Move finished time to complete: 19318 ms[0m
+1028.log:[0m[ INFO] [1547823495.543570766]: Move finished time to complete: 17828 ms[0m
+1028.log:[0m[ INFO] [1547823650.911590542]: Move finished time to complete: 16127 ms[0m
+1029-1030.log:[0m[ INFO] [1547825259.192481086]: ID 1029 now using Linear curve (index 0)[0m
+1029-1030.log:[0m[ INFO] [1547826446.015202485]: Move finished time to complete: 26899 ms[0m
+1029-1030.log:[0m[ INFO] [1547826468.140583941]: Move finished time to complete: 16359 ms[0m
+1029-1030.log:[0m[ INFO] [1547826499.086696892]: Move finished time to complete: 13990 ms[0m
+1029-1030.log:[0m[ INFO] [1547826522.018214017]: Move finished time to complete: 16531 ms[0m
+1029-1030.log:[0m[ INFO] [1547826560.812515920]: Move finished time to complete: 19072 ms[0m
+1029-1030.log:[0m[ INFO] [1547826869.879494121]: Move finished time to complete: 16990 ms[0m
+1029-1030.log:[0m[ INFO] [1547826877.452283465]: ID 1029 now using Linear curve (index 1)[0m
+1029-1030.log:[0m[ INFO] [1547826890.643118229]: Move finished time to complete: 10189 ms[0m
+1029-1030.log:[0m[ INFO] [1547826911.253746319]: Move finished time to complete: 13169 ms[0m
+1029-1030.log:[0m[ INFO] [1547826937.016558342]: Move finished time to complete: 13051 ms[0m
+1029-1030.log:[0m[ INFO] [1547826961.423635813]: Move finished time to complete: 17896 ms[0m
+1029-1030.log:[0m[ INFO] [1547827002.461488478]: Move finished time to complete: 21022 ms[0m
+1029-1030.log:[0m[ INFO] [1547827247.998968169]: Move finished time to complete: 15578 ms[0m
+1029-1030.log:[0m[ INFO] [1547827256.136476360]: ID 1029 now using Slow in, Slow out curve (index 2)[0m
+1029-1030.log:[0m[ INFO] [1547827266.406904281]: Move finished time to complete: 7081 ms[0m
+1029-1030.log:[0m[ INFO] [1547827284.635650780]: Move finished time to complete: 12556 ms[0m
+1029-1030.log:[0m[ INFO] [1547827312.696898352]: Move finished time to complete: 14465 ms[0m
+1029-1030.log:[0m[ INFO] [1547827343.655275676]: Move finished time to complete: 17971 ms[0m
+1029-1030.log:[0m[ INFO] [1547827382.193996390]: Move finished time to complete: 21950 ms[0m
+1029-1030.log:[0m[ INFO] [1547827571.636529176]: Move finished time to complete: 22240 ms[0m
+1029-1030.log:[0m[ INFO] [1547827579.988013251]: ID 1029 now using Slow in, Slow out curve (index 3)[0m
+1029-1030.log:[0m[ INFO] [1547827588.631231077]: Move finished time to complete: 5978 ms[0m
+1029-1030.log:[0m[ INFO] [1547827606.250470406]: Move finished time to complete: 11870 ms[0m
+1029-1030.log:[0m[ INFO] [1547827634.593034884]: Move finished time to complete: 13913 ms[0m
+1029-1030.log:[0m[ INFO] [1547827662.794687941]: Move finished time to complete: 22142 ms[0m
+1029-1030.log:[0m[ INFO] [1547827696.164011749]: Move finished time to complete: 19069 ms[0m
+1029-1030.log:[0m[ INFO] [1547827887.467000697]: Move finished time to complete: 19193 ms[0m
+1029-1030.log:[0m[ INFO] [1547829069.902660202]: ID 1030 now using Linear curve (index 0)[0m
+1029-1030.log:[0m[ INFO] [1547829152.357540305]: Move finished time to complete: 7001 ms[0m
+1029-1030.log:[0m[ INFO] [1547829177.755003308]: Move finished time to complete: 12023 ms[0m
+1029-1030.log:[0m[ INFO] [1547829200.987819889]: Move finished time to complete: 13493 ms[0m
+1029-1030.log:[0m[ INFO] [1547829224.501469509]: Move finished time to complete: 16873 ms[0m
+1029-1030.log:[0m[ INFO] [1547829257.443167940]: Move finished time to complete: 20182 ms[0m
+1029-1030.log:[0m[ INFO] [1547829578.377277633]: Move finished time to complete: 16167 ms[0m
+1029-1030.log:[0m[ INFO] [1547829585.658708474]: ID 1030 now using Slow in, Slow out curve (index 1)[0m
+1029-1030.log:[0m[ INFO] [1547829596.474469046]: Move finished time to complete: 7904 ms[0m
+1029-1030.log:[0m[ INFO] [1547829614.272625182]: Move finished time to complete: 11762 ms[0m
+1029-1030.log:[0m[ INFO] [1547829640.981625591]: Move finished time to complete: 18273 ms[0m
+1029-1030.log:[0m[ INFO] [1547829673.371930829]: Move finished time to complete: 19855 ms[0m
+1029-1030.log:[0m[ INFO] [1547829707.904442586]: Move finished time to complete: 17834 ms[0m
+1029-1030.log:[0m[ INFO] [1547829916.004804193]: Move finished time to complete: 16041 ms[0m
+1029-1030.log:[0m[ INFO] [1547829926.926914465]: ID 1030 now using Slow in, Slow out curve (index 2)[0m
+1029-1030.log:[0m[ INFO] [1547829937.041888637]: Move finished time to complete: 7004 ms[0m
+1029-1030.log:[0m[ INFO] [1547829954.272821021]: Move finished time to complete: 9689 ms[0m
+1029-1030.log:[0m[ INFO] [1547829981.810056666]: Move finished time to complete: 15264 ms[0m
+1029-1030.log:[0m[ INFO] [1547830010.690835742]: Move finished time to complete: 17215 ms[0m
+1029-1030.log:[0m[ INFO] [1547830041.531488480]: Move finished time to complete: 18369 ms[0m
+1029-1030.log:[0m[ INFO] [1547830243.317170058]: Move finished time to complete: 15622 ms[0m
+1029-1030.log:[0m[ INFO] [1547830250.725106602]: ID 1030 now using Linear curve (index 3)[0m
+1029-1030.log:[0m[ INFO] [1547830259.806773999]: Move finished time to complete: 6406 ms[0m
+1029-1030.log:[0m[ INFO] [1547830281.952978956]: Move finished time to complete: 16385 ms[0m
+1029-1030.log:[0m[ INFO] [1547830304.303350473]: Move finished time to complete: 13587 ms[0m
+1029-1030.log:[0m[ INFO] [1547830359.594304474]: Move finished time to complete: 43380 ms[0m
+1029-1030.log:[0m[ INFO] [1547830395.466709446]: Move finished time to complete: 20448 ms[0m
+1029-1030.log:[0m[ INFO] [1547830621.298059761]: Move finished time to complete: 16583 ms[0m
+1031.log:[0m[ INFO] [1548064764.601979530]: ID 1031 now using Slow in, Slow out curve (index 0)[0m
+1031.log:[0m[ INFO] [1548064778.955210927]: Move finished time to complete: 10748 ms[0m
+1031.log:[0m[ INFO] [1548064803.982296804]: Move finished time to complete: 12245 ms[0m
+1031.log:[0m[ INFO] [1548064828.220158978]: Move finished time to complete: 12810 ms[0m
+1031.log:[0m[ INFO] [1548064854.548465682]: Move finished time to complete: 19357 ms[0m
+1031.log:[0m[ INFO] [1548064893.793934379]: Move finished time to complete: 23250 ms[0m
+1031.log:[0m[ INFO] [1548065252.272844663]: Move finished time to complete: 34647 ms[0m
+1031.log:[0m[ INFO] [1548065263.079555133]: ID 1031 now using Linear curve (index 1)[0m
+1031.log:[0m[ INFO] [1548065299.203640857]: Move finished time to complete: 33597 ms[0m
+1031.log:[0m[ INFO] [1548065317.740372240]: Move finished time to complete: 12459 ms[0m
+1031.log:[0m[ INFO] [1548065350.580613645]: Move finished time to complete: 17709 ms[0m
+1031.log:[0m[ INFO] [1548065375.428178981]: Move finished time to complete: 18625 ms[0m
+1031.log:[0m[ INFO] [1548065410.249143937]: Move finished time to complete: 18112 ms[0m
+1031.log:[0m[ INFO] [1548065641.277565042]: Move finished time to complete: 44826 ms[0m
+1031.log:[0m[ INFO] [1548065650.056219448]: ID 1031 now using Slow in, Slow out curve (index 2)[0m
+1031.log:[0m[ INFO] [1548065662.117981757]: Move finished time to complete: 9158 ms[0m
+1031.log:[0m[ INFO] [1548065681.401200384]: Move finished time to complete: 12544 ms[0m
+1031.log:[0m[ INFO] [1548065708.982231993]: Move finished time to complete: 17370 ms[0m
+1031.log:[0m[ INFO] [1548065759.712412998]: Move finished time to complete: 43921 ms[0m
+1031.log:[0m[ INFO] [1548065792.954624294]: Move finished time to complete: 19761 ms[0m
+1031-2.log:[0m[ INFO] [1548066036.076671661]: Move finished time to complete: 48149 ms[0m
+1031-2.log:[0m[ INFO] [1548066045.668422700]: ID 1031 now using Linear curve (index 3)[0m
+1031-2.log:[0m[ INFO] [1548066079.652093697]: Move finished time to complete: 31943 ms[0m
+1031-2.log:[0m[ INFO] [1548066099.111307072]: Move finished time to complete: 11787 ms[0m
+1031-2.log:[0m[ INFO] [1548066123.245883291]: Move finished time to complete: 12734 ms[0m
+1031-2.log:[0m[ INFO] [1548066148.135950296]: Move finished time to complete: 17792 ms[0m
+1031-2.log:[0m[ INFO] [1548066184.959790993]: Move finished time to complete: 18868 ms[0m
+1031-2.log:[0m[ INFO] [1548066369.986462644]: Move finished time to complete: 15856 ms[0m
+1032.log:[0m[ INFO] [1548076643.873681803]: ID 1032 now using Slow in, Slow out curve (index 0)[0m
+1032.log:[0m[ INFO] [1548077838.204254982]: Move finished time to complete: 9770 ms[0m
+1032.log:[0m[ INFO] [1548077856.588812133]: Move finished time to complete: 11791 ms[0m
+1032.log:[0m[ INFO] [1548077879.167733375]: Move finished time to complete: 12758 ms[0m
+1032.log:[0m[ INFO] [1548077929.596482594]: Move finished time to complete: 44114 ms[0m
+1032.log:[0m[ INFO] [1548077965.250373283]: Move finished time to complete: 19233 ms[0m
+1032.log:[0m[ INFO] [1548078209.087558920]: Move finished time to complete: 16568 ms[0m
+1032.log:[0m[ INFO] [1548078215.649904135]: ID 1032 now using Linear curve (index 1)[0m
+1032.log:[0m[ INFO] [1548078225.928540473]: Move finished time to complete: 7584 ms[0m
+1032.log:[0m[ INFO] [1548078244.864420217]: Move finished time to complete: 12181 ms[0m
+1032.log:[0m[ INFO] [1548078273.932404361]: Move finished time to complete: 19300 ms[0m
+1032.log:[0m[ INFO] [1548078299.385601682]: Move finished time to complete: 17452 ms[0m
+1032.log:[0m[ INFO] [1548078332.861854547]: Move finished time to complete: 19290 ms[0m
+1032.log:[0m[ INFO] [1548078569.554323662]: Move finished time to complete: 17131 ms[0m
+1032.log:[0m[ INFO] [1548078577.240593709]: ID 1032 now using Slow in, Slow out curve (index 2)[0m
+1032.log:[0m[ INFO] [1548078589.455445142]: Move finished time to complete: 9933 ms[0m
+1032.log:[0m[ INFO] [1548078612.117358648]: Move finished time to complete: 16885 ms[0m
+1032.log:[0m[ INFO] [1548078639.676814759]: Move finished time to complete: 14850 ms[0m
+1032.log:[0m[ INFO] [1548078691.159558928]: Move finished time to complete: 44603 ms[0m
+1032.log:[0m[ INFO] [1548078723.228990452]: Move finished time to complete: 18520 ms[0m
+1032.log:[0m[ INFO] [1548079014.702205867]: Move finished time to complete: 15534 ms[0m
+1032.log:[0m[ INFO] [1548079023.776267076]: ID 1032 now using Linear curve (index 3)[0m
+1032.log:[0m[ INFO] [1548079040.112574297]: Move finished time to complete: 7608 ms[0m
+1032.log:[0m[ INFO] [1548079056.872770606]: Move finished time to complete: 11335 ms[0m
+1032.log:[0m[ INFO] [1548079079.635127641]: Move finished time to complete: 13528 ms[0m
+1032.log:[0m[ INFO] [1548079107.216476191]: Move finished time to complete: 21324 ms[0m
+1032.log:[0m[ INFO] [1548079143.367343861]: Move finished time to complete: 20699 ms[0m
+1032.log:[0m[ INFO] [1548079333.157936445]: Move finished time to complete: 21212 ms[0m
+1033.log:[0m[ INFO] [1548326377.283059147]: ID 1033 now using Linear curve (index 0)[0m
+1033.log:[0m[ INFO] [1548328142.921641209]: Move finished time to complete: 15699 ms[0m
+1033.log:[0m[ INFO] [1548328211.190862351]: Move finished time to complete: 56113 ms[0m
+1033.log:[0m[ INFO] [1548328238.808296566]: Move finished time to complete: 12950 ms[0m
+1033.log:[0m[ INFO] [1548328280.067735820]: Move finished time to complete: 34838 ms[0m
+1033.log:[0m[ INFO] [1548328313.996311818]: Move finished time to complete: 18527 ms[0m
+1033.log:[0m[ INFO] [1548328567.443341330]: Move finished time to complete: 15949 ms[0m
+1033.log:[0m[ INFO] [1548328584.555586351]: ID 1033 now using Slow in, Slow out curve (index 1)[0m
+1033.log:[0m[ INFO] [1548328594.462747903]: Move finished time to complete: 7589 ms[0m
+1033.log:[0m[ INFO] [1548328612.924192552]: Move finished time to complete: 12334 ms[0m
+1033.log:[0m[ INFO] [1548328634.882448831]: Move finished time to complete: 13237 ms[0m
+1033.log:[0m[ INFO] [1548328658.531986604]: Move finished time to complete: 17204 ms[0m
+1033.log:[0m[ INFO] [1548328700.532825275]: Move finished time to complete: 30063 ms[0m
+1033.log:[0m[ INFO] [1548328890.433415395]: Move finished time to complete: 21275 ms[0m
+1033.log:[0m[ INFO] [1548328903.059818886]: ID 1033 now using Linear curve (index 2)[0m
+1033.log:[0m[ INFO] [1548328916.158858990]: Move finished time to complete: 11046 ms[0m
+1033.log:[0m[ INFO] [1548328934.093120267]: Move finished time to complete: 12340 ms[0m
+1033.log:[0m[ INFO] [1548328961.578814586]: Move finished time to complete: 17330 ms[0m
+1033.log:[0m[ INFO] [1548328985.205773625]: Move finished time to complete: 17451 ms[0m
+1033.log:[0m[ INFO] [1548329020.595772385]: Move finished time to complete: 20316 ms[0m
+1033.log:[0m[ INFO] [1548329171.362575304]: Move finished time to complete: 16399 ms[0m
+1033.log:[0m[ INFO] [1548329180.019654612]: ID 1033 now using Slow in, Slow out curve (index 3)[0m
+1033.log:[0m[ INFO] [1548329196.468401678]: Move finished time to complete: 15625 ms[0m
+1033.log:[0m[ INFO] [1548329214.662909477]: Move finished time to complete: 12863 ms[0m
+1033.log:[0m[ INFO] [1548329245.948335456]: Move finished time to complete: 23633 ms[0m
+1033.log:[0m[ INFO] [1548329271.185548468]: Move finished time to complete: 18991 ms[0m
+1033.log:[0m[ INFO] [1548329305.538741640]: Move finished time to complete: 22605 ms[0m
+1033.log:[0m[ INFO] [1548329493.476909366]: Move finished time to complete: 15652 ms[0m
+1034.log:[0m[ INFO] [1548339972.691780001]: ID 1034 now using Slow in, Slow out curve (index 0)[0m
+1034.log:[0m[ INFO] [1548342451.704588007]: Move finished time to complete: 5338 ms[0m
+1034.log:[0m[ INFO] [1548342509.394013048]: Move finished time to complete: 51030 ms[0m
+1034.log:[0m[ INFO] [1548342541.254138732]: Move finished time to complete: 20574 ms[0m
+1034.log:[0m[ INFO] [1548342570.397337847]: Move finished time to complete: 17240 ms[0m
+1034.log:[0m[ INFO] [1548342602.184564537]: Move finished time to complete: 19535 ms[0m
+1034.log:[0m[ INFO] [1548342796.089243507]: Move finished time to complete: 16543 ms[0m
+1034.log:[0m[ INFO] [1548342800.361266586]: ID 1034 now using Linear curve (index 1)[0m
+1034.log:[0m[ INFO] [1548342822.289577262]: Move finished time to complete: 10411 ms[0m
+1034.log:[0m[ INFO] [1548342840.872317142]: Move finished time to complete: 12455 ms[0m
+1034.log:[0m[ INFO] [1548342861.481299793]: Move finished time to complete: 13054 ms[0m
+1034.log:[0m[ INFO] [1548342885.125178338]: Move finished time to complete: 16783 ms[0m
+1034.log:[0m[ INFO] [1548342918.562436746]: Move finished time to complete: 20656 ms[0m
+1034.log:[0m[ INFO] [1548343060.299292076]: Move finished time to complete: 17300 ms[0m
+1034.log:[0m[ INFO] [1548343064.568132731]: ID 1034 now using Slow in, Slow out curve (index 2)[0m
+1034.log:[0m[ INFO] [1548343077.039302142]: Move finished time to complete: 7079 ms[0m
+1034.log:[0m[ INFO] [1548343094.583856025]: Move finished time to complete: 11575 ms[0m
+1034.log:[0m[ INFO] [1548343120.167382879]: Move finished time to complete: 14554 ms[0m
+1034.log:[0m[ INFO] [1548343146.092175707]: Move finished time to complete: 19041 ms[0m
+1034.log:[0m[ INFO] [1548343182.466699418]: Move finished time to complete: 22366 ms[0m
+1034.log:[0m[ INFO] [1548343314.528342616]: Move finished time to complete: 16146 ms[0m
+1034.log:[0m[ INFO] [1548343323.592711724]: ID 1034 now using Linear curve (index 3)[0m
+1034.log:[0m[ INFO] [1548343333.948026584]: Move finished time to complete: 7441 ms[0m
+1034.log:[0m[ INFO] [1548343352.576522882]: Move finished time to complete: 12584 ms[0m
+1034.log:[0m[ INFO] [1548343376.375601681]: Move finished time to complete: 16143 ms[0m
+1034.log:[0m[ INFO] [1548343400.131067925]: Move finished time to complete: 16991 ms[0m
+1034.log:[0m[ INFO] [1548343431.265603994]: Move finished time to complete: 19416 ms[0m
+1034.log:[0m[ INFO] [1548343547.308559541]: Move finished time to complete: 14919 ms[0m
+1035.log:[0m[ INFO] [1548344812.962841093]: ID 1035 now using Linear curve (index 0)[0m
+1035.log:[0m[ INFO] [1548346023.783886431]: Move finished time to complete: 4243 ms[0m
+1035.log:[0m[ INFO] [1548346049.957588075]: Move finished time to complete: 20809 ms[0m
+1035.log:[0m[ INFO] [1548346079.613380489]: Move finished time to complete: 18591 ms[0m
+1035.log:[0m[ INFO] [1548346109.903581334]: Move finished time to complete: 18757 ms[0m
+1035.log:[0m[ INFO] [1548346146.169849143]: Move finished time to complete: 19072 ms[0m
+1035.log:[0m[ INFO] [1548346350.956060174]: Move finished time to complete: 16353 ms[0m
+1035.log:[0m[ INFO] [1548346354.849046177]: ID 1035 now using Linear curve (index 1)[0m
+1035.log:[0m[ INFO] [1548346375.423668214]: Move finished time to complete: 5956 ms[0m
+1035.log:[0m[ INFO] [1548346392.542152204]: Move finished time to complete: 10842 ms[0m
+1035.log:[0m[ INFO] [1548346413.820881899]: Move finished time to complete: 13340 ms[0m
+1035.log:[0m[ INFO] [1548346436.640282297]: Move finished time to complete: 16610 ms[0m
+1035.log:[0m[ INFO] [1548346472.075643339]: Move finished time to complete: 18219 ms[0m
+1035.log:[0m[ INFO] [1548346616.029150021]: Move finished time to complete: 20430 ms[0m
+1035.log:[0m[ INFO] [1548346621.210989813]: ID 1035 now using Slow in, Slow out curve (index 2)[0m
+1035.log:[0m[ INFO] [1548346637.137548512]: Move finished time to complete: 7188 ms[0m
+1035.log:[0m[ INFO] [1548346655.988790819]: Move finished time to complete: 12940 ms[0m
+1035.log:[0m[ INFO] [1548346678.217802150]: Move finished time to complete: 14182 ms[0m
+1035.log:[0m[ INFO] [1548346713.112741961]: Move finished time to complete: 28004 ms[0m
+1035.log:[0m[ INFO] [1548346745.665067313]: Move finished time to complete: 18413 ms[0m
+1035.log:[0m[ INFO] [1548346939.190247706]: Move finished time to complete: 15454 ms[0m
+1035.log:[0m[ INFO] [1548346946.330671639]: ID 1035 now using Slow in, Slow out curve (index 3)[0m
+1035.log:[0m[ INFO] [1548346956.107430107]: Move finished time to complete: 6287 ms[0m
+1035.log:[0m[ INFO] [1548346980.402772665]: Move finished time to complete: 17891 ms[0m
+1035.log:[0m[ INFO] [1548347010.967795659]: Move finished time to complete: 13581 ms[0m
+1035.log:[0m[ INFO] [1548347036.072836220]: Move finished time to complete: 18656 ms[0m
+1035.log:[0m[ INFO] [1548347067.996631879]: Move finished time to complete: 19165 ms[0m
+1035.log:[0m[ INFO] [1548347216.181128372]: Move finished time to complete: 17359 ms[0m
+1036.log:[0m[ INFO] [1548348866.315578397]: ID 1036 now using Linear curve (index 0)[0m
+1036.log:[0m[ INFO] [1548349299.091587326]: Move finished time to complete: 31586 ms[0m
+1036.log:[0m[ INFO] [1548349319.748392877]: Move finished time to complete: 11391 ms[0m
+1036.log:[0m[ INFO] [1548349343.573114493]: Move finished time to complete: 13425 ms[0m
+1036.log:[0m[ INFO] [1548349367.425475809]: Move finished time to complete: 16538 ms[0m
+1036.log:[0m[ INFO] [1548349400.406326954]: Move finished time to complete: 22499 ms[0m
+1036.log:[0m[ INFO] [1548349543.504727014]: Move finished time to complete: 15029 ms[0m
+1036.log:[0m[ INFO] [1548349550.281712011]: ID 1036 now using Slow in, Slow out curve (index 1)[0m
+1036.log:[0m[ INFO] [1548349560.233365039]: Move finished time to complete: 7642 ms[0m
+1036.log:[0m[ INFO] [1548349578.408230730]: Move finished time to complete: 12077 ms[0m
+1036.log:[0m[ INFO] [1548349602.083125280]: Move finished time to complete: 14871 ms[0m
+1036.log:[0m[ INFO] [1548349627.356853513]: Move finished time to complete: 17706 ms[0m
+1036.log:[0m[ INFO] [1548349661.187387326]: Move finished time to complete: 20425 ms[0m
+1036.log:[0m[ INFO] [1548349770.768733199]: Move finished time to complete: 17309 ms[0m
+1036.log:[0m[ INFO] [1548349783.569797569]: ID 1036 now using Slow in, Slow out curve (index 2)[0m
+1036.log:[0m[ INFO] [1548349793.503269289]: Move finished time to complete: 6420 ms[0m
+1036.log:[0m[ INFO] [1548349816.660638178]: Move finished time to complete: 12623 ms[0m
+1036.log:[0m[ INFO] [1548349838.285857272]: Move finished time to complete: 13619 ms[0m
+1036.log:[0m[ INFO] [1548349896.297371901]: Move finished time to complete: 49906 ms[0m
+1036.log:[0m[ INFO] [1548349934.598104469]: Move finished time to complete: 22943 ms[0m
+1036.log:[0m[ INFO] [1548350068.156435489]: Move finished time to complete: 16601 ms[0m
+1036.log:[0m[ INFO] [1548350074.228341758]: ID 1036 now using Linear curve (index 3)[0m
+1036.log:[0m[ INFO] [1548350095.535113079]: Move finished time to complete: 12461 ms[0m
+1036.log:[0m[ INFO] [1548350111.984984088]: Move finished time to complete: 11035 ms[0m
+1036.log:[0m[ INFO] [1548350134.124788307]: Move finished time to complete: 14142 ms[0m
+1036.log:[0m[ INFO] [1548350157.960146860]: Move finished time to complete: 17705 ms[0m
+1036.log:[0m[ INFO] [1548350189.434207520]: Move finished time to complete: 19742 ms[0m
+1036.log:[0m[ INFO] [1548350289.901679178]: Move finished time to complete: 15999 ms[0m
+1037.log:[0m[ INFO] [1548765192.756064998]: ID 1037 now using Slow in, Slow out curve (index 0)[0m
+1037.log:[0m[ INFO] [1548767635.898153396]: Move finished time to complete: 4645 ms[0m
+1037.log:[0m[ INFO] [1548767663.277645676]: Move finished time to complete: 21102 ms[0m
+1037.log:[0m[ INFO] [1548767687.841441955]: Move finished time to complete: 13575 ms[0m
+1037.log:[0m[ INFO] [1548767712.682761918]: Move finished time to complete: 18660 ms[0m
+1037.log:[0m[ INFO] [1548767741.669562750]: Move finished time to complete: 17425 ms[0m
+1037.log:[0m[ INFO] [1548768126.047526249]: Move finished time to complete: 22638 ms[0m
+1037.log:[0m[ INFO] [1548768132.875487017]: ID 1037 now using Linear curve (index 1)[0m
+1037.log:[0m[ INFO] [1548768142.450401839]: Move finished time to complete: 7268 ms[0m
+1037.log:[0m[ INFO] [1548768164.791699984]: Move finished time to complete: 14124 ms[0m
+1037.log:[0m[ INFO] [1548768190.589437473]: Move finished time to complete: 14191 ms[0m
+1037.log:[0m[ INFO] [1548768219.636817632]: Move finished time to complete: 22787 ms[0m
+1037.log:[0m[ INFO] [1548768249.259886742]: Move finished time to complete: 17332 ms[0m
+1037.log:[0m[ INFO] [1548768484.047998806]: Move finished time to complete: 15197 ms[0m
+1037.log:[0m[ INFO] [1548768490.718691825]: ID 1037 now using Linear curve (index 2)[0m
+1037.log:[0m[ INFO] [1548768500.064700998]: Move finished time to complete: 6825 ms[0m
+1037.log:[0m[ INFO] [1548768518.341090671]: Move finished time to complete: 11848 ms[0m
+1037.log:[0m[ INFO] [1548768550.972382240]: Move finished time to complete: 23145 ms[0m
+1037.log:[0m[ INFO] [1548768574.371489504]: Move finished time to complete: 16881 ms[0m
+1037.log:[0m[ INFO] [1548768612.107105820]: Move finished time to complete: 24099 ms[0m
+1037.log:[0m[ INFO] [1548768861.270814289]: Move finished time to complete: 21149 ms[0m
+1037.log:[0m[ INFO] [1548768867.524494625]: ID 1037 now using Slow in, Slow out curve (index 3)[0m
+1037.log:[0m[ INFO] [1548768876.252069743]: Move finished time to complete: 6141 ms[0m
+1037.log:[0m[ INFO] [1548768898.870321459]: Move finished time to complete: 12450 ms[0m
+1037.log:[0m[ INFO] [1548768926.116334217]: Move finished time to complete: 18462 ms[0m
+1037.log:[0m[ INFO] [1548768952.475935010]: Move finished time to complete: 20436 ms[0m
+1037.log:[0m[ INFO] [1548768988.273025357]: Move finished time to complete: 23659 ms[0m
+1037.log:[0m[ INFO] [1548769240.080932128]: Move finished time to complete: 16162 ms[0m
+1038.log:[0m[ INFO] [1548842727.519663108]: ID 1038 now using Linear curve (index 0)[0m
+1038.log:[0m[ INFO] [1548843073.884644629]: Move finished time to complete: 4998 ms[0m
+1038.log:[0m[ INFO] [1548843107.524727372]: Move finished time to complete: 23202 ms[0m
+1038.log:[0m[ INFO] [1548843128.418662516]: Move finished time to complete: 13306 ms[0m
+1038.log:[0m[ INFO] [1548843165.622827898]: Move finished time to complete: 28497 ms[0m
+1038.log:[0m[ INFO] [1548843200.815178852]: Move finished time to complete: 19417 ms[0m
+1038.log:[0m[ INFO] [1548843457.822382537]: Move finished time to complete: 17724 ms[0m
+1038.log:[0m[ INFO] [1548843465.568875157]: ID 1038 now using Linear curve (index 1)[0m
+1038.log:[0m[ INFO] [1548843476.553247884]: Move finished time to complete: 6735 ms[0m
+1038.log:[0m[ INFO] [1548843497.056310555]: Move finished time to complete: 14986 ms[0m
+1038.log:[0m[ INFO] [1548843521.380800739]: Move finished time to complete: 15847 ms[0m
+1038.log:[0m[ INFO] [1548843546.777906932]: Move finished time to complete: 19056 ms[0m
+1038.log:[0m[ INFO] [1548843582.348152825]: Move finished time to complete: 18231 ms[0m
+1038.log:[0m[ INFO] [1548843718.595802986]: Move finished time to complete: 15904 ms[0m
+1038.log:[0m[ INFO] [1548843724.390443641]: ID 1038 now using Slow in, Slow out curve (index 2)[0m
+1038.log:[0m[ INFO] [1548843733.269487151]: Move finished time to complete: 6333 ms[0m
+1038.log:[0m[ INFO] [1548843751.682773897]: Move finished time to complete: 11701 ms[0m
+1038.log:[0m[ INFO] [1548843773.462128794]: Move finished time to complete: 13972 ms[0m
+1038.log:[0m[ INFO] [1548843828.121803019]: Move finished time to complete: 48594 ms[0m
+1038.log:[0m[ INFO] [1548843862.238038401]: Move finished time to complete: 21776 ms[0m
+1038.log:[0m[ INFO] [1548843969.899783538]: Move finished time to complete: 16114 ms[0m
+1038.log:[0m[ INFO] [1548843984.312813435]: ID 1038 now using Slow in, Slow out curve (index 3)[0m
+1038.log:[0m[ INFO] [1548843988.096160488]: Move finished time to complete: 6262 ms[0m
+1038.log:[0m[ INFO] [1548844006.739400608]: Move finished time to complete: 12521 ms[0m
+1038.log:[0m[ INFO] [1548844028.266151548]: Move finished time to complete: 13433 ms[0m
+1038.log:[0m[ INFO] [1548844051.175779871]: Move finished time to complete: 16942 ms[0m
+1038.log:[0m[ INFO] [1548844092.979779090]: Move finished time to complete: 28752 ms[0m
+1038.log:[0m[ INFO] [1548844206.301422605]: Move finished time to complete: 16462 ms[0m

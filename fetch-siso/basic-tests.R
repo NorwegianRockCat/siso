@@ -186,6 +186,20 @@ tidyFetchSisoResults <- function() {
                               GSS.reversed.avg = rowMeans(data.frame(GSS1, GSS2.reversed, GSS3.reversed)))
 }
 
+tidyFetchTimings <- function() {
+    timings <- read_tsv("timings-tidy.tsv",
+                        col_types = cols(
+                            id = col_integer(),
+                            time = col_integer(),
+                            type = col_factor(c("Siso", "Linear")),
+                            time1 = col_integer(),
+                            time2 = col_integer(),
+                            time3 = col_integer(),
+                            time4 = col_integer(),
+                            time5 = col_integer(),
+                            time6 = col_integer()))
+    timings
+}
 
 tidy.variable.names <- function(df = tidyFetchSisoResults()) {
     # We make an assumption it's the tidyFetchSisoResults
