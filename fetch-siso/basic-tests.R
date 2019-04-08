@@ -473,3 +473,14 @@ godspeed.avg.wilcox.adjusted <- godspeed.adjust.p(godspeed.all.wilcox)
 timings.t.results <- t.test.for.timings(timings)
 
 
+results.split.averages.summary <- results.split.averages %>% summarize(n = n(),
+                                                                       GSAnthro = mean(GSAnthro.avg, na.rm = TRUE),
+                                                                       GSAnthro.sd = sd(GSAnthro.avg, na.rm = TRUE),
+                                                                       GSAnimacy = mean(GSAnimacy.avg, na.rm = TRUE),
+                                                                       GSAnimacy.sd = sd(GSAnimacy.avg, na.rm = TRUE),
+                                                                       GSLikeability = mean(GSL.avg, na.rm = TRUE),
+                                                                       GSLikeability.sd = sd(GSL.avg, na.rm = TRUE),
+                                                                       GSIntelligence = mean(GSI.avg, na.rm = TRUE),
+                                                                       GSIntelligence.sd = sd(GSI.avg, na.rm = TRUE),
+                                                                       GSS.reversed = mean(GSS.reversed.avg, na.rm = TRUE),
+                                                                       GSS.reversed.sd = sd(GSS.reversed.avg, na.rm = TRUE))
