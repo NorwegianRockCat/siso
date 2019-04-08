@@ -295,7 +295,7 @@ tws.make.gs.avg.plot <- function(df, xformat, facet.background, font) {
         theme(text = font, axis.text.x=xformat,
               strip.text.x = element_text(face = "bold"),
               strip.background = facet.background) +
-        scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence★ ", "Perceived Safety"))
+        scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence", "Perceived Safety"))
 
     tws.save.plot(plot, "gs-avg")
 }
@@ -315,6 +315,7 @@ tws.make.gs.anthro.plot <- function(df, xformat, facet.background, font) {
 }
 
 tws.make.gs.animacy.plot <- function(df, xformat, facet.background, font) {
+    df <- df %>% dplyr::filter(ID > 1006)
     plot <- ggplot(df, aes(GSAnimacy, GSAnimacy.Value)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Animacy Items", y = NULL,
@@ -353,7 +354,7 @@ tws.make.gs.intelligence.plot <- function(df, xformat, facet.background, font) {
               strip.text.x = element_text(face = "bold"),
               strip.background = facet.background) +
         scale_x_discrete(labels=c("Incompetent—Competent", "Ignorant—Knowledgeable", "Irresponsible—Responsible",
-                                  "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable★"))
+                                  "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable"))
 
     tws.save.plot(plot, "gs-intelligence")
 }
@@ -369,7 +370,7 @@ tws.make.gs.safety.plot <- function(df, xformat, facet.background, font) {
               axis.text.x=xformat,
               strip.text.x = element_text(face = "bold"),
               strip.background = facet.background) +
-        scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm★", "*Surprised - Quiescent"))
+        scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm", "*Surprised - Quiescent"))
 
     tws.save.plot(plot, "gs-safety")
 }
