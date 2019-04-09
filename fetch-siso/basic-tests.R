@@ -455,6 +455,11 @@ results.shapiro <- function(df, variable.names) {
     sapply(X=variable.names, FUN=function(x) shapiro.test(df[[x]]), simplify = FALSE, USE.NAMES = TRUE)
 }
 
+timings.shapiro <- function(df = tidyFetchTimings()) {
+    sapply(names(df)[4:9], FUN = function(x) shapiro.test(df[[x]]), simplify = FALSE, USE.NAMES = TRUE)
+}
+
+
 godspeed.test.animacy.fixed <- function(df = results.split.averages) {
     df.from.1007 <- df %>%
                        dplyr::filter(ID > 1006) %>%
@@ -479,10 +484,10 @@ godspeed.adjust.p <- function(df = godspeed.wilcox.tests.for.components()) {
         }, simplify = FALSE, USE.NAMES = TRUE), simplify = FALSE, USE.NAMES = TRUE)
 }
 
-t.test.for.timings <- function(df = tidyFetchTimings()) {
+wilcox.test.for.timings <- function(df = tidyFetchTimings()) {
     timings.siso <- df %>% dplyr::filter(type == "Siso")
     timings.linear <- df %>% dplyr::filter(type == "Linear")
-    sapply(names(df)[4:9], FUN = function(x) t.test(timings.siso[[x]], timings.linear[[x]]),
+    sapply(names(df)[4:9], FUN = function(x) wilcox.test(timings.siso[[x]], timings.linear[[x]]),
            simplify = FALSE, USE.NAMES = TRUE)
 }
 
@@ -490,13 +495,35 @@ t.test.for.timings <- function(df = tidyFetchTimings()) {
 
 results.tidy <- tidyFetchSisoResults()
 timings <- tidyFetchTimings()
+timings.average.and.median <- timings %>%
+    dplyr::group_by(type) %>%
+    summarize(time1.avg = mean(time1, na.rm = TRUE),
+              time1.median = median(time1, na.rm = TRUE),
+              time1.sd = sd(time1, na.rm = TRUE),
+              time2.avg = mean(time2, na.rm = TRUE),
+              time2.median = median(time2, na.rm = TRUE),
+              time2.sd = sd(time2, na.rm = TRUE),
+              time3.avg = mean(time3, na.rm = TRUE),
+              time3.median = median(time3, na.rm = TRUE),
+              time3.sd = sd(time3, na.rm = TRUE),
+              time4.avg = mean(time4, na.rm = TRUE),
+              time4.median = median(time4, na.rm = TRUE),
+              time4.sd = sd(time4, na.rm = TRUE),
+              time5.avg = mean(time5, na.rm = TRUE),
+              time5.median = median(time5, na.rm = TRUE),
+              time5.sd = sd(time5, na.rm = TRUE),
+              time6.avg = mean(time6, na.rm = TRUE),
+              time6.median = median(time6, na.rm = TRUE),
+              time6.sd = sd(time6, na.rm = TRUE))
+
 results.split.averages <- siso.and.linear.godspeed.component.averages(results.tidy)
 godspeed.alpha <- alphaAllEncounters(results.tidy)
 godspeed.avg.shapiro <- results.shapiro(results.tidy, names(results.tidy)[35:40])
 godspeed.component.shapiro <- results.shapiro(results.tidy, names(results.tidy)[7:33])
 godspeed.all.wilcox <- godspeed.wilcox.tests.for.components(results.split.averages)
 godspeed.avg.wilcox.adjusted <- godspeed.adjust.p(godspeed.all.wilcox)
-timings.t.results <- t.test.for.timings(timings)
+timings.shapiro.results <- timings.shapiro(timings)
+timings.wilcox.results <- wilcox.test.for.timings(timings)
 
 results.split.averages.summary <- results.split.averages %>% dplyr::summarize(n = n(),
                                                                        GSAnthro = mean(GSAnthro.avg, na.rm = TRUE),
