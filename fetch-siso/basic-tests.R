@@ -472,8 +472,7 @@ godspeed.all.wilcox <- godspeed.wilcox.tests.for.components(results.split.averag
 godspeed.avg.wilcox.adjusted <- godspeed.adjust.p(godspeed.all.wilcox)
 timings.t.results <- t.test.for.timings(timings)
 
-
-results.split.averages.summary <- results.split.averages %>% summarize(n = n(),
+results.split.averages.summary <- results.split.averages %>% dplyr::summarize(n = n(),
                                                                        GSAnthro = mean(GSAnthro.avg, na.rm = TRUE),
                                                                        GSAnthro.sd = sd(GSAnthro.avg, na.rm = TRUE),
                                                                        GSAnimacy = mean(GSAnimacy.avg, na.rm = TRUE),
@@ -484,3 +483,37 @@ results.split.averages.summary <- results.split.averages %>% summarize(n = n(),
                                                                        GSIntelligence.sd = sd(GSI.avg, na.rm = TRUE),
                                                                        GSS.reversed = mean(GSS.reversed.avg, na.rm = TRUE),
                                                                        GSS.reversed.sd = sd(GSS.reversed.avg, na.rm = TRUE))
+
+results.split.animacy.summary <- results.split.averages %>% dplyr::filter(ID > 1006) %>% dplyr::summarize(n = n(),
+                                                                      GSAnimacy1 = mean(GSAnimacy1.avg, na.rm = TRUE),
+                                                                      GSAnimacy1.sd = sd(GSAnimacy1.avg, na.rm = TRUE),
+                                                                      GSAnimacy2 = mean(GSAnimacy2.avg, na.rm = TRUE),
+                                                                      GSAnimacy2.sd = sd(GSAnimacy2.avg, na.rm = TRUE),
+                                                                      GSAnimacy3 = mean(GSAnimacy3.avg, na.rm = TRUE),
+                                                                      GSAnimacy3.sd = sd(GSAnimacy3.avg, na.rm = TRUE),
+                                                                      GSAnimacy4 = mean(GSAnimacy4.avg, na.rm = TRUE),
+                                                                      GSAnimacy4.sd = sd(GSAnimacy4.avg, na.rm = TRUE),
+                                                                      GSAnimacy5 = mean(GSAnimacy5.avg, na.rm = TRUE),
+                                                                      GSAnimacy5.sd = sd(GSAnimacy5.avg, na.rm = TRUE))
+
+results.split.intelligence.summary <- results.split.averages %>% dplyr::summarize(n = n(),
+                                                                           GSI1 = mean(GSI1.avg, na.rm = TRUE),
+                                                                           GSI1.sd = sd(GSI1.avg, na.rm = TRUE),
+                                                                           GSI2 = mean(GSI2.avg, na.rm = TRUE),
+                                                                           GSI2.sd = sd(GSI2.avg, na.rm = TRUE),
+                                                                           GSI3 = mean(GSI3.avg, na.rm = TRUE),
+                                                                           GSI3.sd = sd(GSI3.avg, na.rm = TRUE),
+                                                                           GSI4 = mean(GSI4.avg, na.rm = TRUE),
+                                                                           GSI4.sd = sd(GSI4.avg, na.rm = TRUE),
+                                                                           GSI5 = mean(GSI5.avg, na.rm = TRUE),
+                                                                           GSI5.sd = sd(GSI5.avg, na.rm = TRUE),
+                                                                           GSI6 = mean(GSI6.avg, na.rm = TRUE),
+                                                                           GSI6.sd = sd(GSI6.avg, na.rm = TRUE))
+
+results.split.safety.summary <- results.split.averages %>% dplyr::summarize(n = n(),
+                                                                     GSS1 = mean(GSS1.avg, na.rm = TRUE),
+                                                                     GSS1.sd = sd(GSS1.avg, na.rm = TRUE),
+                                                                     GSS2 = mean(GSS2.reversed.avg, na.rm = TRUE),
+                                                                     GSS2.sd = sd(GSS2.reversed.avg, na.rm = TRUE),
+                                                                     GSS3 = mean(GSS3.reversed.avg, na.rm = TRUE),
+                                                                     GSS3.sd = sd(GSS3.reversed.avg, na.rm = TRUE))
