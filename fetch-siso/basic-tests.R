@@ -28,6 +28,7 @@ require(stats)
 require(extrafont)
 require(psych)
 require(tidyverse)
+require(rcompanion)
 
 tidyFetchSisoResults <- function() {
     movement <- c("Siso", "Linear")
@@ -448,6 +449,31 @@ godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.c
                                     simplify = FALSE, USE.NAMES = TRUE),
            simplify = FALSE, USE.NAMES = TRUE)
 }
+
+godspeed.bootstraped.ci.for.components <- function(df = siso.and.linear.godspeed.component.averages()) {
+    cols <- names(df)
+    variable.names <- cols[3:length(cols)]
+    # For now calculate ALL the different confidence intervals, but we
+    # really only care about the Bootstrap bias-corrected Accelerated
+    # interval.
+    sapply(X = variable.names,
+           FUN = function(x) {
+               tmpdf <- df %>% drop_na(x)
+               group.formula <- as.formula(paste(x, "Movement", sep = " ~ "))
+               groupwiseMean(formula = group.formula,
+                             data = tmpdf,
+                             conf = 0.95,
+                             digits = 3,
+                             R = 10000,
+                             boot = TRUE,
+                             traditional = TRUE,
+                             normal = TRUE,
+                             basic = TRUE,
+                             percentile = TRUE,
+                             bca = TRUE)
+            }, simplify = FALSE, USE.NAMES = TRUE)
+}
+
 
 # Test if we have a normal distribution for each component.
 # example: results.shapiro(results.tidy, names(results.tidy)[7:length(names(results.tidy))])
