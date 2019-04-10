@@ -453,9 +453,11 @@ godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.c
 godspeed.bootstraped.ci.for.components <- function(df = siso.and.linear.godspeed.component.averages()) {
     cols <- names(df)
     variable.names <- cols[3:length(cols)]
+
     # For now calculate ALL the different confidence intervals, but we
     # really only care about the Bootstrap bias-corrected Accelerated
     # interval.
+
     sapply(X = variable.names,
            FUN = function(x) {
                tmpdf <- df %>% drop_na(x)
@@ -464,7 +466,7 @@ godspeed.bootstraped.ci.for.components <- function(df = siso.and.linear.godspeed
                              data = tmpdf,
                              conf = 0.95,
                              digits = 3,
-                             R = 10000,
+                             R = 2000,
                              boot = TRUE,
                              traditional = TRUE,
                              normal = TRUE,
