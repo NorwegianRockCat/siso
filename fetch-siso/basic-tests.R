@@ -432,7 +432,7 @@ make.godspeed.graphs <- function() {
 
 
 godspeed.nonparamTestByName <- function(df1, df2, name, func = c(t.test, wilcox.test), paired = TRUE, alternative = c("two.sided", "less", "greater")) {
-    func(df1[[name]], df2[[name]], paired = paired, alternative)
+    func(df1[[name]], df2[[name]], paired = paired, alternative = alternative, conf.int = TRUE, conf.level = 0.95)
 }
 
 godspeed.wilcox.tests.for.components <- function(df = siso.and.linear.godspeed.component.averages(), paired = TRUE) {
