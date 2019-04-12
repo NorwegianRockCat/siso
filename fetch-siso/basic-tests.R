@@ -314,89 +314,84 @@ tws.save.plot <- function(plot, filename.without.suffix, suffix = "pdf") {
     file.remove(filename.unembedded)
 }
 
-tws.make.gs.avg.plot <- function(df, xformat, facet.background, font) {
-    plot <- ggplot(df, aes(GS.avg, GS.avg.Value)) + geom_boxplot() +
-        facet_wrap(~Movement) +
+tws.make.gs.avg.plot <- function(df, xformat, font, fill) {
+    plot <- ggplot(df, aes(x = GS.avg, y = GS.avg.Value, fill = Movement)) + geom_boxplot() +
         labs(x = "Godspeed Series", y = NULL, title = "Godspeed Averages for Linear and Slow in, Slow out Velocity Profiles") +
+        scale_fill_manual(values = fill) +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
-              strip.text.x = element_text(face = "bold"),
-              strip.background = facet.background) +
+              strip.text.x = element_text(face = "bold")) +
         scale_x_discrete(labels=c("Animacy", "Athropomorphism", "Likeability", "Perceived Intelligence", "Perceived Safety"))
 
     tws.save.plot(plot, "gs-avg")
 }
 
-tws.make.gs.anthro.plot <- function(df, xformat, facet.background, font) {
-    plot <- ggplot(df, aes(GSAnthro, GSAnthro.Value)) + geom_boxplot() +
+tws.make.gs.anthro.plot <- function(df, xformat, font, fill) {
+    plot <- ggplot(df, aes(GSAnthro, GSAnthro.Value, fill = Movement)) + geom_boxplot() +
         facet_wrap(~Movement) +
         labs(x = "Godspeed Anthropomorphism Items", y = NULL,
              title = "Godspeed Anthropomorphism Series") +
+        scale_fill_manual(values = fill) +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
-              strip.text.x = element_text(face = "bold"),
-              strip.background = facet.background) +
+              strip.text.x = element_text(face = "bold")) +
         scale_x_discrete(labels=c("Fake—Natural", "Machinelike—Humanlike", "Unconscious—Conscious", "Artificial—Lifelike", "Moving Rigidly—Elegantly"))
 
     tws.save.plot(plot, "gs-anthro")
 }
 
-tws.make.gs.animacy.plot <- function(df, xformat, facet.background, font) {
+tws.make.gs.animacy.plot <- function(df, xformat, font, fill) {
     df <- df %>% dplyr::filter(ID > 1006)
-    plot <- ggplot(df, aes(GSAnimacy, GSAnimacy.Value)) + geom_boxplot() +
-        facet_wrap(~Movement) +
+    plot <- ggplot(df, aes(GSAnimacy, GSAnimacy.Value, fill = Movement)) + geom_boxplot() +
         labs(x = "Godspeed Animacy Items", y = NULL,
              title = "Godspeed Animacy Series") +
+        scale_fill_manual(values = fill) +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
-              strip.text.x = element_text(face = "bold"),
-              strip.background = facet.background) +
+              strip.text.x = element_text(face = "bold")) +
         scale_x_discrete(labels=c("Dead—Alive", "Stagnant—Lively", "Mechanical—Organic", "Artificial—Lifelike", "Inert—Interactive"))
 
     tws.save.plot(plot, "gs-animacy")
 }
 
-tws.make.gs.likeability.plot <- function(df, xformat, facet.background, font) {
-    plot <- ggplot(df, aes(GSL, GSL.Value)) + geom_boxplot() +
-        facet_wrap(~Movement) +
+tws.make.gs.likeability.plot <- function(df, xformat, font, fill) {
+    plot <- ggplot(df, aes(GSL, GSL.Value, fill = Movement)) + geom_boxplot() +
         labs(x = "Godspeed Likeability Items", y = NULL,
              title = "Godspeed Likeability Series") +
+        scale_fill_manual(values = fill) +
         theme_gray() +
         theme(text = font, axis.text.x=xformat,
-              strip.text.x = element_text(face = "bold"),
-              strip.background = facet.background) +
+              strip.text.x = element_text(face = "bold")) +
         scale_x_discrete(labels=c("Dislike—Like", "Unfriendly—Friendly", "Unkind—Kind", "Unpleasant—Pleasant", "Awful—Nice"))
 
     tws.save.plot(plot, "gs-likeability")
 }
 
-tws.make.gs.intelligence.plot <- function(df, xformat, facet.background, font) {
-    plot <- ggplot(df, aes(GSI, GSI.Value)) + geom_boxplot() +
-        facet_wrap(~Movement) +
+tws.make.gs.intelligence.plot <- function(df, xformat, font, fill) {
+    plot <- ggplot(df, aes(GSI, GSI.Value, fill = Movement)) + geom_boxplot() +
         labs(x = "Godspeed Perceived Intelligence Items", y = NULL,
              title = "Godspeed Perceived Intelligence Series") +
+        scale_fill_manual(values = fill) +
         theme_gray() +
         theme(text = font,
               axis.text.x=element_text(color = "black", angle=65, vjust=.8, hjust=0.8),
-              strip.text.x = element_text(face = "bold"),
-              strip.background = facet.background) +
+              strip.text.x = element_text(face = "bold")) +
         scale_x_discrete(labels=c("Incompetent—Competent", "Ignorant—Knowledgeable", "Irresponsible—Responsible",
                                   "Unintelligent—Intelligent", "Foolish—Sensible", "Unpredictable—Predictable"))
 
     tws.save.plot(plot, "gs-intelligence")
 }
 
-tws.make.gs.safety.plot <- function(df, xformat, facet.background, font) {
-    plot <- ggplot(df, aes(GSS.reversed, GSS.reversed.Value)) + geom_boxplot() +
-        facet_wrap(~Movement) +
+tws.make.gs.safety.plot <- function(df, xformat, font, fill) {
+    plot <- ggplot(df, aes(GSS.reversed, GSS.reversed.Value, fill = Movement)) + geom_boxplot() +
         labs(x = "Godspeed Perceived Safety Items", y = NULL,
              title = "Godspeed Perceived Safety Series",
              subtitle = "*Items 2 and 3 have been reversed") +
+        scale_fill_manual(values = fill) +
         theme_gray() +
         theme(text = font,
               axis.text.x=xformat,
-              strip.text.x = element_text(face = "bold"),
-              strip.background = facet.background) +
+              strip.text.x = element_text(face = "bold")) +
         scale_x_discrete(labels=c("Anxious - Relaxed", "*Agitated - Calm", "*Surprised - Quiescent"))
 
     tws.save.plot(plot, "gs-safety")
@@ -409,26 +404,26 @@ make.godspeed.graphs <- function() {
     levels(df$Movement) <- c("Slow in, Slow out", "Linear")
     df$Movement <- factor(df$Movement, sort(levels(df$Movement)))
     x.axis.text.format <- element_text(color = "black", angle=30, vjust=.8, hjust=0.8)
-    facet.background <- element_rect(color = NULL, fill = "white")
     font <- element_text(family = "Aktiv Grotesk")
+    fill.colors = c("gray80", "white")
 
     # Overall Averages
-    tws.make.gs.avg.plot(df, x.axis.text.format, facet.background, font)
+    tws.make.gs.avg.plot(df, x.axis.text.format, font, fill = fill.colors)
 
     # Anthropomorphism
-    tws.make.gs.anthro.plot(df, x.axis.text.format, facet.background, font)
+    tws.make.gs.anthro.plot(df, x.axis.text.format, font, fill = fill.colors)
 
     # Animacy
-    tws.make.gs.animacy.plot(df, x.axis.text.format, facet.background, font)
+    tws.make.gs.animacy.plot(df, x.axis.text.format, font, fill = fill.colors)
 
     # Likeability
-    tws.make.gs.likeability.plot(df, x.axis.text.format, facet.background, font)
+    tws.make.gs.likeability.plot(df, x.axis.text.format, font, fill = fill.colors)
 
     # Perceived Intelligence
-    tws.make.gs.intelligence.plot(df, x.axis.text.format, facet.background, font)
+    tws.make.gs.intelligence.plot(df, x.axis.text.format, font, fill = fill.colors)
 
     # Perceived Safety
-    tws.make.gs.safety.plot(df, x.axis.text.format, facet.background, font)
+    tws.make.gs.safety.plot(df, x.axis.text.format, font, fill = fill.colors)
 }
 
 
