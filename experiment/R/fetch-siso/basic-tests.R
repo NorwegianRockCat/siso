@@ -1,18 +1,18 @@
 # BSD 2-Clause License
-# 
+#
 # Copyright (c) 2019, the University of Oslo, The University of Hertfordshire
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # 1. Redistributions of source code must retain the above copyright notice, this
 #    list of conditions and the following disclaimer.
-# 
+#
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
 #    and/or other materials provided with the distribution.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -262,33 +262,33 @@ alphaAllEncounters <- function(df = tidyFetchSisoResults()) {
 siso.and.linear.godspeed.component.averages <- function(df = results.tidy) {
     df %>% dplyr::group_by(Movement, ID) %>%
         dplyr::summarize(
-                   GSAnthro1.avg = dplyr::mean(GSAnthro1),
-                   GSAnthro2.avg = dplyr::mean(GSAnthro2),
-                   GSAnthro3.avg = dplyr::mean(GSAnthro3),
-                   GSAnthro4.avg = dplyr::mean(GSAnthro4),
-                   GSAnthro5.avg = dplyr::mean(GSAnthro5),
-                   PM1.avg = dplyr::mean(PM1),
-                   GSAnimacy1.avg = dplyr::mean(GSAnimacy1),
-                   GSAnimacy2.avg = dplyr::mean(GSAnimacy2),
-                   GSAnimacy3.avg = dplyr::mean(GSAnimacy3),
-                   GSAnimacy4.avg = dplyr::mean(GSAnimacy4),
-                   GSAnimacy5.avg = dplyr::mean(GSAnimacy5),
-                   GSL1.avg = dplyr::mean(GSL1),
-                   GSL2.avg = dplyr::mean(GSL2),
-                   GSL3.avg = dplyr::mean(GSL3),
-                   GSL4.avg = dplyr::mean(GSL4),
-                   GSL5.avg = dplyr::mean(GSL5),
-                   GSI1.avg = dplyr::mean(GSI1),
-                   GSI2.avg = dplyr::mean(GSI2),
-                   GSI3.avg = dplyr::mean(GSI3),
-                   GSI4.avg = dplyr::mean(GSI4),
-                   GSI5.avg = dplyr::mean(GSI5),
-                   GSI6.avg = dplyr::mean(GSI6),
-                   GSS1.avg = dplyr::mean(GSS1),
-                   GSS2.avg = dplyr::mean(GSS2),
-                   GSS2.reversed.avg = dplyr::mean(GSS2.reversed),
-                   GSS3.avg = dplyr::mean(GSS3),
-                   GSS3.reversed.avg = dplyr::mean(GSS3.reversed)) %>%
+                   GSAnthro1.avg = mean(GSAnthro1),
+                   GSAnthro2.avg = mean(GSAnthro2),
+                   GSAnthro3.avg = mean(GSAnthro3),
+                   GSAnthro4.avg = mean(GSAnthro4),
+                   GSAnthro5.avg = mean(GSAnthro5),
+                   PM1.avg = mean(PM1),
+                   GSAnimacy1.avg = mean(GSAnimacy1),
+                   GSAnimacy2.avg = mean(GSAnimacy2),
+                   GSAnimacy3.avg = mean(GSAnimacy3),
+                   GSAnimacy4.avg = mean(GSAnimacy4),
+                   GSAnimacy5.avg = mean(GSAnimacy5),
+                   GSL1.avg = mean(GSL1),
+                   GSL2.avg = mean(GSL2),
+                   GSL3.avg = mean(GSL3),
+                   GSL4.avg = mean(GSL4),
+                   GSL5.avg = mean(GSL5),
+                   GSI1.avg = mean(GSI1),
+                   GSI2.avg = mean(GSI2),
+                   GSI3.avg = mean(GSI3),
+                   GSI4.avg = mean(GSI4),
+                   GSI5.avg = mean(GSI5),
+                   GSI6.avg = mean(GSI6),
+                   GSS1.avg = mean(GSS1),
+                   GSS2.avg = mean(GSS2),
+                   GSS2.reversed.avg = mean(GSS2.reversed),
+                   GSS3.avg = mean(GSS3),
+                   GSS3.reversed.avg = mean(GSS3.reversed)) %>%
         dplyr::mutate(GSAnthro.avg = rowMeans(data.frame(GSAnthro1.avg, GSAnthro2.avg, GSAnthro3.avg, GSAnthro4.avg, GSAnthro5.avg)),
                       GSAnimacy.avg = rowMeans(data.frame(GSAnimacy1.avg, GSAnimacy2.avg, GSAnimacy3.avg, GSAnimacy4.avg, GSAnimacy5.avg)),
                       GSL.avg = rowMeans(data.frame(GSL1.avg, GSL2.avg, GSL3.avg, GSL4.avg, GSL5.avg)),
