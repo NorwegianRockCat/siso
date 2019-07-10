@@ -397,15 +397,14 @@ tws.make.gs.safety.plot <- function(df, xformat, font, fill) {
     tws.save.plot(plot, "gs-safety")
 }
 
-make.godspeed.graphs <- function() {
+make.godspeed.graphs <- function(df = siso.and.linear.godspeed.component.averages.gathered()) {
     # Make a lot of graphs and then save them.
     # Assumption that extrafonts have been loaded and that you have Aktiv Grotesk installed (likely not).
-    df <- siso.and.linear.godspeed.component.averages.gathered()
     levels(df$Movement) <- c("Slow in, Slow out", "Linear")
     df$Movement <- factor(df$Movement, sort(levels(df$Movement)))
     x.axis.text.format <- element_text(color = "black", angle=30, vjust=.8, hjust=0.8)
     font <- element_text(family = "Aktiv Grotesk")
-    fill.colors = c("gray80", "white")
+    fill.colors = c("#CD99D9", "#B8EEAB")
 
     # Overall Averages
     tws.make.gs.avg.plot(df, x.axis.text.format, font, fill = fill.colors)
